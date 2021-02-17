@@ -1,0 +1,9 @@
+-1 missing System (a class that handles system responses, such as validating moves, rank up requests, etc)
+Consider making this from player 
+-0.5 I'm sure some of these classes NEED others, missing composition.
+
+Good multiplicities and sequence diagrams
+Your CRC cards look good as well
+
+18.5
+Great job!
