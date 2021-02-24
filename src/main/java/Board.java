@@ -11,4 +11,15 @@ public class Board {
     public Board(){
         //
     }
+
+    public int getDay(){ return this.day;}
+
+    //getScene
+    //getPlayerPos
+    
+    public int[][] getBoardPosition(){return this.boardPosition;}
+
+    //changePlayerPos
+    //setScene
+    //setPlayerPosition
 }

@@ -8,4 +8,7 @@ public class Move {
     public Move(){
         //
     }
+
+    //calculateMove
+    //verifyMove
 }
