@@ -4,6 +4,9 @@ import java.util.Arrays;
 
 //An Aggregation of the increaseRank, Act, and TakeRole classes
 
+//player can Move -> Take Role !-> Act
+// Upgrade -> Move, Move -> Upgrade
+
 public class PlayerAction {
     private Player player = null;
     private boolean success;
