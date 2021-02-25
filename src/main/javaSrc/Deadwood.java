@@ -1,7 +1,6 @@
-package ;
+package javaSrc;
 
     class Deadwood {
-
 
         public static void main(String[] args) {
             String boardXMLFile = null;

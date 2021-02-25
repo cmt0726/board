@@ -1,4 +1,4 @@
-package java;
+package javaSrc;
 import java.util.*;
 
 public class Move {

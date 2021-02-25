@@ -1,4 +1,4 @@
-package java;
+package javaSrc;
 public class Player {
     private int rank = 1;
     private int credit = 0;

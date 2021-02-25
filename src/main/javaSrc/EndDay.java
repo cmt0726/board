@@ -1,4 +1,4 @@
-package java;
+package javaSrc;
 public class EndDay {
     
     private int playerCount;
