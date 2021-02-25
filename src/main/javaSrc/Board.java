@@ -13,11 +13,15 @@ public class Board {
 
     private Player[] players;
     private int totalPlayerCount;
-    private EndDay endday = new EndDay(this); //passing the Board object into EndDay
+    public EndDay endday = new EndDay(this); //passing the Board object into EndDay
     
     public Board(int playerCount){
 
+        totalPlayerCount = playerCount;
         players = new Player[playerCount];
+        for(int i = 0; i < playerCount; i++){
+            players[i] = new Player();
+        }
         if(playerCount <= 3) {
             endday.setDayLimit(3);
         } else {
@@ -38,16 +42,7 @@ public class Board {
         }
         totalPlayerCount = playerCount;
 
-        //when end day is detected
-        // while(game != end){
-        //     for each player
-        //         parse player action until no more possible action
-        //     dayEnd();
-        // }
-
-        // if(nextLine == end turn){
-        //     //set players to [i + 1]
-        // }
+        
 
     }
 
@@ -61,4 +56,91 @@ public class Board {
     //changePlayerPos
     //setScene
     //setPlayerPosition
+
+
+    /*
+        This function will loop through all players displaying what actions can be taken
+        It will then execute those actions
+        If an action is one that is turn ending it sets the hasMoreAction flag to false
+        and the result variable to "exit"
+
+        if you can do more actions, then it will continue to do so for that player
+
+        I've decided that Act, Move, Endturn, and Exit are turn ending but that is arbitrary
+
+        if you add an action that is turn ending, remember to set the flag to false
+        and that case is lowercase
+
+        Currently with 3 players, for 3 days, if every player acts and ends the turn
+        this function will end up looping through the userInput 9 times, which is correct
+    */
+    public String executeDay(){
+        
+        Scanner sc = new Scanner(System.in);
+        String res = "";
+        
+        for(int curTurnIdx = 0; curTurnIdx < totalPlayerCount; curTurnIdx++){
+            Boolean hasMoreAction = true;
+            //TODO implement a system that calcualtes available actions
+            //currently this just says you can do anything
+            
+
+            while(hasMoreAction){
+                System.out.println("Current Available Actions: Act, Move, RankUp, EndTurn, exit, Active Player");
+                res = sc.nextLine();
+
+                System.out.println("--> " + res);
+                String[] commands = res.split(" ");
+                switch(commands[0].toLowerCase()) {
+                    case "act":
+
+                        System.out.println("You've acted at scene [CALCULATE SCENE NAME] and you earned [CALCULATE PAYOUT]");
+                        hasMoreAction = false;
+                        break;
+                    case "move":
+                        
+                        if(commands.length != 2){
+                            System.out.println("Must specify Location to move to");
+                            break;
+                        }
+                        String destPos = commands[1]; 
+                        //TODO caluclate if that move is actually valid
+                        System.out.println("You've moved from [CURRENT POS] to [DEST POS]");
+                        hasMoreAction = false;
+                        break;
+                    case "rankup":
+
+                        int rankToBe = players[curTurnIdx].getRank() + 1;
+                        
+                        if(commands.length != 2) {
+                            System.out.println("You must specify a method, money or credit");
+                            break;
+                        }
+
+                        String method = commands[1];
+
+                        if(rankToBe == 7){System.out.println("You are already at max rank");}
+                        
+                        players[curTurnIdx].rankUp(rankToBe, method);
+                        System.out.println("Current Rank: " + players[curTurnIdx].getRank());
+                        break;
+                    case "endturn":
+                        hasMoreAction = false;
+                        break;
+                    case "exit":
+                        res = "exit";
+                        hasMoreAction = false;
+                        break;
+                    case "active":
+                        System.out.println("Current player is player: " + (curTurnIdx+1));
+                        break;
+                    //add any actions you feel would be helpful
+                }
+            }
+        }
+        res = "exit";
+        return res;
+    }
+
+    public int getPlayerCount(){return this.totalPlayerCount;}
 }

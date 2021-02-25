@@ -60,4 +60,13 @@ public class Player {
         return this.currentPos;
     }
 
+    public void rankUp(int rankRequest, String payment){
+
+        PlayerAction playerAct = new PlayerAction(this);
+
+        //this call will affect this current player objects rank
+        playerAct.rankUp(rankRequest, payment);
+
+    }
+
 }

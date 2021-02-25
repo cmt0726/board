@@ -29,6 +29,8 @@ public class EndDay {
         return scores;
     }
 
+    public int getDayLim(){return this.dayLimit;}
+
     //generateScene
     
 }
