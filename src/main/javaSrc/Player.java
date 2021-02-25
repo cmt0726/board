@@ -1,15 +1,17 @@
 package javaSrc;
+
 public class Player {
     private int rank = 1;
     private int credit = 0;
-    private int money = 0;
+    private int money = 20;
     private int role;
     private String playerId;
     private int practiceChips = 0; //temp
     private int[] currentPos = {0,0};
+    private PlayerAction playerAct = new PlayerAction(this);
 
     public Player(){
-        //
+    	//
     }
 
     public String getPlayerId(){
@@ -61,12 +63,26 @@ public class Player {
     }
 
     public void rankUp(int rankRequest, String payment){
-
-        PlayerAction playerAct = new PlayerAction(this);
-
         //this call will affect this current player objects rank
         playerAct.rankUp(rankRequest, payment);
+        System.out.println(this.rank);
 
+    }
+    
+    public void act(int x /*scene difficulty*/){
+        //this call will affect this current player objects rank
+        if (playerAct.act(x)) {
+        	System.out.println("Scene progressed");
+        }
+        else {
+        	System.out.println("Scene failed");
+        }
+    }
+    
+    public void rehearse(){
+        //this call will affect this current player objects rank
+        playerAct.rehearse();
+        System.out.println(this.getChips());
     }
 
 }
