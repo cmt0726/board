@@ -1,3 +1,4 @@
+package java;
 public class EndDay {
     
     private int playerCount;
@@ -8,19 +9,25 @@ public class EndDay {
         this.board = bObject;
     }
 
-    public int setDayLimit() {
-        //
-        return 0;
+    public void setDayLimit(int dLimit) {
+        this.dayLimit = dLimit;
     }
 
-    public int[] endGame() {
+    public int[] endGame(Player[] players) {
         int day = this.board.getDay();
         //
-        int[] ret = {};
+        int[] ret = calculateScore(players);
         return ret;
     }
 
-    //calculateScore
+    //Calculates and returns an array of the final scores of each player
+    public int[] calculateScore(Player[] players){
+        int[] scores = new int[playerCount];
+        for(int i = 0; i < players.length; i++){
+            scores[i] = players[i].getMoney() + players[i].getCredits() + (players[i].getRank() * 5);
+        }
+        return scores;
+    }
 
     //generateScene
     

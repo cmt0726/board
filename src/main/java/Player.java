@@ -1,32 +1,63 @@
+package java;
 public class Player {
-    private int rank;
-    private int credit;
-    private int money;
+    private int rank = 1;
+    private int credit = 0;
+    private int money = 0;
     private int role;
     private String playerId;
+    private int practiceChips = 0; //temp
+    private int[] currentPos = {0,0};
 
     public Player(){
         //
     }
 
-    public int getRank(){return this.rank;}
-    public int getCredit(){return this.credit;}
-    public int getMoney(){return this.money;}
-    public int getRole(){return this.role;}
-    public String getPlayerId(){return this.playerId;}
+    public String getPlayerId(){
+        return this.playerId;
+    }
+
+    public int getRank(){
+        return this.rank;
+    }
+
+    public int getCredits(){
+        return this.credit;
+    }
+
+    public int getMoney(){
+        return this.money;
+    }
+
+    public int getRole(){
+        return this.role;
+    }
+
     public int setRank(int newRank){
         this.rank = newRank;
         return this.rank;
     }
 
     public int setMoney(int payout){
-        this.money += payout;
+        this.money = payout;
         return this.money;
     }
 
-    public int setCredit(int payout){
-        this.credit += payout;
+    public int setCredits(int payout){
+        this.credit = payout;
         return this.credit;
+    }
+    
+    public int setChips(int chips) {
+    	this.practiceChips = chips;
+    	return this.practiceChips;
+    }
+    
+    public int getChips() {
+    	return this.practiceChips;
+    }
+
+    public int[] getPlayerPos(){
+        return this.currentPos;
     }
 
 }
