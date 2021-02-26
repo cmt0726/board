@@ -13,7 +13,7 @@ public class Board {
     private ArrayList role;
     private ArrayList scene;
     private int day;
-    private xmlParser xml;
+    public xmlParser xml = new xmlParser();
 
     private String[] trailerNeighbors = {"Main Street", "Saloon", "Hotel"};
     private String[] officeNeighbors = {"Train Station", "Ranch", "Secret Hideout"};
@@ -21,13 +21,16 @@ public class Board {
     private List<String> traiNeiList = Arrays.asList(trailerNeighbors);
     private List<String> offNeiList = Arrays.asList(trailerNeighbors);
 
+    public HashMap<Integer, String[][]> cardData = xml.card.cardsData;
+    public HashMap<String, String[][]> locationRoleData = xml.set.locationRoleData;
+    public HashMap<String, String[][]> locationCardRoleData= xml.set.locationCardRoleData;
+
     private Player[] players;
     private int totalPlayerCount;
     public EndDay endday = new EndDay(this); //passing the Board object into EndDay
     
     public Board(int playerCount) throws Exception{
-        xml = new xmlParser();
-
+       
     	Scanner sc = new Scanner(System.in);
 
         totalPlayerCount = playerCount;
@@ -93,9 +96,7 @@ public class Board {
         
         Scanner sc = new Scanner(System.in);
         String res = "";
-        HashMap<Integer, String[][]> cardData = xml.card.cardsData;
-        HashMap<String, String[][]> locationRoleData = xml.set.locationRoleData;
-        HashMap<String, String[][]> locationCardRoleData= xml.set.locationCardRoleData;
+        
         //HashMap<String, Integer> sceneShotCounter = xml.set.sceneShotCounter;
 
         xml.set.generateSceneCards();
@@ -180,7 +181,8 @@ public class Board {
                                             } 
                                         }
                                         if(totalActiveScenes < 2) {
-                                            //
+                                            endday.resetForNextDay();
+                                            res = "exit";
                                         }
                                     } else {
                                         currentPlayer.setMoney(currentPlayer.getMoney() + 1);
@@ -217,7 +219,8 @@ public class Board {
                                             } 
                                         }
                                         if(totalActiveScenes < 2) {
-                                            //
+                                            endday.resetForNextDay();
+                                            res = "exit";
                                         }
 
                                     } 
@@ -227,9 +230,7 @@ public class Board {
 
 
                         }
-                        //int partDifficulty = 
-                    	//currentPlayer.act(4 /*temp for scene difficulty*/);
-                        //System.out.println("You've acted at scene [CALCULATE SCENE NAME] and you earned [CALCULATE PAYOUT]");
+                        
                         hasMoreAction = false;
                         break;
                         
@@ -239,32 +240,6 @@ public class Board {
                         hasMoreAction = false;
                         break;
 
-                    
-                        
-                    // case "takerole":
-                    // 	if(currentPlayer.getHasRole()) {
-                    // 		System.out.println("You already have a role. You can only act or rehearse.");
-                    // 		break;
-                    // 	}
-                    // 	else {
-                    // 		System.out.println("Choose one of the roles: ");//+ scene.roles)
-                    // 		int resint = sc.nextInt();
-                    // 		switch(resint) {
-                    // 			case 1:
-                    // 				System.out.println(currentPlayer.getId() + " now has the 1role");
-                    // 				break;
-                    // 			case 2:
-                    // 				System.out.println(currentPlayer.getId() + " now has the 2role");
-                    // 				break;
-                    // 			case 3:
-                    // 				System.out.println(currentPlayer.getId() + " now has the 3role");
-                    // 				break;
-                    // 		}
-                    	
-                    // 		currentPlayer.setHasRole(true);
-                    // 		hasMoreAction = false;
-                    // 		break;
-                    // 	}
                         
                     case "move":  
                     	
@@ -352,4 +327,6 @@ public class Board {
     }
 
     public int getPlayerCount(){return this.totalPlayerCount;}
+    public Player[] getPlayers(){return this.players;}
+    public void incrementDay(){this.day += 1;}
 }

@@ -13,11 +13,20 @@ public class EndDay {
         this.dayLimit = dLimit;
     }
 
-    public int[] endGame(Player[] players) {
-        int day = this.board.getDay();
-        //
+    public void endGame(Player[] players) {
+        
         int[] ret = calculateScore(players);
-        return ret;
+        int playerWinnerIdx = 0;
+        int maxScore = 0;
+        for(int i = 0; i < ret.length; i++){
+            if(ret[i] > maxScore){
+                playerWinnerIdx = i;
+                maxScore = ret[i];
+            }
+        }
+        System.out.println("The winner is: " + playerWinnerIdx);
+        System.exit(1);
+        
     }
 
     //Calculates and returns an array of the final scores of each player
@@ -30,6 +39,19 @@ public class EndDay {
     }
 
     public int getDayLim(){return this.dayLimit;}
+
+    public void resetForNextDay(){
+        board.xml.set.generateSceneCards();
+        int playerCount = board.getPlayerCount();
+        Player[] players = board.getPlayers();
+        for(int i = 0; i < playerCount; i++) {
+            players[i].setPos("Trailer");
+        }
+        board.incrementDay();
+        if(board.getDay() > this.dayLimit){
+            endGame(players);
+        }
+    }
 
     //generateScene
     
