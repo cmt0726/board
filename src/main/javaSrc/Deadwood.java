@@ -27,8 +27,8 @@ package javaSrc;
                 Board board = new Board(playerCount);
                 play(board);
             } else {
-                // boardXMLFile = "src/main/resources/board.xml";
-                // cardXMLFile = "src/main/resources/cards.xml";
+                boardXMLFile = "src/main/resources/board.xml";
+                cardXMLFile = "src/main/resources/cards.xml";
                 System.out.println("Invalid usage!");
                 System.exit(0);
             }
