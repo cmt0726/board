@@ -24,6 +24,7 @@ public class Board {
     public HashMap<Integer, String[][]> cardData = xml.card.cardsData;
     public HashMap<String, String[][]> locationRoleData = xml.set.locationRoleData;
     public HashMap<String, String[][]> locationCardRoleData= xml.set.locationCardRoleData;
+    public HashMap<String, String[]> neighbors = xml.set.neighbors;
 
     private Player[] players;
     private int totalPlayerCount;
@@ -245,6 +246,7 @@ public class Board {
                     	
                     	System.out.println("Move where? :");
                     	String destPos = sc.nextLine();
+                    	String[] moves = neighbors.get(currentPlayer.getPos());
                         
                         if(players[curTurnIdx].getHasRole()) {
                         	System.out.println("You can only act or rehearse while you have a role.");
@@ -265,6 +267,11 @@ public class Board {
                         	System.out.println("You cannot move there from here.");
                         	break;
                         }
+                        
+                        //else if (Arrays.stream(moves).anyMatch(players[curTurnIdx].getPos()::equals)) {
+                        //	System.out.println("a");
+                        //	break;
+                        //}
                         
                         else {
                         	//System.out.println(traiNeiList.contains(destPos));
