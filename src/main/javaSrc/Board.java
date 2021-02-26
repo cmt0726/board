@@ -10,12 +10,17 @@ public class Board {
     private ArrayList role;
     private ArrayList scene;
     private int day;
+    private xmlParser xml;
+    
+    private String[] trailerNeighbors = {"Main Street", "Saloon", "Hotel"};
+    private String[] officeNeighbors = {"Train Station", "Ranch", "Secret Hideout"};
 
     private Player[] players;
     private int totalPlayerCount;
     public EndDay endday = new EndDay(this); //passing the Board object into EndDay
     
-    public Board(int playerCount){
+    public Board(int playerCount) throws Exception{
+        xml = new xmlParser();
     	Scanner sc = new Scanner(System.in);
 
         totalPlayerCount = playerCount;
