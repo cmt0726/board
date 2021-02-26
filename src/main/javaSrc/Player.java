@@ -86,7 +86,7 @@ public class Player {
     public void rankUp(int rankRequest, String payment){
         //this call will affect this current player objects rank
         playerAct.rankUp(rankRequest, payment);
-        System.out.println(this.rank);
+        //System.out.println(this.rank);
 
     }
     

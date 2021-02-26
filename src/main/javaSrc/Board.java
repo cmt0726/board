@@ -1,6 +1,8 @@
 package javaSrc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class Board {
@@ -14,6 +16,8 @@ public class Board {
     
     private String[] trailerNeighbors = {"Main Street", "Saloon", "Hotel"};
     private String[] officeNeighbors = {"Train Station", "Ranch", "Secret Hideout"};
+    private List<String> traiNeiList = Arrays.asList(trailerNeighbors);
+    private List<String> offNeiList = Arrays.asList(trailerNeighbors);
 
     private Player[] players;
     private int totalPlayerCount;
@@ -141,10 +145,9 @@ public class Board {
                     	}
                         
                     case "move":  
-                        if(commands.length != 2){
-                            System.out.println("Must specify Location to move to");
-                            break;
-                        }
+                    	
+                    	System.out.println("Move where? :");
+                    	String destPos = sc.nextLine();
                         
                         if(players[curTurnIdx].getHasRole()) {
                         	System.out.println("You can only act or rehearse while you have a role.");
@@ -155,24 +158,33 @@ public class Board {
                         	System.out.println("You cannot move twice in one turn.");
                         	break;
                         }
+                        
+                        if (players[curTurnIdx].getPos().equalsIgnoreCase("trailer") && !traiNeiList.contains(destPos)) {
+                        	System.out.println("You cannot move there from here.");
+                        	break;
+                        }
+                        
+                        if (players[curTurnIdx].getPos().equalsIgnoreCase("office") && !offNeiList.contains(destPos)) {
+                        	System.out.println("You cannot move there from here.");
+                        	break;
+                        }
+                        
                         else {
-                        	String destPos = commands[1]; 
+                        	//System.out.println(traiNeiList.contains(destPos));
+                        	 
                         	//TODO calculate if that move is actually valid
                         	System.out.println("You've moved from " + players[curTurnIdx].getPos() + " to " + destPos);
                         	players[curTurnIdx].setPos(destPos);
-                        	System.out.println(players[curTurnIdx].getPos());
+                        	//System.out.println(players[curTurnIdx].getPos());
                         	players[curTurnIdx].setHasMoved(true);
                         	break;
                         }
                         
                     case "rankup":         	
-                        if(commands.length != 3) {
-                            System.out.println("You must specify a rank, 1-6, and method, money or credit");
-                            break;
-                        }
-
-                        int rankToBe = Integer.parseInt(commands[1]);
-                        String method = commands[2];
+                        System.out.println("Which rank would you like to be?: ");
+                        int rankToBe = Integer.parseInt(sc.nextLine());
+                        System.out.println("How would you like to pay?: ");
+                        String method = sc.nextLine();
 
                         if(rankToBe == 7){System.out.println("You can only rank up to 6");}
                         
