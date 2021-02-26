@@ -110,4 +110,8 @@ public class Player {
     	return this.position;
     }
 
+    public void bonus(String budget){
+        playerAct.bonus(budget);
+    }
+
 }

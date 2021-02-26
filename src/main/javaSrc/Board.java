@@ -17,6 +17,7 @@ public class Board {
 
     private String[] trailerNeighbors = {"Main Street", "Saloon", "Hotel"};
     private String[] officeNeighbors = {"Train Station", "Ranch", "Secret Hideout"};
+    private String[] setNames = {"Train Station", "Secret Hideout", "Church", "Hotel", "Main Street", "Jail", "General Store", "Ranch", "Bank", "Saloon"};
     private List<String> traiNeiList = Arrays.asList(trailerNeighbors);
     private List<String> offNeiList = Arrays.asList(trailerNeighbors);
 
@@ -162,13 +163,24 @@ public class Board {
 
                                     Boolean success = currentPlayer.act(Integer.parseInt(currentRoleDataOnCard[i][1]), currentPlayer.getRank());
                                     if(success){
+
                                         currentPlayer.setCredits(currentPlayer.getCredits() + 1);
                                         currentPlayer.setMoney(currentPlayer.getMoney() + 1);
+                                        
                                         xml.set.decreaseShotCount(currentPlayer.getPos());
                                         System.out.println("You have succeeded! You gain 1 credit and 1 dollar");
                                         currentRoleDataOffCard[i][2] = "True";
                                         if(xml.set.sceneShotCounter.get(currentPlayer.getPos()) == 0) {
-                                            //commence payout.
+                                            currentPlayer.bonus(currentRoleDataOnCard[i][1]);
+                                        }
+                                        int totalActiveScenes = 0;
+                                        for(String scName : setNames){
+                                            if(xml.set.sceneShotCounter.get(scName) >= 1) {
+                                                totalActiveScenes++;
+                                            } 
+                                        }
+                                        if(totalActiveScenes < 2) {
+                                            //
                                         }
                                     } else {
                                         currentPlayer.setMoney(currentPlayer.getMoney() + 1);
@@ -196,8 +208,18 @@ public class Board {
                                         xml.set.decreaseShotCount(currentPlayer.getPos());
                                         System.out.println("You have succeeded! You gain 2 credits");
                                         if(xml.set.sceneShotCounter.get(currentPlayer.getPos()) == 0) {
-                                            //commence payout.
+                                            currentPlayer.bonus(currentRoleDataOnCard[i][1]);
                                         }
+                                        int totalActiveScenes = 0;
+                                        for(String scName : setNames){
+                                            if(xml.set.sceneShotCounter.get(scName) >= 1) {
+                                                totalActiveScenes++;
+                                            } 
+                                        }
+                                        if(totalActiveScenes < 2) {
+                                            //
+                                        }
+
                                     } 
                                 }
                             }
@@ -216,6 +238,8 @@ public class Board {
                         
                         hasMoreAction = false;
                         break;
+
+                    
                         
                     // case "takerole":
                     // 	if(currentPlayer.getHasRole()) {

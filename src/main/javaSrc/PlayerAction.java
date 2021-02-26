@@ -1,6 +1,7 @@
 package javaSrc;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 //An Aggregation of the increaseRank, Act, and TakeRole classes
 
@@ -32,6 +33,16 @@ public class PlayerAction {
 	
 	public void rehearse() {
 		player.setChips(player.getChips() + 1);
+	}
+
+	public Integer[] bonus(String budget) {
+		Integer[] rolls = new Integer[Integer.parseInt(budget)];
+
+		for(int i = 0; i <Integer.parseInt(budget); i++) {
+			rolls[i] = 1 + (int)(Math.random() * (7 - 1));
+		}
+		Arrays.sort(rolls, Collections.reverseOrder());
+		return rolls;
 	}
 
     public void rankUp(int rankRequest, String payment) {
