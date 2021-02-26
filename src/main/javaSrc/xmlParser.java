@@ -84,7 +84,7 @@ public class xmlParser {
             
             NodeList offCardRolesList = eEle.getElementsByTagName("part");
             int offCardRolesListSize = offCardRolesList.getLength();
-            String[][] offCardRoleData = new String[offCardRolesListSize][2];
+            String[][] offCardRoleData = new String[offCardRolesListSize][3];
 
             for(int j = 0; j < offCardRolesListSize; j++){
 
@@ -92,7 +92,7 @@ public class xmlParser {
                 Element oCREle = (Element) offCardRoleNode;
                 String currentTileRoleLevel = oCREle.getAttribute("level"); 
                 String currentTileRoleName = oCREle.getAttribute("name");
-                String[] temp = {currentTileRoleName, currentTileRoleLevel};
+                String[] temp = {currentTileRoleName, currentTileRoleLevel, "False"};
                 offCardRoleData[j] = temp;
 
             }

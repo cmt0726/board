@@ -90,9 +90,9 @@ public class Player {
 
     }
     
-    public Boolean act(int x /*scene difficulty*/){
+    public Boolean act(int x, int rank){
         //this call will roll and calculate for scene progression when a player decides to act
-        return playerAct.act(x);
+        return playerAct.act(x, rank);
     }
     
     public void rehearse(){

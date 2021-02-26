@@ -17,7 +17,9 @@ public class PlayerAction {
 
     
 	//TODO
-	public Boolean act(int difficulty) {
+	public Boolean act(int playerRank, int difficulty) {
+		if(difficulty > playerRank)
+			return false;
 		success = false;
 		int roll = 1 + (int)(Math.random() * (7 - 1));
 		int chips = player.getChips();
