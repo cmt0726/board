@@ -7,7 +7,7 @@ public class Player {
     private int role;
     private String playerId;
     private int practiceChips = 0; //temp
-    private int[] currentPos = {0,0};
+    private String position = "Trailer";
     private PlayerAction playerAct = new PlayerAction(this);
 
     public Player(){
@@ -84,5 +84,7 @@ public class Player {
         playerAct.rehearse();
         System.out.println(this.getChips());
     }
+
+    public String getPos(){return this.position;}
 
 }
