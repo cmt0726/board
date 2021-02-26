@@ -2,6 +2,7 @@ package javaSrc;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.HashMap;
 
 public class Board {
     
@@ -11,7 +12,7 @@ public class Board {
     private ArrayList scene;
     private int day;
     private xmlParser xml;
-    
+
     private String[] trailerNeighbors = {"Main Street", "Saloon", "Hotel"};
     private String[] officeNeighbors = {"Train Station", "Ranch", "Secret Hideout"};
 
@@ -21,6 +22,7 @@ public class Board {
     
     public Board(int playerCount) throws Exception{
         xml = new xmlParser();
+
     	Scanner sc = new Scanner(System.in);
 
         totalPlayerCount = playerCount;
@@ -86,8 +88,14 @@ public class Board {
         
         Scanner sc = new Scanner(System.in);
         String res = "";
-        
+        HashMap<Integer, String[][]> cardData = xml.card.cardsData;
+        HashMap<String, String[][]> locationRoleData = xml.set.locationRoleData;
+        HashMap<String, String[][]> locationCardRoleData= xml.set.locationCardRoleData;
+
+        xml.set.generateSceneCards();
+
         for(int curTurnIdx = 0; curTurnIdx < totalPlayerCount; curTurnIdx++){
+            Player currentPlayer = players[curTurnIdx];
             Boolean hasMoreAction = true;
             players[curTurnIdx].setHasMoved(false);
             //TODO implement a system that calcualtes available actions
@@ -95,8 +103,8 @@ public class Board {
             
 
             while(hasMoreAction){
-            	System.out.println(players[curTurnIdx].getId());
-                System.out.println("Current Available Actions: Act, Rehearse, Move, TakeRole, RankUp, EndTurn, exit, Active Player");
+            	System.out.println(currentPlayer.getId());
+                System.out.println("Current Available Actions: Act, Rehearse, Move, RankUp, EndTurn, exit, Active Player");
                 res = sc.nextLine();
                 
 
@@ -104,41 +112,87 @@ public class Board {
                 String[] commands = res.split(" ");
                 switch(commands[0].toLowerCase()) {
                     case "act":
-                    	players[curTurnIdx].act(4 /*temp for scene difficulty*/);
+
+                        if(!(currentPlayer.getHasRole())){
+                            System.out.println("You must pick a role first from these options:");
+                            //System.out.println(currentPlayer.getPos());
+                            String[][] currentRoleDataOffCard = locationRoleData.get(currentPlayer.getPos());
+                            String[][] currentRoleDataOnCard = locationCardRoleData.get(currentPlayer.getPos());
+                            
+                            System.out.println("Off card available roles: ");
+                            for(String[] role : currentRoleDataOffCard){
+                                if(role[3].equals("False")){
+                                    System.out.print(role[0] + " -level-: " + role[1] + " ");
+                                }
+                            }
+
+                            System.out.println("\nOn card available roles: ");
+                            
+                            for(String[] role : currentRoleDataOnCard){
+                                if(role[3].equals("False")){
+                                    System.out.print(role[0] + " -level-: " + role[1] + " ");
+                                }
+                            }
+                            
+                            System.out.println("\nChoose one of those Roles");
+                            String roleSelection = sc.nextLine();
+
+                            for(int i = 0; i < currentRoleDataOffCard.length; i++){
+                                if(currentRoleDataOffCard[i][0].equals(roleSelection)) {
+                                    System.out.println("You have chosen: " + currentRoleDataOffCard[i][0]);
+                                    Boolean success = currentPlayer.act(Integer.parseInt(currentRoleDataOffCard[i][1]));
+                                    if(success){
+
+                                    }
+                                }
+                            }
+
+                            for(int i = 0; i < currentRoleDataOnCard.length; i++){
+                                if(currentRoleDataOnCard[i][0].equals(roleSelection)) {
+                                    System.out.println("You have chosen: " + currentRoleDataOnCard[i][0]);
+
+                                }
+                            }
+
+
+
+                        }
+                        //int partDifficulty = 
+                    	//currentPlayer.act(4 /*temp for scene difficulty*/);
                         //System.out.println("You've acted at scene [CALCULATE SCENE NAME] and you earned [CALCULATE PAYOUT]");
                         hasMoreAction = false;
                         break;
                         
                     case "rehearse":
-                    	players[curTurnIdx].rehearse();
-                        //System.out.println("You've acted at scene [CALCULATE SCENE NAME] and you earned [CALCULATE PAYOUT]");
+                    currentPlayer.rehearse();
+                        
                         hasMoreAction = false;
                         break;
                         
-                    case "takerole":
-                    	if(players[curTurnIdx].getHasRole()) {
-                    		System.out.println("You already have a role. You can only act or rehearse.");
-                    		break;
-                    	}
-                    	else {
-                    		System.out.println("Choose one of the roles: ");//+ scene.roles)
-                    		int resint = sc.nextInt();
-                    		switch(resint) {
-                    			case 1:
-                    				System.out.println(players[curTurnIdx].getId() + " now has the 1role");
-                    				break;
-                    			case 2:
-                    				System.out.println(players[curTurnIdx].getId() + " now has the 2role");
-                    				break;
-                    			case 3:
-                    				System.out.println(players[curTurnIdx].getId() + " now has the 3role");
-                    				break;
-                    		}
+                    // case "takerole":
+                    // 	if(currentPlayer.getHasRole()) {
+                    // 		System.out.println("You already have a role. You can only act or rehearse.");
+                    // 		break;
+                    // 	}
+                    // 	else {
+                    // 		System.out.println("Choose one of the roles: ");//+ scene.roles)
+                    // 		int resint = sc.nextInt();
+                    // 		switch(resint) {
+                    // 			case 1:
+                    // 				System.out.println(currentPlayer.getId() + " now has the 1role");
+                    // 				break;
+                    // 			case 2:
+                    // 				System.out.println(currentPlayer.getId() + " now has the 2role");
+                    // 				break;
+                    // 			case 3:
+                    // 				System.out.println(currentPlayer.getId() + " now has the 3role");
+                    // 				break;
+                    // 		}
                     	
-                    		players[curTurnIdx].setHasRole(true);
-                    		hasMoreAction = false;
-                    		break;
-                    	}
+                    // 		currentPlayer.setHasRole(true);
+                    // 		hasMoreAction = false;
+                    // 		break;
+                    // 	}
                         
                     case "move":  
                         if(commands.length != 2){

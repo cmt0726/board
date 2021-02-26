@@ -123,25 +123,26 @@ public class xmlParser {
             // Node scene = cardSceneNumber.item(0);
             // scene.get
             NodeList partCardList = eEle.getElementsByTagName("part");
-            String[][] cardDataInstance = new String[partCardList.getLength()][3];
+            String[][] cardDataInstance = new String[partCardList.getLength()][4];
             for(int j = 0; j < partCardList.getLength(); j++) {     
                 Node currentPart = partCardList.item(j);
                 Element curPartEle = (Element) currentPart;
                 String curPartName = curPartEle.getAttribute("name");
                 String curPartLevel = curPartEle.getAttribute("level");
-                String[] cardArr = {curPartName, curPartLevel,currentCardBudget};
+                String[] cardArr = {curPartName, curPartLevel,currentCardBudget, "False"};
                 cardDataInstance[j] = cardArr;
             }
             cardData.put(i, cardDataInstance);
         }
 
         card = new Cards(cardData);
-        set = new Sets(locationShotCount, locationNeighbors, locationRoleData);
+        set = new Sets(locationShotCount, locationNeighbors, locationRoleData, card);
 
     }
 
     public void resetSceneCounts(){
-        Sets scene = new Sets(locationShotCount, locationNeighbors, locationRoleData);
+        //Sets scene = new Sets(locationShotCount, locationNeighbors, locationRoleData, card);
+        set.resetShotCount(locationShotCount);
     }
 
     public Sets getSet(){return this.set;}

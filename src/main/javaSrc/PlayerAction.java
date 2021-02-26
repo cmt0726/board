@@ -17,7 +17,7 @@ public class PlayerAction {
 
     
 	//TODO
-	public boolean act(int difficulty) {
+	public Boolean act(int difficulty) {
 		success = false;
 		int roll = 1 + (int)(Math.random() * (7 - 1));
 		int chips = player.getChips();

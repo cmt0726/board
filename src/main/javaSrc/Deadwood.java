@@ -1,9 +1,9 @@
 package javaSrc;
-import java.util.HashMap;
+
     class Deadwood {
         
         public static void main(String[] args) throws Exception{
-            xmlParser xml = new xmlParser();
+            //xmlParser xml = new xmlParser();
             //HashMap<Integer, String[][]> cardsData = xml.card.cardsData;
             //HashMap<String, Integer> locationShotCount = xml.set.sceneShotCounter;
 
@@ -24,8 +24,8 @@ import java.util.HashMap;
                     
                 }
                 System.out.println("success!");
-                //Board board = new Board(playerCount);
-                //play(board);
+                Board board = new Board(playerCount);
+                play(board);
             } else {
                 // boardXMLFile = "src/main/resources/board.xml";
                 // cardXMLFile = "src/main/resources/cards.xml";

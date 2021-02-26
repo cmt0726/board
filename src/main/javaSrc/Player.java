@@ -4,10 +4,10 @@ public class Player {
     private int rank = 1;
     private int credit = 0;
     private int money = 0;
-    private int role;
+    private String role;
     private String playerId;
     private int practiceChips = 0; //temp
-    private String position = "Trailer";
+    private String position = "Bank"; //temp
     private PlayerAction playerAct = new PlayerAction(this);
     private boolean hasMoved = false;
     private boolean hasRole = false;
@@ -55,7 +55,7 @@ public class Player {
         return this.money;
     }
 
-    public int getRole(){
+    public String getRole(){
         return this.role;
     }
 
@@ -90,14 +90,9 @@ public class Player {
 
     }
     
-    public void act(int x /*scene difficulty*/){
+    public Boolean act(int x /*scene difficulty*/){
         //this call will roll and calculate for scene progression when a player decides to act
-        if (playerAct.act(x)) {
-        	System.out.println("Scene progressed");
-        }
-        else {
-        	System.out.println("Scene failed");
-        }
+        return playerAct.act(x);
     }
     
     public void rehearse(){
