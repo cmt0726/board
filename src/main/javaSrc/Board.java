@@ -159,7 +159,7 @@ public class Board {
                             
 
                             for(int i = 0; i < currentRoleDataOffCard.length; i++){
-                                if(currentRoleDataOffCard[i][0].equals(roleSelection)) {
+                                if((currentRoleDataOffCard[i][0]).toLowerCase().equals(roleSelection.toLowerCase())) {
                                     
                                    
                                     System.out.println("You have chosen: " + currentRoleDataOffCard[i][0]);
