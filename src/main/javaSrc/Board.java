@@ -121,8 +121,10 @@ public class Board {
                 String[] commands = res.split(" ");
                 switch(commands[0].toLowerCase()) {
                     case "act":
-
-
+                    	if(players[curTurnIdx].getPos().equals("trailer") || players[curTurnIdx].getPos().equals("office")) {
+                    		System.out.println("There is no role here.");
+                    		break;
+                    	}
 
                         if(!(currentPlayer.getHasRole())){
                             System.out.println("You must pick a role first from these options:");
@@ -154,6 +156,7 @@ public class Board {
                             
                             System.out.println("\nChoose one of those Roles");
                             String roleSelection = sc.nextLine();
+                            
 
                             for(int i = 0; i < currentRoleDataOffCard.length; i++){
                                 if(currentRoleDataOffCard[i][0].equals(roleSelection)) {
@@ -242,23 +245,40 @@ public class Board {
                         break;
 
                         
-                    case "move":  
+                    case "move": 
+                    	
+                    	if (players[curTurnIdx].getHasMoved()) {
+                        	System.out.println("You cannot move twice in one turn.");
+                        	break;
+                        } 
+                    	
+                        if(players[curTurnIdx].getHasRole()) {
+                        	System.out.println("You can only act or rehearse while you have a role.");
+                        	break;
+                        } 
                     	
                     	System.out.println("Move where? :");
                     	String destPos = sc.nextLine();
                     	String[] moves = neighbors.get(currentPlayer.getPos());
+                    	boolean adj = false;	   
                         
-                        if(players[curTurnIdx].getHasRole()) {
-                        	System.out.println("You can only act or rehearse while you have a role.");
-                        	break;
-                        }
+                    	if(moves != null) {
+                    		for(int i = 0; i < moves.length; i++) {
+                    			if(moves[i].equals(destPos)) {
+                    				adj = true;
+                    			}
+                    		}
+                    	}
+                    	
+                    	if(players[curTurnIdx].getPos().equalsIgnoreCase("trailer") && traiNeiList.contains(destPos)) {
+                    		adj = true;
+                    	}
+                    	
+                    	if (players[curTurnIdx].getPos().equalsIgnoreCase("office") && offNeiList.contains(destPos)) {
+                    		adj = true;
+                    	}
                         
-                        if (players[curTurnIdx].getHasMoved()) {
-                        	System.out.println("You cannot move twice in one turn.");
-                        	break;
-                        }
-                        
-                        if (players[curTurnIdx].getPos().equalsIgnoreCase("trailer") && !traiNeiList.contains(destPos)) {
+                        if (!adj) {
                         	System.out.println("You cannot move there from here.");
                         	break;
                         }
@@ -314,7 +334,8 @@ public class Board {
                         break;
                         
                     case "active":
-                        System.out.println("Current player is player: " + (curTurnIdx+1));
+                        System.out.println("Current player is " + players[curTurnIdx].getId());
+                        System.out.println("Current player is at " + players[curTurnIdx].getPos());
                         System.out.println("Rank : " + players[curTurnIdx].getRank());
                         System.out.println("Money : " + players[curTurnIdx].getMoney());
                         System.out.println("Credits : " + players[curTurnIdx].getCredits());

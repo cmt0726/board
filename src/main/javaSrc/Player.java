@@ -7,7 +7,7 @@ public class Player {
     private String role;
     private String playerId;
     private int practiceChips = 0; //temp
-    private String position = "Bank"; //temp
+    private String position = "trailer"; //temp
     private PlayerAction playerAct = new PlayerAction(this);
     private boolean hasMoved = false;
     private boolean hasRole = false;
