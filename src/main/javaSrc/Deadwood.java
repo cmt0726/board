@@ -18,7 +18,7 @@ package javaSrc;
                 }
                 System.out.println("success!");
                 Board board = new Board(playerCount);
-                //play(board);
+                play(board);
             } else {
                 // boardXMLFile = "src/main/resources/board.xml";
                 // cardXMLFile = "src/main/resources/cards.xml";

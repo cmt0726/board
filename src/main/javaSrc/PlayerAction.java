@@ -33,7 +33,7 @@ public class PlayerAction {
 	}
 
     public void rankUp(int rankRequest, String payment) {
-        String temp = "Trailer";
+        String temp = "office";
         //TODO : Link up playerPosition from board class
 		if(payment.equalsIgnoreCase("money") && player.getPos().equals(temp)){//player.getPlayerPos() == temp  && payment.equalsIgnoreCase("money")) {
 			if (rankRequest == 2 && (player.getMoney() >= 4)) {

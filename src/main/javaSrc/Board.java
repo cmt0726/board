@@ -150,7 +150,9 @@ public class Board {
                         else {
                         	String destPos = commands[1]; 
                         	//TODO calculate if that move is actually valid
-                        	System.out.println("You've moved from [CURRENT POS] to [DEST POS]");
+                        	System.out.println("You've moved from " + players[curTurnIdx].getPos() + " to " + destPos);
+                        	players[curTurnIdx].setPos(destPos);
+                        	System.out.println(players[curTurnIdx].getPos());
                         	players[curTurnIdx].setHasMoved(true);
                         	break;
                         }
@@ -167,7 +169,19 @@ public class Board {
                         if(rankToBe == 7){System.out.println("You can only rank up to 6");}
                         
                         players[curTurnIdx].rankUp(rankToBe, method);
-                        //players[curTurnIdx].setRank(rankToBe);
+                        
+                        if(!(method.equalsIgnoreCase("money")) && !(method.equalsIgnoreCase("credit"))) {
+                        	System.out.println("Payement must be money or credit");
+                        	break;
+                        }
+                        
+                        if(!(players[curTurnIdx].getPos().equalsIgnoreCase("office"))) {
+                        	System.out.println("You must go to the casting office to rank up.");
+                        }
+                        
+                        else if(players[curTurnIdx].getRank() != rankToBe) {
+                        	System.out.println("You did not have enough to rank up.");
+                        }
                         System.out.println("Current Rank: " + players[curTurnIdx].getRank());
                         break;
                         

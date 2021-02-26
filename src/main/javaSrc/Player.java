@@ -101,6 +101,13 @@ public class Player {
         System.out.println(this.getChips());
     }
 
-    public String getPos(){return this.position;}
+    public String getPos(){
+    	return this.position;
+    }
+    
+    public String setPos(String newPos) {
+    	this.position = newPos;
+    	return this.position;
+    }
 
 }
