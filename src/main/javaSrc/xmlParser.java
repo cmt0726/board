@@ -7,9 +7,13 @@ import java.util.HashMap;
 
 public class xmlParser {
 
+    Sets set;
     NodeList nList;
     Document doc;
     HashMap<String, String[]> locationNeighbors = new HashMap<String, String[]>();
+    HashMap<String, Integer> locationShotCount = new HashMap<String, Integer>();
+    //locationRoleData.get(setName) => {{"roleName", level},{"roleName", level},{"roleName", level}, etc}
+    HashMap<String, String[][]> locationRoleData = new HashMap<String, String[][]>();
     
     
     public xmlParser() throws Exception{
@@ -47,10 +51,9 @@ public class xmlParser {
         for(int i = 0; i < nList.getLength(); i++){
             
             Node nNode = nList.item(i);
-            //System.out.print(nNode.getNodeName() + ": ");
+            
             Element eEle = (Element) nNode;
-            //Element neighborNode = (Element) eEle.getElementsByTagName("neighbors");
-            //System.out.println(eEle.getAttribute("name"));
+            
             String currentSetName = eEle.getAttribute("name");
             NodeList neighborNlist = eEle.getElementsByTagName("neighbor");
             int neighborSize = neighborNlist.getLength();
@@ -62,13 +65,46 @@ public class xmlParser {
                 Element neighborEle = (Element) neighborNode;
                 String currentTileNeighbor = neighborEle.getAttribute("name");
                 neighbors[j] = currentTileNeighbor;
-                //System.out.print(currentTileNeighbor + " ");
+                
                 
             }
-            //System.out.println();
+            
+            NodeList offCardRolesList = eEle.getElementsByTagName("part");
+            int offCardRolesListSize = offCardRolesList.getLength();
+            String[][] offCardRoleData = new String[offCardRolesListSize][2];
+
+            for(int j = 0; j < offCardRolesListSize; j++){
+
+                Node offCardRoleNode = offCardRolesList.item(j);
+                Element oCREle = (Element) offCardRoleNode;
+                String currentTileRoleLevel = oCREle.getAttribute("level"); 
+                String currentTileRoleName = oCREle.getAttribute("name");
+                String[] temp = {currentTileRoleName, currentTileRoleLevel};
+                offCardRoleData[j] = temp;
+
+            }
+            
+            locationRoleData.put(currentSetName, offCardRoleData);
+
+            NodeList setTakeList = eEle.getElementsByTagName("take");
+            Node setTakeNode = setTakeList.item(0);
+            Element setTakeEle = (Element) setTakeNode;
+            Integer setTakesCount = Integer.parseInt(setTakeEle.getAttribute("number"));
             locationNeighbors.put(currentSetName, neighbors);
+            locationShotCount.put(currentSetName, setTakesCount);
+
+            
             
         }
+
+        set = new Sets(locationShotCount, locationNeighbors, locationRoleData);
+
     }
+
+    public void resetSceneCounts(){
+        Sets scene = new Sets(locationShotCount, locationNeighbors, locationRoleData);
+    }
+
+    public Sets getSet(){return this.set;}
 
 }
