@@ -34,8 +34,13 @@ public class Player {
     	return this.hasRole;
     }
 
-    public String getPlayerId(){
+    public String getId(){
         return this.playerId;
+    }
+    
+    public String setId(String name) {
+    	this.playerId = name;
+    	return this.playerId;
     }
 
     public int getRank(){

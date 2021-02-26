@@ -16,11 +16,14 @@ public class Board {
     public EndDay endday = new EndDay(this); //passing the Board object into EndDay
     
     public Board(int playerCount){
+    	Scanner sc = new Scanner(System.in);
 
         totalPlayerCount = playerCount;
         players = new Player[playerCount];
         for(int i = 0; i < playerCount; i++){
             players[i] = new Player();
+            System.out.println("Player name :");
+            players[i].setId(sc.next());
         }
         if(playerCount <= 3) {
             endday.setDayLimit(3);
@@ -87,7 +90,7 @@ public class Board {
             
 
             while(hasMoreAction){
-            	System.out.println("Player " + (curTurnIdx + 1));
+            	System.out.println(players[curTurnIdx].getId());
                 System.out.println("Current Available Actions: Act, Rehearse, Move, TakeRole, RankUp, EndTurn, exit, Active Player");
                 res = sc.nextLine();
                 
@@ -117,13 +120,13 @@ public class Board {
                     		int resint = sc.nextInt();
                     		switch(resint) {
                     			case 1:
-                    				System.out.println("Player " + (curTurnIdx + 1) + " now has the 1role");
+                    				System.out.println(players[curTurnIdx].getId() + " now has the 1role");
                     				break;
                     			case 2:
-                    				System.out.println("Player " + (curTurnIdx + 1) + " now has the 2role");
+                    				System.out.println(players[curTurnIdx].getId() + " now has the 2role");
                     				break;
                     			case 3:
-                    				System.out.println("Player " + (curTurnIdx + 1) + " now has the 3role");
+                    				System.out.println(players[curTurnIdx].getId() + " now has the 3role");
                     				break;
                     		}
                     	
