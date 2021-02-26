@@ -33,9 +33,9 @@ public class PlayerAction {
 	}
 
     public void rankUp(int rankRequest, String payment) {
-        int[] temp = {0,0};
+        String temp = "Trailer";
         //TODO : Link up playerPosition from board class
-		if(payment.equalsIgnoreCase("money") && Arrays.equals(player.getPlayerPos(), temp)){//player.getPlayerPos() == temp  && payment.equalsIgnoreCase("money")) {
+		if(payment.equalsIgnoreCase("money") && player.getPos().equals(temp)){//player.getPlayerPos() == temp  && payment.equalsIgnoreCase("money")) {
 			if (rankRequest == 2 && (player.getMoney() >= 4)) {
 				player.setMoney(player.getMoney() - 4);
                 player.setRank(2);
@@ -62,7 +62,7 @@ public class PlayerAction {
 			}
 		}
 		
-		if(player.getPlayerPos() == temp && payment == "Credits") {
+		if(player.getPos() == temp && payment == "Credits") {
 			if (rankRequest == 2 && (player.getCredits() >= 5)) {
 				player.setCredits(player.getCredits() - 5);
                 player.setRank(2);
