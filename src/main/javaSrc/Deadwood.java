@@ -38,6 +38,7 @@ package javaSrc;
         }
 
         public static void play(Board board){
+        	System.out.println("Day 1");
             String res = board.executeDay();
             //loops through number of days
             for(int i = 0; i < board.endday.getDayLim(); i++){
@@ -46,6 +47,7 @@ package javaSrc;
                 //or when the player has executed an action which indicates they can no longer make another action
                 //in which case it will go onto the next turn
                 while(!((res).toLowerCase().equals("exit"))){
+                	System.out.println("Day " + (i+1));
                     res = board.executeDay();
                 }
                 res = ""; //resets result so the next for loop iteration will go into the while loop

@@ -113,7 +113,7 @@ public class Board {
             while(hasMoreAction){
             	System.out.println(currentPlayer.getId());
                 Boolean playerHasAvailableRole = false;
-                System.out.println("Current Available Actions: Act, Rehearse, Move, RankUp, EndTurn, exit, Active Player");
+                System.out.println("Current Available Actions: Act, Rehearse, Move, RankUp, EndTurn, Active Player, exit, Show Players");
                 res = sc.nextLine();
                 
 
@@ -300,23 +300,33 @@ public class Board {
                         }
                         
                     case "rankup":         	
+                    	
+                    	if(!(players[curTurnIdx].getPos().equalsIgnoreCase("office"))) {
+                        	System.out.println("You must go to the casting office to rank up.");
+                        	break;
+                        }
+                    	
                         System.out.println("Which rank would you like to be?: ");
                         int rankToBe = Integer.parseInt(sc.nextLine());
                         System.out.println("How would you like to pay?: ");
                         String method = sc.nextLine();
 
-                        if(rankToBe == 7){System.out.println("You can only rank up to 6");}
+                        if(rankToBe <= players[curTurnIdx].getRank()) {
+                        	System.out.println("You are already that rank or higher.");
+                        	break;
+                        }
+                        	
+                        if(rankToBe > 6) {
+                        	System.out.println("You can only rank up to 6.");
+                        	break;
+                        }
                         
                         players[curTurnIdx].rankUp(rankToBe, method);
                         
                         if(!(method.equalsIgnoreCase("money")) && !(method.equalsIgnoreCase("credit"))) {
                         	System.out.println("Payement must be money or credit");
                         	break;
-                        }
-                        
-                        if(!(players[curTurnIdx].getPos().equalsIgnoreCase("office"))) {
-                        	System.out.println("You must go to the casting office to rank up.");
-                        }
+                        } 
                         
                         else if(players[curTurnIdx].getRank() != rankToBe) {
                         	System.out.println("You did not have enough to rank up.");
@@ -341,11 +351,20 @@ public class Board {
                         System.out.println("Credits : " + players[curTurnIdx].getCredits());
                         System.out.println("Practice Chips : " + players[curTurnIdx].getChips());
                         break;
+                        
+                    case "show":
+                    	for(int i = 0; i < players.length; i++) {
+                    		System.out.println(players[i].getId() + " is at " + players[i].getPos());
+                    	}
+                    	break;
                     //add any actions you feel would be helpful
                 }
             }
+            if(res.equals("exit")) {
+            	break;
+            }
         }
-        res = "exit";
+        //res = "exit";
         return res;
     }
 
