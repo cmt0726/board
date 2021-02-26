@@ -266,12 +266,7 @@ public class Board {
                         if (players[curTurnIdx].getPos().equalsIgnoreCase("office") && !offNeiList.contains(destPos)) {
                         	System.out.println("You cannot move there from here.");
                         	break;
-                        }
-                        
-                        //else if (Arrays.stream(moves).anyMatch(players[curTurnIdx].getPos()::equals)) {
-                        //	System.out.println("a");
-                        //	break;
-                        //}
+                        }  
                         
                         else {
                         	//System.out.println(traiNeiList.contains(destPos));
