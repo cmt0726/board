@@ -3,7 +3,7 @@ package javaSrc;
     class Deadwood {
         
         public static void main(String[] args) throws Exception{
-            xmlParser xml = new xmlParser();
+            //xmlParser xml = new xmlParser();
             String boardXMLFile = null;
             String cardXMLFile = null;
             int playerCount = 0;

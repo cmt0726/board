@@ -3,15 +3,35 @@ package javaSrc;
 public class Player {
     private int rank = 1;
     private int credit = 0;
-    private int money = 20;
+    private int money = 0;
     private int role;
     private String playerId;
     private int practiceChips = 0; //temp
     private int[] currentPos = {0,0};
     private PlayerAction playerAct = new PlayerAction(this);
+    private boolean hasMoved = false;
+    private boolean hasRole = false;
 
     public Player(){
     	//
+    }
+    
+    public boolean getHasMoved() {
+    	return this.hasMoved;
+    }
+    
+    public boolean getHasRole() {
+    	return this.hasRole;
+    }
+    
+    public boolean setHasMoved(boolean moved) {
+    	this.hasMoved = moved;
+    	return this.hasMoved;
+    }
+    
+    public boolean setHasRole(boolean role) {
+    	this.hasRole = true;
+    	return this.hasRole;
     }
 
     public String getPlayerId(){
@@ -70,7 +90,7 @@ public class Player {
     }
     
     public void act(int x /*scene difficulty*/){
-        //this call will affect this current player objects rank
+        //this call will roll and calculate for scene progression when a player decides to act
         if (playerAct.act(x)) {
         	System.out.println("Scene progressed");
         }
@@ -80,7 +100,7 @@ public class Player {
     }
     
     public void rehearse(){
-        //this call will affect this current player objects rank
+        //this call will add practice chips to the current player
         playerAct.rehearse();
         System.out.println(this.getChips());
     }

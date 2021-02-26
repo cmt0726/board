@@ -78,11 +78,10 @@ public class Board {
         
         Scanner sc = new Scanner(System.in);
         String res = "";
-        boolean hasMoved;
-        boolean hasRole;
         
         for(int curTurnIdx = 0; curTurnIdx < totalPlayerCount; curTurnIdx++){
             Boolean hasMoreAction = true;
+            players[curTurnIdx].setHasMoved(false);
             //TODO implement a system that calcualtes available actions
             //currently this just says you can do anything
             
@@ -91,6 +90,7 @@ public class Board {
             	System.out.println("Player " + (curTurnIdx + 1));
                 System.out.println("Current Available Actions: Act, Rehearse, Move, TakeRole, RankUp, EndTurn, exit, Active Player");
                 res = sc.nextLine();
+                
 
                 System.out.println("--> " + res);
                 String[] commands = res.split(" ");
@@ -108,20 +108,52 @@ public class Board {
                         break;
                         
                     case "takerole":
-                    	System.out.println("Choose one of the roles: ");//+ scene.roles)
-                    	hasMoreAction = false;
-                    	break;
+                    	if(players[curTurnIdx].getHasRole()) {
+                    		System.out.println("You already have a role. You can only act or rehearse.");
+                    		break;
+                    	}
+                    	else {
+                    		System.out.println("Choose one of the roles: ");//+ scene.roles)
+                    		int resint = sc.nextInt();
+                    		switch(resint) {
+                    			case 1:
+                    				System.out.println("Player " + (curTurnIdx + 1) + " now has the 1role");
+                    				break;
+                    			case 2:
+                    				System.out.println("Player " + (curTurnIdx + 1) + " now has the 2role");
+                    				break;
+                    			case 3:
+                    				System.out.println("Player " + (curTurnIdx + 1) + " now has the 3role");
+                    				break;
+                    		}
+                    	
+                    		players[curTurnIdx].setHasRole(true);
+                    		hasMoreAction = false;
+                    		break;
+                    	}
                         
                     case "move":  
                         if(commands.length != 2){
                             System.out.println("Must specify Location to move to");
                             break;
                         }
-                        String destPos = commands[1]; 
-                        //TODO calculate if that move is actually valid
-                        System.out.println("You've moved from [CURRENT POS] to [DEST POS]");
-                        hasMoreAction = false;
-                        break;
+                        
+                        if(players[curTurnIdx].getHasRole()) {
+                        	System.out.println("You can only act or rehearse while you have a role.");
+                        	break;
+                        }
+                        
+                        if (players[curTurnIdx].getHasMoved()) {
+                        	System.out.println("You cannot move twice in one turn.");
+                        	break;
+                        }
+                        else {
+                        	String destPos = commands[1]; 
+                        	//TODO calculate if that move is actually valid
+                        	System.out.println("You've moved from [CURRENT POS] to [DEST POS]");
+                        	players[curTurnIdx].setHasMoved(true);
+                        	break;
+                        }
                         
                     case "rankup":         	
                         if(commands.length != 3) {
