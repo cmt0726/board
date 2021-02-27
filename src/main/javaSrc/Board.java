@@ -197,6 +197,11 @@ public class Board {
                                         			currentRoleDataOffCard[0][2] = "true";
                                         			locationRoleData.put(currentPlayer.getPos(), currentRoleDataOffCard);
                                         			payout(players,currentPlayer.getPos() ,currentPlayer.bonus(currentRoleDataOnCard[i][2]));
+                                        			for(int j = 0; j < players.length;j++) {
+                                        				if(!players[j].getHasRole()) {
+                                        					players[j].setChips(0);
+                                        				}
+                                        			}
         										
                                         			currentPlayer.setHasRole(false);
                                         			currentPlayer.setOnCardRole(false);
@@ -253,6 +258,11 @@ public class Board {
                                         			locationRoleData.put(currentPlayer.getPos(), currentRoleDataOffCard);
                                                 
                                         			payout(players,currentPlayer.getPos() ,currentPlayer.bonus(currentRoleDataOnCard[i][2]));
+                                        			for(int j = 0; j < players.length;j++) {
+                                        				if(!players[j].getHasRole()) {
+                                        					players[j].setChips(0);
+                                        				}
+                                        			}
                                         			currentPlayer.setHasRole(false);
                                         			currentPlayer.setOnCardRole(false);
                                         			int totalActiveScenes = 0;
@@ -291,6 +301,11 @@ public class Board {
                                     			locationRoleData.put(currentPlayer.getPos(), currentRoleDataOffCard);
                                             
                                     			payout(players,currentPlayer.getPos() ,currentPlayer.bonus(currentRoleDataOnCard[0][2]));
+                                    			for(int j = 0; j < players.length;j++) {
+                                    				if(!players[j].getHasRole()) {
+                                    					players[j].setChips(0);
+                                    				}
+                                    			}
                                     			currentPlayer.setOnCardRole(false);
                                     			currentPlayer.setHasRole(false);
                                     			int totalActiveScenes = 0;
@@ -331,6 +346,11 @@ public class Board {
                                             //System.out.println("NO MORE SHOTSSSSSSSSSSSSSSS");
 
                                     			payout(players,currentPlayer.getPos() ,currentPlayer.bonus(currentRoleDataOnCard[0][2]));
+                                    			for(int j = 0; j < players.length;j++) {
+                                    				if(!players[j].getHasRole()) {
+                                    					players[j].setChips(0);
+                                    				}
+                                    			}
                                     			currentPlayer.setOnCardRole(false);
                                     			currentPlayer.setHasRole(false);
 
