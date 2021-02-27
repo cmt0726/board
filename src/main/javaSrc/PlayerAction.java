@@ -2,6 +2,7 @@ package javaSrc;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Random;
 
 //An Aggregation of the increaseRank, Act, and TakeRole classes
 
@@ -10,7 +11,7 @@ import java.util.Collections;
 
 public class PlayerAction {
     private Player player = null;
-    private boolean success;
+    
 
     public PlayerAction(Player playerOb){
         player = playerOb;
@@ -19,12 +20,15 @@ public class PlayerAction {
     
 	//TODO
 	public Boolean act(int playerRank, int difficulty) {
-		if(difficulty > playerRank)
-			return false;
-		success = false;
-		int roll = 1 + (int)(Math.random() * (7 - 1));
+		Boolean success = false;
+		Random randRoll = new Random();
+		// if(difficulty > playerRank)
+		// 	return false;
+		
+		int roll = randRoll.nextInt(6) + 1;
+		System.out.println("PLAYER ROLL FOR ACTING: " + roll);
 		int chips = player.getChips();
-		if(roll + chips >= difficulty) {
+		if(roll + chips >= difficulty/*difficulty*/) {
 			//scene.progress++;
 			success = true;
 		}
@@ -48,7 +52,7 @@ public class PlayerAction {
     public void rankUp(int rankRequest, String payment) {
         String temp = "office";
         //TODO : Link up playerPosition from board class
-		if(payment.equalsIgnoreCase("money") && player.getPos().equals(temp)){//player.getPlayerPos() == temp  && payment.equalsIgnoreCase("money")) {
+		if(payment.equalsIgnoreCase("money") && player.getPos().equals(temp)){
 			if (rankRequest == 2 && (player.getMoney() >= 4)) {
 				player.setMoney(player.getMoney() - 4);
                 player.setRank(2);

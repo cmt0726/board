@@ -92,7 +92,7 @@ public class xmlParser {
                 Element oCREle = (Element) offCardRoleNode;
                 String currentTileRoleLevel = oCREle.getAttribute("level"); 
                 String currentTileRoleName = oCREle.getAttribute("name");
-                String[] temp = {currentTileRoleName, currentTileRoleLevel, "False"};
+                String[] temp = {currentTileRoleName, currentTileRoleLevel, "false"};
                 offCardRoleData[j] = temp;
 
             }
@@ -129,7 +129,7 @@ public class xmlParser {
                 Element curPartEle = (Element) currentPart;
                 String curPartName = curPartEle.getAttribute("name");
                 String curPartLevel = curPartEle.getAttribute("level");
-                String[] cardArr = {curPartName, curPartLevel,currentCardBudget, "False"};
+                String[] cardArr = {curPartName, curPartLevel,currentCardBudget, "false"};
                 cardDataInstance[j] = cardArr;
             }
             cardData.put(i, cardDataInstance);

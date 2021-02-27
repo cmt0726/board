@@ -15,7 +15,7 @@ public class Sets {
     HashMap<String, String[][]> locationRoleData;
     HashMap<String, String[][]> locationCardRoleData = new HashMap<String, String[][]>();
     Cards card;
-    int cardIdx = 0;
+    int cardIdx = 10;
 
 
     public Sets(HashMap<String, Integer> scene, 
@@ -58,8 +58,8 @@ public class Sets {
         //end copy
         Set<String> temp = locationRoleData.keySet();
         Iterator<String> temp1 = temp.iterator();
-        int i = cardIdx;
-        while(temp1.hasNext()){
+        int i = cardIdx -10;
+        while(temp1.hasNext() && i < cardIdx - 10){
             try{
                 locationCardRoleData.put(temp1.next(), card.cardsData.get(i));
                 i++;

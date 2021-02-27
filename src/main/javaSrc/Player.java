@@ -5,12 +5,14 @@ public class Player {
     private int credit = 0;
     private int money = 0;
     private String role;
+    private Integer currentRoleRank = 0;
     private String playerId;
     private int practiceChips = 0; //temp
     private String position = "Trailer"; //temp
     private PlayerAction playerAct = new PlayerAction(this);
     private boolean hasMoved = false;
     private boolean hasRole = false;
+    private boolean onCardRole = false;
 
     public Player(){
     	//
@@ -30,7 +32,7 @@ public class Player {
     }
     
     public boolean setHasRole(boolean role) {
-    	this.hasRole = true;
+    	this.hasRole = role;
     	return this.hasRole;
     }
 
@@ -55,8 +57,21 @@ public class Player {
         return this.money;
     }
 
+    public Integer getCurrentRoleRank(){
+        return this.currentRoleRank;
+    }
+
     public String getRole(){
         return this.role;
+    }
+
+    public boolean getOnCardRole(){
+        return this.onCardRole;
+    }
+
+    public boolean setOnCardRole(boolean onRole){
+        this.onCardRole = onRole;
+        return this.onCardRole;
     }
 
     public int setRank(int newRank){
@@ -83,6 +98,11 @@ public class Player {
     	return this.practiceChips;
     }
 
+    public Integer setCurrentRoleRank(int roleRank){
+        this.currentRoleRank = roleRank;
+        return this.currentRoleRank;
+    }
+
     public void rankUp(int rankRequest, String payment){
         //this call will affect this current player objects rank
         playerAct.rankUp(rankRequest, payment);
@@ -92,7 +112,7 @@ public class Player {
     
     public Boolean act(int x, int rank){
         //this call will roll and calculate for scene progression when a player decides to act
-        return playerAct.act(x, rank);
+        return playerAct.act(rank, x);
     }
     
     public void rehearse(){
@@ -110,8 +130,8 @@ public class Player {
     	return this.position;
     }
 
-    public void bonus(String budget){
-        playerAct.bonus(budget);
+    public Integer[] bonus(String budget){
+        return playerAct.bonus(budget);
     }
 
 }
