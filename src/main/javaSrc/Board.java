@@ -67,15 +67,8 @@ public class Board {
     }
 
     public int getDay(){ return this.day;}
-
-    //getScene
-    //getPlayerPos
     
     public int[][] getBoardPosition(){return this.boardPosition;}
-
-    //changePlayerPos
-    //setScene
-    //setPlayerPosition
 
 
     /*
@@ -127,6 +120,10 @@ public class Board {
         			String[] commands = res.split(" ");
         			switch(commands[0].toLowerCase()) {
         				case "act":
+                            if(currentPlayer.getPos().equals("office") || currentPlayer.getPos().equals("trailer")){
+                                System.out.println("There are no roles for you here!");
+                                break;
+                            }
                             String[][] currentRoleDataOffCard = locationRoleData.get(currentPlayer.getPos());
 
         					String[][] currentRoleDataOnCard = locationCardRoleData.get(currentPlayer.getPos());
@@ -382,9 +379,22 @@ public class Board {
         						break;
         					} 
         					
-        					System.out.println("Move where? :");
-        					String destPos = sc.nextLine();
+        					System.out.print("Move where?: ");
+        					
         					String[] moves = neighbors.get(currentPlayer.getPos());
+
+                            if(currentPlayer.getPos().equals("trailer")){
+                                for(int i = 0; i < trailerNeighbors.length; i++)
+                                    System.out.print(trailerNeighbors[i] + ", ");
+                            } else if(currentPlayer.getPos().equals("office")){
+                                for(int i = 0; i < trailerNeighbors.length; i++)
+                                    System.out.print(officeNeighbors[i] + ", ");
+                            } else {
+                                for(int i = 0; i < moves.length; i++)
+                                    System.out.print(moves[i] + ", ");
+                            }
+                            System.out.println("\n");
+                            String destPos = sc.nextLine();
         					boolean adj = false;	   
                         
         					if(moves != null) {
