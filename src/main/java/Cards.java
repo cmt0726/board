@@ -1,4 +1,4 @@
-package javaSrc;
+
 import java.util.HashMap;
 
 public class Cards {

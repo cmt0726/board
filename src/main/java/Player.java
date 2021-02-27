@@ -1,4 +1,4 @@
-package javaSrc;
+
 
 public class Player {
     private int rank = 1;

@@ -1,4 +1,4 @@
-package javaSrc;
+
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.io.*;
@@ -24,10 +24,10 @@ public class xmlParser {
     HashMap<Integer, String[][]> cardData = new HashMap<Integer, String[][]>();
     
     
-    public xmlParser() throws Exception{
+    public xmlParser(String board, String card) throws Exception{
 
-        File inputFile = new File("./resources/board.xml");
-        File inputFileCards = new File("./resources/cards.xml");
+        File inputFile = new File(board);
+        File inputFileCards = new File(card);
         //Code taken from https://www.tutorialspoint.com/java_xml/java_dom_parse_document.htm
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();

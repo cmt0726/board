@@ -1,4 +1,4 @@
-package javaSrc;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +14,9 @@ public class Board {
     private ArrayList role;
     private ArrayList scene;
     private int day;
-    public xmlParser xml = new xmlParser();
+	private String boardS;
+	private String cardS;
+    public xmlParser xml;
 
     private String[] trailerNeighbors = {"Main Street", "Saloon", "Hotel"};
     private String[] officeNeighbors = {"Train Station", "Ranch", "Secret Hideout"};
@@ -22,17 +24,27 @@ public class Board {
     private List<String> traiNeiList = Arrays.asList(trailerNeighbors);
     private List<String> offNeiList = Arrays.asList(officeNeighbors);
 
-    public HashMap<Integer, String[][]> cardData = xml.card.cardsData;
-    public HashMap<String, String[][]> locationRoleData = xml.set.locationRoleData;
-    public HashMap<String, String[][]> locationCardRoleData= xml.set.locationCardRoleData;
-    public HashMap<String, String[]> neighbors = xml.set.neighbors;
+    public HashMap<Integer, String[][]> cardData;
+    public HashMap<String, String[][]> locationRoleData;
+    public HashMap<String, String[][]> locationCardRoleData;
+    public HashMap<String, String[]> neighbors;
 
     private Player[] players;
     private int totalPlayerCount;
     public EndDay endday = new EndDay(this); //passing the Board object into EndDay
     
-    public Board(int playerCount) throws Exception{
+    public Board(int playerCount, String board, String card) throws Exception{
        
+		this.boardS = board;
+		this.cardS = card;
+
+		xml = new xmlParser(boardS, cardS);
+
+		this.cardData = xml.card.cardsData;
+		this.locationRoleData = xml.set.locationRoleData;
+		this.locationCardRoleData = xml.set.locationCardRoleData;
+		this.neighbors = xml.set.neighbors;
+
     	Scanner sc = new Scanner(System.in);
 
         totalPlayerCount = playerCount;
@@ -179,6 +191,8 @@ public class Board {
                                         System.out.println("CURRENT ROLE BUDGET:" + currentRoleDataOnCard[i][2]);
                                         currentPlayer.setHasRole(true);
                                         
+
+
                                         if(!currentPlayer.getHasMoved()) {
                                         	Boolean success = currentPlayer.act(Integer.parseInt(currentRoleDataOnCard[i][2]), currentPlayer.getRank());
                                         	
@@ -342,8 +356,6 @@ public class Board {
 
                                     			currentRoleDataOffCard[0][2] = "true";
                                     			locationRoleData.put(currentPlayer.getPos(), currentRoleDataOffCard);
-
-                                            //System.out.println("NO MORE SHOTSSSSSSSSSSSSSSS");
 
                                     			payout(players,currentPlayer.getPos() ,currentPlayer.bonus(currentRoleDataOnCard[0][2]));
                                     			for(int j = 0; j < players.length;j++) {

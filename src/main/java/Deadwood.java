@@ -1,4 +1,4 @@
-package javaSrc;
+
 
     class Deadwood {
         
@@ -11,8 +11,8 @@ package javaSrc;
             //String[] temp = {"Train Station", "Secret Hideout", "Church", "Hotel", "Main Street", "Jail", "General Store", "Ranch", "Bank", "Saloon"};
             
 
-            String boardXMLFile = null;
-            String cardXMLFile = null;
+            String boardXMLFile = args[1];
+            String cardXMLFile = args[2];
             int playerCount = 0;
 
             if (args.length >= 3) {
@@ -24,7 +24,7 @@ package javaSrc;
                     
                 }
                 System.out.println("success!");
-                Board board = new Board(playerCount);
+                Board board = new Board(playerCount, boardXMLFile, cardXMLFile);
                 play(board);
             } else {
                 boardXMLFile = "src/main/resources/board.xml";
