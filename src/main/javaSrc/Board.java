@@ -384,6 +384,16 @@ public class Board {
         					break;
                         
         				case "rehearse":
+        					if(currentPlayer.getChips() > 4) {
+        						System.out.println("You already have guaranteed success, you must act.");
+        						break;
+        					}
+        					
+        					if(!currentPlayer.getHasRole()) {
+        						System.out.println("You cannot rehearse without having a role");
+        						break;
+        					}
+        					
         					currentPlayer.rehearse();
                         
         					hasMoreAction = false;
