@@ -1,14 +1,14 @@
 package javaSrc;
 
 public class Player {
-    private int rank = 1;
+    private int rank = 6;
     private int credit = 0;
     private int money = 0;
     private String role;
     private Integer currentRoleRank = 0;
     private String playerId;
     private int practiceChips = 0; //temp
-    private String position = "Trailer"; //temp
+    private String position = "trailer"; //temp
     private PlayerAction playerAct = new PlayerAction(this);
     private boolean hasMoved = false;
     private boolean hasRole = false;
