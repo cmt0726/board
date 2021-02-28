@@ -1,0 +1,19 @@
+Our core design is centrally focused around the Board class. Our entry out is of course Deadwood.java, but
+From there, we utilize low coupling between the board and the xmlParsing class in order to sustain a
+more independent product design that reduces depencies on other data.
+
+Aside from our core set up, we implemented cohesion in much of our helper classes. This let us 
+interpet data from the seperate objects in a predictable way.
+For example, Our player class has no programming logic inside, it is simply a connection
+between seperate classes and their goals.
+
+Another example would be the interactions between Board.java and xmlParser.java. In this relationship 
+Board knows nothing about implementation details, Board simply acts on received data, and if that
+data were to change, then a simple array indexing difference is all that would be needed.
+Because of this, semantic labelling and compartmentalized data, working with the xml files
+was a smooth process.
+
+With the completion and implementation of the game, there's quite a bit that we learned as well.
+Seperating out functionaility and implementation details from class interactions was essential.
+What was also important was how proper data access and data labelling made testing
+really easy, where we could change a few variables, and then test if our endgame functions worked- for example.
