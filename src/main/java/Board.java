@@ -173,6 +173,7 @@ public class Board {
         						
         						for(int i = 0; i < currentRoleDataOffCard.length; i++){
 									String nameOfPotentialRole = currentRoleDataOffCard[i][0];
+									String partBudgetS = currentRoleDataOnCard[i][2];
         							if(nameOfPotentialRole.equals(roleSelection)) {
                                     
                                    
@@ -184,13 +185,13 @@ public class Board {
 										//Means the player chose a role that is OffCard and we're associating a player position with that fact
         								xml.set.locationRoleData.put(currentPlayer.getPos(), currentRoleDataOffCard);
 
-                                        System.out.println("CURRENT ROLE BUDGET:" + currentRoleDataOnCard[i][2]);
+                                        System.out.println("Current Role Budget:" + partBudgetS);
                                         currentPlayer.setHasRole(true);
 
                                         if(!currentPlayer.getHasMoved()) {
 
-											Integer partBudget = Integer.parseInt(currentRoleDataOnCard[i][2]);
-											String partBudgetS = currentRoleDataOnCard[i][2];
+											Integer partBudget = Integer.parseInt(partBudgetS);
+											
                                         	Boolean success = currentPlayer.act(partBudget, currentPlayer.getRank());
                                         	
                                         	if(success){
