@@ -1,4 +1,7 @@
-
+/* Written by Connor Teige and Connor Dole
+    Assignment 4, CS345
+    2/27/2021
+*/
 
 import java.util.HashMap;
 import java.util.Iterator;

@@ -1,4 +1,7 @@
-
+/* Written by Connor Teige and Connor Dole
+    Assignment 4, CS345
+    2/27/2021
+*/
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.io.*;
@@ -28,17 +31,19 @@ public class xmlParser {
 
         File inputFile = new File(board);
         File inputFileCards = new File(card);
+
         //Code taken from https://www.tutorialspoint.com/java_xml/java_dom_parse_document.htm
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
 
         StringBuilder xmlStringBuilder = new StringBuilder();
         xmlStringBuilder.append("<?xml version=\"1.0\"?> <class> </class>");
-        //ByteArrayInputStream input = new ByteArrayInputStream(xmlStringBuilder.toString().getBytes("UTF-8"));
+      
         doc = builder.parse(inputFile);
         docCards = builder.parse(inputFileCards);
 
         doc.getDocumentElement().normalize();
+        //
         docCards.getDocumentElement().normalize();
         populateHash();
  
@@ -55,17 +60,19 @@ public class xmlParser {
         }
     }
 
+    //This function will populate the hashmaps associated with Sets.java and Cards.java
     private void populateHash(){
         nList = doc.getElementsByTagName("set");
         cardsNlist = docCards.getElementsByTagName("card");
         
+        //gets the list of neighbors for each set
         for(int i = 0; i < nList.getLength(); i++){
             
             Node nNode = nList.item(i);
             
             Element eEle = (Element) nNode;
             
-            String currentSetName = eEle.getAttribute("name");
+            String currentSetName = eEle.getAttribute("name").toLowerCase();
             NodeList neighborNlist = eEle.getElementsByTagName("neighbor");
 
             int neighborSize = neighborNlist.getLength();
@@ -76,7 +83,7 @@ public class xmlParser {
                 
                 Node neighborNode = neighborNlist.item(j);
                 Element neighborEle = (Element) neighborNode;
-                String currentTileNeighbor = neighborEle.getAttribute("name");
+                String currentTileNeighbor = neighborEle.getAttribute("name").toLowerCase();
                 neighbors[j] = currentTileNeighbor;
                 
                 
@@ -86,12 +93,13 @@ public class xmlParser {
             int offCardRolesListSize = offCardRolesList.getLength();
             String[][] offCardRoleData = new String[offCardRolesListSize][3];
 
+            //gets the level for each off card role
             for(int j = 0; j < offCardRolesListSize; j++){
 
                 Node offCardRoleNode = offCardRolesList.item(j);
                 Element oCREle = (Element) offCardRoleNode;
-                String currentTileRoleLevel = oCREle.getAttribute("level"); 
-                String currentTileRoleName = oCREle.getAttribute("name");
+                String currentTileRoleLevel = oCREle.getAttribute("level").toLowerCase(); 
+                String currentTileRoleName = oCREle.getAttribute("name").toLowerCase();
                 String[] temp = {currentTileRoleName, currentTileRoleLevel, "false"};
                 offCardRoleData[j] = temp;
 
@@ -107,11 +115,10 @@ public class xmlParser {
             locationNeighbors.put(currentSetName, neighbors);
             locationShotCount.put(currentSetName, setTakesCount);
 
-            //time to populate cards
-
             
         }
 
+        //goes through every card and associates and index 0-39 for that card so we can randomly apply them to the sets
         for(int i = 0; i < cardsNlist.getLength(); i++){
             Node nNode = cardsNlist.item(i);
             
@@ -119,16 +126,16 @@ public class xmlParser {
             
             String currentCardBudget = eEle.getAttribute("budget");
             String currentCardName = eEle.getAttribute("name");
-            // NodeList cardSceneNumber = eEle.getElementsByTagName("scene");
-            // Node scene = cardSceneNumber.item(0);
-            // scene.get
+            
             NodeList partCardList = eEle.getElementsByTagName("part");
             String[][] cardDataInstance = new String[partCardList.getLength()][4];
+
+            //gets the name and level for each card 
             for(int j = 0; j < partCardList.getLength(); j++) {     
                 Node currentPart = partCardList.item(j);
                 Element curPartEle = (Element) currentPart;
-                String curPartName = curPartEle.getAttribute("name");
-                String curPartLevel = curPartEle.getAttribute("level");
+                String curPartName = curPartEle.getAttribute("name").toLowerCase();
+                String curPartLevel = curPartEle.getAttribute("level").toLowerCase();
                 String[] cardArr = {curPartName, curPartLevel,currentCardBudget, "false"};
                 cardDataInstance[j] = cardArr;
             }

@@ -1,4 +1,7 @@
-
+/* Written by Connor Teige and Connor Dole
+    Assignment 4, CS345
+    2/27/2021
+*/
 public class EndDay {
     
     private int playerCount;
@@ -40,6 +43,7 @@ public class EndDay {
 
     public int getDayLim(){return this.dayLimit;}
 
+    //moves players back to trailer, resets cards for the board, and increments day counter
     public void resetForNextDay(){
         board.xml.set.generateSceneCards();
         int playerCount = board.getPlayerCount();
@@ -53,6 +57,5 @@ public class EndDay {
         }
     }
 
-    //generateScene
     
 }

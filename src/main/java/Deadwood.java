@@ -1,15 +1,11 @@
-
+/* Written by Connor Teige and Connor Dole
+    Assignment 4, CS345
+    2/27/2021
+*/
 
     class Deadwood {
         
         public static void main(String[] args) throws Exception{
-            //xmlParser xml = new xmlParser();
-            //HashMap<Integer, String[][]> cardsData = xml.card.cardsData;
-            //HashMap<String, Integer> locationShotCount = xml.set.sceneShotCounter;
-
-            
-            //String[] temp = {"Train Station", "Secret Hideout", "Church", "Hotel", "Main Street", "Jail", "General Store", "Ranch", "Bank", "Saloon"};
-            
 
             String boardXMLFile = args[1];
             String cardXMLFile = args[2];

@@ -1,4 +1,7 @@
-
+/* Written by Connor Teige and Connor Dole
+    Assignment 4, CS345
+    2/27/2021
+*/
 
 public class Player {
     private int rank = 1;
@@ -7,16 +10,12 @@ public class Player {
     private String role;
     private Integer currentRoleRank = 0;
     private String playerId;
-    private int practiceChips = 0; //temp
-    private String position = "trailer"; //temp
+    private int practiceChips = 0;
+    private String position = "trailer"; 
     private PlayerAction playerAct = new PlayerAction(this);
     private boolean hasMoved = false;
     private boolean hasRole = false;
     private boolean onCardRole = false;
-
-    public Player(){
-    	//
-    }
     
     public boolean getHasMoved() {
     	return this.hasMoved;
