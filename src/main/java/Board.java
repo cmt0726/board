@@ -125,12 +125,13 @@ public class Board {
         			String[] commands = res.split(" ");
         			switch(commands[0].toLowerCase()) {
         				case "act":
-                            if(currentPlayer.getPos().equals("office") || currentPlayer.getPos().equals("trailer")){
+							String playerPosition = currentPlayer.getPos();
+                            if(playerPosition.equals("office") || playerPosition.equals("trailer")){
                                 System.out.println("There are no roles for you here!");
                                 break;
                             }
-                            String[][] currentRoleDataOffCard = locationRoleData.get(currentPlayer.getPos());
-        					String[][] currentRoleDataOnCard = locationCardRoleData.get(currentPlayer.getPos());
+                            String[][] currentRoleDataOffCard = locationRoleData.get(playerPosition);
+        					String[][] currentRoleDataOnCard = locationCardRoleData.get(playerPosition);
 
                             if(currentRoleDataOffCard[0][2].equals("true")){
                                 System.out.println("This set is has wrapped up, you must move to another location");
@@ -173,7 +174,7 @@ public class Board {
         						
         						for(int i = 0; i < currentRoleDataOffCard.length; i++){
 									String nameOfPotentialRole = currentRoleDataOffCard[i][0];
-									String partBudgetS = currentRoleDataOnCard[i][2];
+									String partBudgetS = currentRoleDataOnCard[0][2];
         							if(nameOfPotentialRole.equals(roleSelection)) {
                                     
                                    
@@ -199,16 +200,16 @@ public class Board {
                                         		currentPlayer.setCredits(currentPlayer.getCredits() + 1);
                                         		currentPlayer.setMoney(currentPlayer.getMoney() + 1);
                                         
-                                        		xml.set.decreaseShotCount(currentPlayer.getPos());
+                                        		xml.set.decreaseShotCount(playerPosition);
                                         		System.out.println("You have succeeded! You gain 1 credit and 1 dollar");
                                         		currentRoleDataOffCard[i][2] = "True";
 
                                             //off card guys get no bonus money
 											//This means that specific scene has no more shots to take and that we should commence payout
-                                        		if(xml.set.sceneShotCounter.get(currentPlayer.getPos()) == 0) {
+                                        		if(xml.set.sceneShotCounter.get(playerPosition) == 0) {
                                         			currentRoleDataOffCard[0][2] = "true";
-                                        			locationRoleData.put(currentPlayer.getPos(), currentRoleDataOffCard);
-                                        			payout(players,currentPlayer.getPos() ,currentPlayer.bonus(partBudgetS));
+                                        			locationRoleData.put(playerPosition, currentRoleDataOffCard);
+                                        			payout(players,playerPosition ,currentPlayer.bonus(partBudgetS));
                                         			for(int j = 0; j < players.length;j++) {
                                         				if(!players[j].getHasRole()) {
                                         					players[j].setChips(0);
@@ -256,7 +257,7 @@ public class Board {
 
 										//sets that cards role to True, that there is a player working on it so that no one else can.
         								currentRoleDataOnCard[i][3] = "True";
-        								xml.set.locationCardRoleData.put(currentPlayer.getPos(), currentRoleDataOnCard);
+        								xml.set.locationCardRoleData.put(playerPosition, currentRoleDataOnCard);
 
         								System.out.println("You have chosen: " + roleName);
 										Integer selectedRoleRank = Integer.parseInt(currentRoleDataOnCard[i][1]);
@@ -274,15 +275,15 @@ public class Board {
                                                            
                                         	if(success){
                                         		currentPlayer.setCredits(currentPlayer.getCredits() + 2);
-                                        		xml.set.decreaseShotCount(currentPlayer.getPos());
+                                        		xml.set.decreaseShotCount(playerPosition);
                                         		System.out.println("You have succeeded! You gain 2 credits");
 
 												//No more shots left on this card
-                                        		if(xml.set.sceneShotCounter.get(currentPlayer.getPos()) == 0) {
+                                        		if(xml.set.sceneShotCounter.get(playerPosition) == 0) {
                                         			currentRoleDataOffCard[0][2] = "true";
-                                        			locationRoleData.put(currentPlayer.getPos(), currentRoleDataOffCard);
+                                        			locationRoleData.put(playerPosition, currentRoleDataOffCard);
                                                 
-                                        			payout(players,currentPlayer.getPos() ,currentPlayer.bonus(cardRoleBudgetS));
+                                        			payout(players,playerPosition ,currentPlayer.bonus(cardRoleBudgetS));
 
 													//resets number of practice chips for each player
                                         			for(int j = 0; j < players.length;j++) {
@@ -323,15 +324,15 @@ public class Board {
                                     	Boolean success = currentPlayer.act(Integer.parseInt(roleBudget), currentPlayer.getRank());
                                     	if(success){
                                     		currentPlayer.setCredits(currentPlayer.getCredits() + 2);
-                                    		xml.set.decreaseShotCount(currentPlayer.getPos());
+                                    		xml.set.decreaseShotCount(playerPosition);
                                     		System.out.println("You have succeeded! You gain 2 credits");
 
-                                    		if(xml.set.sceneShotCounter.get(currentPlayer.getPos()) == 0) {
+                                    		if(xml.set.sceneShotCounter.get(playerPosition) == 0) {
 
                                     			currentRoleDataOffCard[0][2] = "true"; //this scene is done, no more shots left.
-                                    			locationRoleData.put(currentPlayer.getPos(), currentRoleDataOffCard); //set the data for that location with the fact there are no more shots left
+                                    			locationRoleData.put(playerPosition, currentRoleDataOffCard); //set the data for that location with the fact there are no more shots left
                                             
-                                    			payout(players,currentPlayer.getPos() ,currentPlayer.bonus(roleBudget));
+                                    			payout(players,playerPosition ,currentPlayer.bonus(roleBudget));
                                     			for(int j = 0; j < players.length;j++) {
                                     				if(!players[j].getHasRole()) {
                                     					players[j].setChips(0);
@@ -364,17 +365,17 @@ public class Board {
                                     		currentPlayer.setCredits(currentPlayer.getCredits() + 1);
                                     		currentPlayer.setMoney(currentPlayer.getMoney() + 1);
                                     
-                                    		xml.set.decreaseShotCount(currentPlayer.getPos());
+                                    		xml.set.decreaseShotCount(playerPosition);
                                     		System.out.println("You have succeeded! You gain 1 credit and 1 dollar");
                                     		currentRoleDataOffCard[0][2] = "True";
 
                                         //off card guys get no bonus money
-                                    		if(xml.set.sceneShotCounter.get(currentPlayer.getPos()) == 0) {
+                                    		if(xml.set.sceneShotCounter.get(playerPosition) == 0) {
 
                                     			currentRoleDataOffCard[0][2] = "true";
-                                    			locationRoleData.put(currentPlayer.getPos(), currentRoleDataOffCard);
+                                    			locationRoleData.put(playerPosition, currentRoleDataOffCard);
 
-                                    			payout(players,currentPlayer.getPos() ,currentPlayer.bonus(roleBudget));
+                                    			payout(players,playerPosition ,currentPlayer.bonus(roleBudget));
                                     			for(int j = 0; j < players.length;j++) {
                                     				if(!players[j].getHasRole()) {
                                     					players[j].setChips(0);
