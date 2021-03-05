@@ -1,1 +1,20 @@
 Consisent spacing is the only issue with your code, variable names look good and so do the comments. Your diagram contains all of the necessary classes and symbols - nice! Your design explains a lot of high level choices but does not explain the types of cohesion/coupling and why you used them. The game works for a single scene, but then it has a hashmap error loading scenes afterward. I think this would benefit from more testing because your implementation was on the right track!
+
++------------------------+----------+---------------+
+| Test                   |   Points |   constrictor |
+|------------------------+----------+---------------|
+| Active player          |        2 |           2   |
+| Location-active player |        2 |           2   |
+| Location-all           |        2 |           2   |
+| Move                   |        2 |           2   |
+| Take role              |        2 |           2   |
+| Upgrade                |        2 |           0   |
+| Rehearse               |        2 |           2   |
+| Act                    |        2 |           2   |
+| End day                |        2 |           0   |
+| End turn               |        2 |           2   |
+| Quality of code        |        5 |           4   |
+| Class Diagram          |        5 |           5   |
+| Design Rational        |       10 |           6.5 |
+| Total                  |       40 |          31.5 |
++------------------------+----------+---------------+
