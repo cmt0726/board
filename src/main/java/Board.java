@@ -174,7 +174,7 @@ public class Board {
         						
         						for(int i = 0; i < currentRoleDataOffCard.length; i++){
 									String nameOfPotentialRole = currentRoleDataOffCard[i][0];
-									String partBudgetS = currentRoleDataOnCard[i][2];
+									String partBudgetS = currentRoleDataOnCard[0][2];
         							if(nameOfPotentialRole.equals(roleSelection)) {
                                     
                                    
