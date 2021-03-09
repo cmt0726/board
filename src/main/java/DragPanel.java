@@ -52,13 +52,14 @@ public class DragPanel extends JPanel{
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(imgBoard, 0, 0, this);
+
         img1.paintIcon(this, g, (int)imageCorner[0].getX(), (int)imageCorner[0].getY());
         img2.paintIcon(this, g, (int)imageCorner[1].getX(), (int)imageCorner[1].getY());
         img3.paintIcon(this, g, (int)imageCorner[2].getX(), (int)imageCorner[2].getY());
         img4.paintIcon(this, g, (int)imageCorner[3].getX(), (int)imageCorner[3].getY());
         img5.paintIcon(this, g, (int)imageCorner[4].getX(), (int)imageCorner[4].getY());
         img6.paintIcon(this, g, (int)imageCorner[5].getX(), (int)imageCorner[5].getY());
-        //imgBoard.paintIcon(this, g, (int)imageCorner.getX(), (int)imageCorner.getY());
+        
     }
 
     public class ClickListener extends MouseAdapter {
@@ -98,8 +99,10 @@ public class DragPanel extends JPanel{
     }
 
     public class DragListener extends MouseMotionAdapter{
+
         public boolean isInObject = true;
         int currentTileIdx;
+        
         public void mouseDragged(MouseEvent e) {
 
             if(!isInObject){
@@ -107,22 +110,12 @@ public class DragPanel extends JPanel{
             }
             
             Point currentPt = e.getPoint();
-
-            //System.out.println(currentPt.getX()+ " " + currentPt.getY());
-
-            // for(int i = 0; i < 6; i++){
-            //     if(currentPt.getX() > imageCorner[i].getX() && currentPt.getX() < imageCorner[i].getX() + WIDTH){
-            //         if(currentPt.getY() > imageCorner[i].getY() && currentPt.getY() < imageCorner[i].getY() + HEIGHT) {
                         
-                        imageCorner[this.currentTileIdx].translate(
-                            (int)(currentPt.getX() - prevPt.getX()),
-                            (int)(currentPt.getY() - prevPt.getY())
-                        );
-                        prevPt = currentPt;
-            //         } 
-                    
-            //     } 
-            // }
+            imageCorner[this.currentTileIdx].translate(
+                (int)(currentPt.getX() - prevPt.getX()),
+                (int)(currentPt.getY() - prevPt.getY())
+            );
+            prevPt = currentPt;
             
             repaint();
         }
