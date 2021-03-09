@@ -11,12 +11,10 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 
 public class DragPanel extends JPanel{
-<<<<<<< HEAD
-    int i = Deadwood.playerCount;
+    int players = Deadwood.playerCount;
     
-=======
     ImageIcon[] images = new ImageIcon[8];
->>>>>>> branch 'master' of https://gitlab.cs.wwu.edu/cs345_21wi/team_constrictor_345-21wi.git
+
     ImageIcon img1 = new ImageIcon("./src/main/resources/img/dice_r1.png");
     ImageIcon img2 = new ImageIcon("./src/main/resources/img/dice_b1.png");
     ImageIcon img3 = new ImageIcon("./src/main/resources/img/dice_g1.png");
@@ -60,9 +58,6 @@ public class DragPanel extends JPanel{
 
     }
 
-    
-
-
     public void paintComponent(Graphics g) {
         
         super.paintComponent(g);
@@ -72,13 +67,13 @@ public class DragPanel extends JPanel{
 
         if(idx == -1){
 
-            for(int i = 0; i < 8; i++){
+            for(int i = 0; i < players; i++){
                 images[i].paintIcon(this, g, (int)imageCorner[i].getX(), (int)imageCorner[i].getY());
             }
 
         } else {
 
-            for(int i = 0; i < 8; i++){
+            for(int i = 0; i < players; i++){
                 if(idx == i){continue;}
                 images[i].paintIcon(this, g, (int)imageCorner[i].getX(), (int)imageCorner[i].getY());
             }
@@ -100,7 +95,7 @@ public class DragPanel extends JPanel{
 
             //System.out.println(currentPt.getX()+ " " + currentPt.getY());
                         		
-            for(int i = 0; i < 8; i++){
+            for(int i = 0; i < players; i++){
                 if(prevPt.getX() > imageCorner[i].getX() && prevPt.getX() < imageCorner[i].getX() + WIDTH){
                     if(prevPt.getY() > imageCorner[i].getY() && prevPt.getY() < imageCorner[i].getY() + HEIGHT) {
                         
