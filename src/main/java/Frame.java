@@ -16,11 +16,11 @@ public class Frame extends JFrame{
         this.setTitle("DeadWood");
 
 
-<<<<<<< HEAD
+
         this.setSize(1200, 900);
-=======
+
         this.setSize(1215, 936);
->>>>>>> refs/remotes/origin/master
+
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
     }
