@@ -11,8 +11,12 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 
 public class DragPanel extends JPanel{
+<<<<<<< HEAD
     int i = Deadwood.playerCount;
     
+=======
+    ImageIcon[] images = new ImageIcon[8];
+>>>>>>> branch 'master' of https://gitlab.cs.wwu.edu/cs345_21wi/team_constrictor_345-21wi.git
     ImageIcon img1 = new ImageIcon("./src/main/resources/img/dice_r1.png");
     ImageIcon img2 = new ImageIcon("./src/main/resources/img/dice_b1.png");
     ImageIcon img3 = new ImageIcon("./src/main/resources/img/dice_g1.png");
@@ -33,8 +37,12 @@ public class DragPanel extends JPanel{
 
     Point[] imageCorner = new Point[8];
     Point prevPt;
+    DragListener dragListener = new DragListener();
+    ClickListener clickListener = new ClickListener(dragListener);
 
     public DragPanel() throws IOException{
+        images[0] = img1; images[1] = img2; images[2] = img3; images[3] = img4; images[4] = img5; images[5] = img6; images[6] = img7; images[7] = img8;
+
 
         imgBoard = ImageIO.read(new File("./src/main/resources/img/board.png"));
         
@@ -46,8 +54,7 @@ public class DragPanel extends JPanel{
         }
         
         
-        DragListener dragListener = new DragListener();
-        ClickListener clickListener = new ClickListener(dragListener);
+        
         this.addMouseListener(clickListener);
         this.addMouseMotionListener(dragListener);
 
@@ -57,16 +64,28 @@ public class DragPanel extends JPanel{
 
 
     public void paintComponent(Graphics g) {
+        
         super.paintComponent(g);
         g.drawImage(imgBoard, 0, 0, this);
-        img1.paintIcon(this, g, (int)imageCorner[0].getX(), (int)imageCorner[0].getY());
-        img2.paintIcon(this, g, (int)imageCorner[1].getX(), (int)imageCorner[1].getY());
-        img3.paintIcon(this, g, (int)imageCorner[2].getX(), (int)imageCorner[2].getY());
-        img4.paintIcon(this, g, (int)imageCorner[3].getX(), (int)imageCorner[3].getY());
-        img5.paintIcon(this, g, (int)imageCorner[4].getX(), (int)imageCorner[4].getY());
-        img6.paintIcon(this, g, (int)imageCorner[5].getX(), (int)imageCorner[5].getY());
-        img7.paintIcon(this, g, (int)imageCorner[6].getX(), (int)imageCorner[6].getY());
-        img8.paintIcon(this, g, (int)imageCorner[7].getX(), (int)imageCorner[7].getY());
+
+        int idx = dragListener.currentTileIdx;
+
+        if(idx == -1){
+
+            for(int i = 0; i < 8; i++){
+                images[i].paintIcon(this, g, (int)imageCorner[i].getX(), (int)imageCorner[i].getY());
+            }
+
+        } else {
+
+            for(int i = 0; i < 8; i++){
+                if(idx == i){continue;}
+                images[i].paintIcon(this, g, (int)imageCorner[i].getX(), (int)imageCorner[i].getY());
+            }
+            images[idx].paintIcon(this, g, (int)imageCorner[idx].getX(), (int)imageCorner[idx].getY());
+        }
+
+        
         //imgBoard.paintIcon(this, g, (int)imageCorner.getX(), (int)imageCorner.getY());
     }
 
@@ -107,8 +126,10 @@ public class DragPanel extends JPanel{
     }
 
     public class DragListener extends MouseMotionAdapter{
+
         public boolean isInObject = true;
-        int currentTileIdx;
+        int currentTileIdx = -1;
+        
         public void mouseDragged(MouseEvent e) {
 
             if(!isInObject){
@@ -116,22 +137,12 @@ public class DragPanel extends JPanel{
             }
             
             Point currentPt = e.getPoint();
-
-            //System.out.println(currentPt.getX()+ " " + currentPt.getY());
-
-            // for(int i = 0; i < 6; i++){
-            //     if(currentPt.getX() > imageCorner[i].getX() && currentPt.getX() < imageCorner[i].getX() + WIDTH){
-            //         if(currentPt.getY() > imageCorner[i].getY() && currentPt.getY() < imageCorner[i].getY() + HEIGHT) {
                         
-                        imageCorner[this.currentTileIdx].translate(
-                            (int)(currentPt.getX() - prevPt.getX()),
-                            (int)(currentPt.getY() - prevPt.getY())
-                        );
-                        prevPt = currentPt;
-            //         } 
-                    
-            //     } 
-            // }
+            imageCorner[this.currentTileIdx].translate(
+                (int)(currentPt.getX() - prevPt.getX()),
+                (int)(currentPt.getY() - prevPt.getY())
+            );
+            prevPt = currentPt;
             
             repaint();
         }
