@@ -444,7 +444,7 @@ public class Board {
         					
         					System.out.print("Move where?: ");
         					
-        					String[] moves = neighbors.get(currentPlayer.getPos().toLowerCase());
+        					String[] moves = neighbors.get(currentPlayer.getPos());
 
                             if(currentPlayer.getPos().equals("trailer")){
                                 for(int i = 0; i < trailerNeighbors.length; i++)

@@ -72,7 +72,7 @@ public class xmlParser {
             
             Element eEle = (Element) nNode;
             
-            String currentSetName = eEle.getAttribute("name").toLowerCase();
+            String currentSetName = eEle.getAttribute("name");
             NodeList neighborNlist = eEle.getElementsByTagName("neighbor");
 
             int neighborSize = neighborNlist.getLength();
@@ -83,7 +83,7 @@ public class xmlParser {
                 
                 Node neighborNode = neighborNlist.item(j);
                 Element neighborEle = (Element) neighborNode;
-                String currentTileNeighbor = neighborEle.getAttribute("name").toLowerCase();
+                String currentTileNeighbor = neighborEle.getAttribute("name");
                 neighbors[j] = currentTileNeighbor;
                 
                 
@@ -98,8 +98,8 @@ public class xmlParser {
 
                 Node offCardRoleNode = offCardRolesList.item(j);
                 Element oCREle = (Element) offCardRoleNode;
-                String currentTileRoleLevel = oCREle.getAttribute("level").toLowerCase(); 
-                String currentTileRoleName = oCREle.getAttribute("name").toLowerCase();
+                String currentTileRoleLevel = oCREle.getAttribute("level"); 
+                String currentTileRoleName = oCREle.getAttribute("name");
                 String[] temp = {currentTileRoleName, currentTileRoleLevel, "false"};
                 offCardRoleData[j] = temp;
 
@@ -134,8 +134,8 @@ public class xmlParser {
             for(int j = 0; j < partCardList.getLength(); j++) {     
                 Node currentPart = partCardList.item(j);
                 Element curPartEle = (Element) currentPart;
-                String curPartName = curPartEle.getAttribute("name").toLowerCase();
-                String curPartLevel = curPartEle.getAttribute("level").toLowerCase();
+                String curPartName = curPartEle.getAttribute("name");
+                String curPartLevel = curPartEle.getAttribute("level");
                 String[] cardArr = {curPartName, curPartLevel,currentCardBudget, "false"};
                 cardDataInstance[j] = cardArr;
             }
