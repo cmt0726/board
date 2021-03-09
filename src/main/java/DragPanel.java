@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
