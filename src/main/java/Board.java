@@ -174,7 +174,7 @@ public class Board {
         						
         						for(int i = 0; i < currentRoleDataOffCard.length; i++){
 									String nameOfPotentialRole = currentRoleDataOffCard[i][0];
-									String partBudgetS = currentRoleDataOnCard[i][2];
+									String partBudgetS = currentRoleDataOnCard[0][2];
         							if(nameOfPotentialRole.equals(roleSelection)) {
                                     
                                    
@@ -444,7 +444,7 @@ public class Board {
         					
         					System.out.print("Move where?: ");
         					
-        					String[] moves = neighbors.get(currentPlayer.getPos().toLowerCase());
+        					String[] moves = neighbors.get(currentPlayer.getPos());
 
                             if(currentPlayer.getPos().equals("trailer")){
                                 for(int i = 0; i < trailerNeighbors.length; i++)
