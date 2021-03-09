@@ -13,7 +13,8 @@
             String cardXMLFile = args[2];
             int playerCount = 0;
             
-            Gui g = new Gui();
+            //Gui g = new Gui();
+            Frame f = new Frame();
             if (args.length >= 3) {
                 boardXMLFile = args[0];
                 cardXMLFile = args[1];

@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 
 public class DragPanel extends JPanel{
     
+
     ImageIcon img1 = new ImageIcon("./src/main/resources/img/dice_b1.png");
     ImageIcon img2 = new ImageIcon("./src/main/resources/img/dice_b2.png");
     ImageIcon img3 = new ImageIcon("./src/main/resources/img/dice_b3.png");
@@ -19,6 +20,7 @@ public class DragPanel extends JPanel{
     ImageIcon img5 = new ImageIcon("./src/main/resources/img/dice_b5.png");
     ImageIcon img6 = new ImageIcon("./src/main/resources/img/dice_b6.png");
     Image imgBoard; 
+    
     int WIDTH = img1.getIconWidth();
     int HEIGHT = img1.getIconHeight();
 
