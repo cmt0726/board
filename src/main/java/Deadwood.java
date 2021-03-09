@@ -14,7 +14,7 @@
             int playerCount = 0;
             
             //Gui g = new Gui();
-            //Frame f = new Frame();
+            Frame f = new Frame();
             if (args.length >= 3) {
                 boardXMLFile = args[0];
                 cardXMLFile = args[1];
@@ -24,8 +24,8 @@
                     
                 }
                 System.out.println("success!");
-                Board board = new Board(playerCount, boardXMLFile, cardXMLFile);
-                play(board);
+                //Board board = new Board(playerCount, boardXMLFile, cardXMLFile);
+                //play(board);
             } else {
                 boardXMLFile = "src/main/resources/board.xml";
                 cardXMLFile = "src/main/resources/cards.xml";

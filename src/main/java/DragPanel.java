@@ -12,7 +12,7 @@ import java.awt.event.MouseEvent;
 
 public class DragPanel extends JPanel{
     
-    ImageIcon img = new ImageIcon("C:/Users/conno/team_constrictor_345-21wi/src/main/resources/img/dice_b1.png");
+    ImageIcon img = new ImageIcon("C:/Users/conno/git/team_constrictor_345-21wi/src/main/resources/img/dice_b1.png");
     Image imgBoard; //= new ImageIcon("C:/Users/conno/team_constrictor_345-21wi/src/main/resources/img/board.png");
     int WIDTH = img.getIconWidth();
     int HEIGHT = img.getIconHeight();
@@ -25,7 +25,7 @@ public class DragPanel extends JPanel{
 
     public DragPanel() throws IOException{
 
-        imgBoard = ImageIO.read(new File("C:/Users/conno/team_constrictor_345-21wi/src/main/resources/img/board.png"));
+        imgBoard = ImageIO.read(new File("C:/Users/conno/git/team_constrictor_345-21wi/src/main/resources/img/board.png"));
         
         imageCorner = new Point(10, 10);
         ClickListener clickListener = new ClickListener();
