@@ -12,14 +12,17 @@ import java.awt.event.MouseEvent;
 
 public class DragPanel extends JPanel{
     
+    ImageIcon img1 = new ImageIcon("./src/main/resources/img/dice_r1.png");
+    ImageIcon img2 = new ImageIcon("./src/main/resources/img/dice_b1.png");
+    ImageIcon img3 = new ImageIcon("./src/main/resources/img/dice_g1.png");
+    ImageIcon img4 = new ImageIcon("./src/main/resources/img/dice_v1.png");
+    ImageIcon img5 = new ImageIcon("./src/main/resources/img/dice_c1.png");
+    ImageIcon img6 = new ImageIcon("./src/main/resources/img/dice_o1.png");
+    ImageIcon img7 = new ImageIcon("./src/main/resources/img/dice_p1.png");
+    ImageIcon img8 = new ImageIcon("./src/main/resources/img/dice_w1.png");
 
-    ImageIcon img1 = new ImageIcon("./src/main/resources/img/dice_b1.png");
-    ImageIcon img2 = new ImageIcon("./src/main/resources/img/dice_b2.png");
-    ImageIcon img3 = new ImageIcon("./src/main/resources/img/dice_b3.png");
-    ImageIcon img4 = new ImageIcon("./src/main/resources/img/dice_b4.png");
-    ImageIcon img5 = new ImageIcon("./src/main/resources/img/dice_b5.png");
-    ImageIcon img6 = new ImageIcon("./src/main/resources/img/dice_b6.png");
-    Image imgBoard; 
+    Image imgBoard; //= new ImageIcon("C:/Users/conno/team_constrictor_345-21wi/src/main/resources/img/board.png");
+
     
     int WIDTH = img1.getIconWidth();
     int HEIGHT = img1.getIconHeight();
@@ -27,15 +30,18 @@ public class DragPanel extends JPanel{
     //int WIDTH_BOARD = imgBoard.getIconWidth();
     //int WIDTH_HEIGHT = img.getIconHeight();
 
-    Point[] imageCorner = new Point[6];
+    Point[] imageCorner = new Point[8];
     Point prevPt;
 
     public DragPanel() throws IOException{
 
         imgBoard = ImageIO.read(new File("./src/main/resources/img/board.png"));
         
-        for(int i = 0; i < 6; i++){
-            imageCorner[i] = new Point(0 + (i * 40), 0);
+        for(int i = 0; i < 4; i++){
+            imageCorner[i] = new Point(1000 + (i * 40), 300);
+        }
+        for(int i = 0; i < 4; i++){
+            imageCorner[i+4] = new Point(1000 + (i * 40), 340);
         }
         
         
@@ -59,7 +65,9 @@ public class DragPanel extends JPanel{
         img4.paintIcon(this, g, (int)imageCorner[3].getX(), (int)imageCorner[3].getY());
         img5.paintIcon(this, g, (int)imageCorner[4].getX(), (int)imageCorner[4].getY());
         img6.paintIcon(this, g, (int)imageCorner[5].getX(), (int)imageCorner[5].getY());
-        
+        img7.paintIcon(this, g, (int)imageCorner[6].getX(), (int)imageCorner[6].getY());
+        img8.paintIcon(this, g, (int)imageCorner[7].getX(), (int)imageCorner[7].getY());
+        //imgBoard.paintIcon(this, g, (int)imageCorner.getX(), (int)imageCorner.getY());
     }
 
     public class ClickListener extends MouseAdapter {
@@ -72,8 +80,8 @@ public class DragPanel extends JPanel{
             
 
             //System.out.println(currentPt.getX()+ " " + currentPt.getY());
-
-            for(int i = 0; i < 6; i++){
+                        		
+            for(int i = 0; i < 8; i++){
                 if(prevPt.getX() > imageCorner[i].getX() && prevPt.getX() < imageCorner[i].getX() + WIDTH){
                     if(prevPt.getY() > imageCorner[i].getY() && prevPt.getY() < imageCorner[i].getY() + HEIGHT) {
                         
