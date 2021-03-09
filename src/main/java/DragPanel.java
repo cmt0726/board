@@ -77,6 +77,7 @@ public class DragPanel extends JPanel{
                     if(prevPt.getY() > imageCorner[i].getY() && prevPt.getY() < imageCorner[i].getY() + HEIGHT) {
                         
                         dl.setIsInObject(true);
+                        dl.setTileIdx(i);
                         return;
                     } else {
                         dl.setIsInObject(false);
@@ -98,7 +99,7 @@ public class DragPanel extends JPanel{
 
     public class DragListener extends MouseMotionAdapter{
         public boolean isInObject = true;
-        
+        int currentTileIdx;
         public void mouseDragged(MouseEvent e) {
 
             if(!isInObject){
@@ -109,25 +110,29 @@ public class DragPanel extends JPanel{
 
             //System.out.println(currentPt.getX()+ " " + currentPt.getY());
 
-            for(int i = 0; i < 6; i++){
-                if(currentPt.getX() > imageCorner[i].getX() && currentPt.getX() < imageCorner[i].getX() + WIDTH){
-                    if(currentPt.getY() > imageCorner[i].getY() && currentPt.getY() < imageCorner[i].getY() + HEIGHT) {
+            // for(int i = 0; i < 6; i++){
+            //     if(currentPt.getX() > imageCorner[i].getX() && currentPt.getX() < imageCorner[i].getX() + WIDTH){
+            //         if(currentPt.getY() > imageCorner[i].getY() && currentPt.getY() < imageCorner[i].getY() + HEIGHT) {
                         
-                        imageCorner[i].translate(
+                        imageCorner[this.currentTileIdx].translate(
                             (int)(currentPt.getX() - prevPt.getX()),
                             (int)(currentPt.getY() - prevPt.getY())
                         );
                         prevPt = currentPt;
-                    } 
+            //         } 
                     
-                } 
-            }
+            //     } 
+            // }
             
             repaint();
         }
 
         public void setIsInObject(boolean statement){
             this.isInObject = statement;
+        }
+
+        public void setTileIdx(int i){
+            this.currentTileIdx = i;
         }
 
     }
