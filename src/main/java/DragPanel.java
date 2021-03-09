@@ -11,6 +11,7 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 
 public class DragPanel extends JPanel{
+    int i = Deadwood.playerCount;
     
     ImageIcon img1 = new ImageIcon("./src/main/resources/img/dice_r1.png");
     ImageIcon img2 = new ImageIcon("./src/main/resources/img/dice_b1.png");

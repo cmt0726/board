@@ -6,15 +6,14 @@
 */
 
     class Deadwood {
+        public static int playerCount;
         
         public static void main(String[] args) throws Exception{
 
             String boardXMLFile = args[1];
             String cardXMLFile = args[2];
-            int playerCount = 0;
             
             //Gui g = new Gui();
-            Frame f = new Frame();
             if (args.length >= 3) {
                 boardXMLFile = args[0];
                 cardXMLFile = args[1];
@@ -23,6 +22,7 @@
                     System.out.println("Invalid player count. Must be from 2 to 8");
                     
                 }
+                Frame f = new Frame();
                 System.out.println("success!");
                 //Board board = new Board(playerCount, boardXMLFile, cardXMLFile);
                 //play(board);
