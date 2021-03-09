@@ -32,7 +32,8 @@ public class Board {
     public EndDay endday = new EndDay(this); //passing the Board object into EndDay
     
     public Board(int playerCount, String board, String card) throws Exception{
-       
+		
+		//Gui g = new Gui();
 		this.boardS = board;
 		this.cardS = card;
 

@@ -1,3 +1,14 @@
+import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.TransferHandler;
+import java.awt.EventQueue;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 /* Written by Connor Teige and Connor Dole
     Assignment 4, CS345
     2/27/2021
@@ -10,7 +21,8 @@
             String boardXMLFile = args[1];
             String cardXMLFile = args[2];
             int playerCount = 0;
-
+            
+            Gui g = new Gui();
             if (args.length >= 3) {
                 boardXMLFile = args[0];
                 cardXMLFile = args[1];
@@ -20,8 +32,8 @@
                     
                 }
                 System.out.println("success!");
-                Board board = new Board(playerCount, boardXMLFile, cardXMLFile);
-                play(board);
+                //Board board = new Board(playerCount, boardXMLFile, cardXMLFile);
+                //play(board);
             } else {
                 boardXMLFile = "src/main/resources/board.xml";
                 cardXMLFile = "src/main/resources/cards.xml";
