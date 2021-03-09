@@ -22,6 +22,8 @@ public class DragPanel extends JPanel{
     ImageIcon img8 = new ImageIcon("./src/main/resources/img/dice_w1.png");
 
     Image imgBoard; //= new ImageIcon("C:/Users/conno/team_constrictor_345-21wi/src/main/resources/img/board.png");
+
+    
     int WIDTH = img1.getIconWidth();
     int HEIGHT = img1.getIconHeight();
 
@@ -33,7 +35,7 @@ public class DragPanel extends JPanel{
 
     public DragPanel() throws IOException{
 
-        imgBoard = ImageIO.read(new File("C:/Users/conno/git/team_constrictor_345-21wi/src/main/resources/img/board.png"));
+        imgBoard = ImageIO.read(new File("./src/main/resources/img/board.png"));
         
         for(int i = 0; i < 4; i++){
             imageCorner[i] = new Point(1000 + (i * 40), 300);
@@ -42,8 +44,9 @@ public class DragPanel extends JPanel{
             imageCorner[i+4] = new Point(1000 + (i * 40), 340);
         }
         
-        ClickListener clickListener = new ClickListener();
+        
         DragListener dragListener = new DragListener();
+        ClickListener clickListener = new ClickListener(dragListener);
         this.addMouseListener(clickListener);
         this.addMouseMotionListener(dragListener);
 
@@ -66,33 +69,78 @@ public class DragPanel extends JPanel{
         //imgBoard.paintIcon(this, g, (int)imageCorner.getX(), (int)imageCorner.getY());
     }
 
-    private class ClickListener extends MouseAdapter {
+    public class ClickListener extends MouseAdapter {
+        
+        DragListener dl;
+
         public void mousePressed(MouseEvent e) {
+            
             prevPt = e.getPoint();
+            
+
+            //System.out.println(currentPt.getX()+ " " + currentPt.getY());
+                        		
+            for(int i = 0; i < 8; i++){
+                if(prevPt.getX() > imageCorner[i].getX() && prevPt.getX() < imageCorner[i].getX() + WIDTH){
+                    if(prevPt.getY() > imageCorner[i].getY() && prevPt.getY() < imageCorner[i].getY() + HEIGHT) {
+                        
+                        dl.setIsInObject(true);
+                        dl.setTileIdx(i);
+                        return;
+                    } else {
+                        dl.setIsInObject(false);
+                    }
+                    
+                } else {
+                    dl.setIsInObject(false);
+                }
+            }
         }
+
+        public ClickListener(DragListener dlnative) {
+            dl = dlnative;
+        }
+
+
+        
     }
 
-    private class DragListener extends MouseMotionAdapter{
-        
+    public class DragListener extends MouseMotionAdapter{
+        public boolean isInObject = true;
+        int currentTileIdx;
         public void mouseDragged(MouseEvent e) {
+
+            if(!isInObject){
+                return;
+            }
+            
             Point currentPt = e.getPoint();
 
-            for(int i = 0; i < 8; i++){
-                if(currentPt.getX() > imageCorner[i].getX() && currentPt.getX() < imageCorner[i].getX() + WIDTH){
-                    if(currentPt.getY() > imageCorner[i].getY() && currentPt.getY() < imageCorner[i].getY() + HEIGHT) {
-                        imageCorner[i].translate(
+            //System.out.println(currentPt.getX()+ " " + currentPt.getY());
+
+            // for(int i = 0; i < 6; i++){
+            //     if(currentPt.getX() > imageCorner[i].getX() && currentPt.getX() < imageCorner[i].getX() + WIDTH){
+            //         if(currentPt.getY() > imageCorner[i].getY() && currentPt.getY() < imageCorner[i].getY() + HEIGHT) {
+                        
+                        imageCorner[this.currentTileIdx].translate(
                             (int)(currentPt.getX() - prevPt.getX()),
                             (int)(currentPt.getY() - prevPt.getY())
                         );
                         prevPt = currentPt;
-                    }
+            //         } 
                     
-                }
-            }
-            
-
+            //     } 
+            // }
             
             repaint();
+        }
+
+        public void setIsInObject(boolean statement){
+            this.isInObject = statement;
+        }
+
+        public void setTileIdx(int i){
+            this.currentTileIdx = i;
         }
 
     }

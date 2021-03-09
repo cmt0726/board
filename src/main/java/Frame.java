@@ -16,7 +16,6 @@ public class Frame extends JFrame{
         this.setTitle("DeadWood");
 
 
-
         this.setSize(1200, 900);
 
         this.setSize(1215, 936);
