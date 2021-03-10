@@ -1,7 +1,10 @@
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
@@ -11,24 +14,28 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 
 public class DragPanel extends JPanel{
+    
     int players = Deadwood.playerCount;
     
     ImageIcon[] images = new ImageIcon[8];
-
+    //We can use this to algorithmically upgrade peoples dice
+    String[] imagePaths = {"./src/main/resources/img/dice_r1.png","./src/main/resources/img/dice_b1.png","./src/main/resources/img/dice_g1.png","./src/main/resources/img/dice_v1.png",
+                            "./src/main/resources/img/dice_c1.png","./src/main/resources/img/dice_o1.png","./src/main/resources/img/dice_p1.png","./src/main/resources/img/dice_w1.png"};
+    
+    //This guy is kept to calculate die width and height
     ImageIcon img1 = new ImageIcon("./src/main/resources/img/dice_r1.png");
-    ImageIcon img2 = new ImageIcon("./src/main/resources/img/dice_b1.png");
-    ImageIcon img3 = new ImageIcon("./src/main/resources/img/dice_g1.png");
-    ImageIcon img4 = new ImageIcon("./src/main/resources/img/dice_v1.png");
-    ImageIcon img5 = new ImageIcon("./src/main/resources/img/dice_c1.png");
-    ImageIcon img6 = new ImageIcon("./src/main/resources/img/dice_o1.png");
-    ImageIcon img7 = new ImageIcon("./src/main/resources/img/dice_p1.png");
-    ImageIcon img8 = new ImageIcon("./src/main/resources/img/dice_w1.png");
+    
 
-    Image imgBoard; //= new ImageIcon("C:/Users/conno/team_constrictor_345-21wi/src/main/resources/img/board.png");
+    Image imgBoard;
+
+    Player[] gamePlayers;
 
     
     int WIDTH = img1.getIconWidth();
     int HEIGHT = img1.getIconHeight();
+    int PLAYER_INFO_X = 1272;
+    int PLAYER_INFO_TOP = 50;
+    int PLAYER_INFO_OFFSET = 30;
 
     //int WIDTH_BOARD = imgBoard.getIconWidth();
     //int WIDTH_HEIGHT = img.getIconHeight();
@@ -37,10 +44,34 @@ public class DragPanel extends JPanel{
     Point prevPt;
     DragListener dragListener = new DragListener();
     ClickListener clickListener = new ClickListener(dragListener);
+    //player info text boxes
+    JLabel currentActivePlayer = new JLabel();
+    JLabel activePlayerCash = new JLabel();
+    JLabel playerRank = new JLabel();
+    JLabel playerRole = new JLabel();
+    JLabel playerCredits = new JLabel();
+    JLabel playerRehearsalPoints = new JLabel();
+    JLabel playerLocation = new JLabel();
 
-    public DragPanel() throws IOException{
-        images[0] = img1; images[1] = img2; images[2] = img3; images[3] = img4; images[4] = img5; images[5] = img6; images[6] = img7; images[7] = img8;
+    public DragPanel(Board board) throws IOException{
 
+        
+        gamePlayers = board.getPlayers();
+
+        //Dimension size = currentActivePlayer.getPreferredSize();
+
+        //setting offsets from board to place active playerInfo
+        currentActivePlayer.setBounds(PLAYER_INFO_X, PLAYER_INFO_TOP, 150, 20);
+        activePlayerCash.setBounds(PLAYER_INFO_X, PLAYER_INFO_TOP + PLAYER_INFO_OFFSET, 150, 20);
+        playerCredits.setBounds(PLAYER_INFO_X, PLAYER_INFO_TOP + PLAYER_INFO_OFFSET*2, 150, 20);
+        playerRole.setBounds(PLAYER_INFO_X, PLAYER_INFO_TOP + PLAYER_INFO_OFFSET*3, 150, 20);
+        playerRank.setBounds(PLAYER_INFO_X, PLAYER_INFO_TOP + PLAYER_INFO_OFFSET*4, 150, 20);  
+        playerRehearsalPoints.setBounds(PLAYER_INFO_X, PLAYER_INFO_TOP + PLAYER_INFO_OFFSET*5, 150, 20);
+        playerLocation.setBounds(PLAYER_INFO_X, PLAYER_INFO_TOP + PLAYER_INFO_OFFSET*6, 150, 20);
+
+        for(int i = 0; i < players; i++){
+            gamePlayers[i].setPlayerImage(imagePaths[i]);
+        }
 
         imgBoard = ImageIO.read(new File("./src/main/resources/img/board.png"));
         
@@ -51,11 +82,18 @@ public class DragPanel extends JPanel{
             imageCorner[i+4] = new Point(1000 + (i * 40), 340);
         }
         
-        
-        
+        //Adding the JLabels that include player data to the JPanel
+        this.add(currentActivePlayer);
+        this.add(activePlayerCash);
+        this.add(playerRank);
+        this.add(playerRole);
+        this.add(playerCredits);
+        this.add(playerRehearsalPoints);
+        this.add(playerLocation);
+
         this.addMouseListener(clickListener);
         this.addMouseMotionListener(dragListener);
-
+        this.setLayout(null); //we want absolute positioning
     }
 
     public void paintComponent(Graphics g) {
@@ -66,22 +104,23 @@ public class DragPanel extends JPanel{
         int idx = dragListener.currentTileIdx;
 
         if(idx == -1){
-
+            
             for(int i = 0; i < players; i++){
-                images[i].paintIcon(this, g, (int)imageCorner[i].getX(), (int)imageCorner[i].getY());
+                ImageIcon currentPlayerDie = gamePlayers[i].getPlayerImage();
+                currentPlayerDie.paintIcon(this, g, (int)imageCorner[i].getX(), (int)imageCorner[i].getY());
             }
 
         } else {
 
             for(int i = 0; i < players; i++){
                 if(idx == i){continue;}
-                images[i].paintIcon(this, g, (int)imageCorner[i].getX(), (int)imageCorner[i].getY());
+                ImageIcon currentPlayerDie = gamePlayers[i].getPlayerImage();
+                currentPlayerDie.paintIcon(this, g, (int)imageCorner[i].getX(), (int)imageCorner[i].getY());
             }
-            images[idx].paintIcon(this, g, (int)imageCorner[idx].getX(), (int)imageCorner[idx].getY());
+            ImageIcon currentPlayerDie = gamePlayers[idx].getPlayerImage();
+            currentPlayerDie.paintIcon(this, g, (int)imageCorner[idx].getX(), (int)imageCorner[idx].getY());
         }
 
-        
-        //imgBoard.paintIcon(this, g, (int)imageCorner.getX(), (int)imageCorner.getY());
     }
 
     public class ClickListener extends MouseAdapter {
@@ -98,7 +137,22 @@ public class DragPanel extends JPanel{
             for(int i = 0; i < players; i++){
                 if(prevPt.getX() > imageCorner[i].getX() && prevPt.getX() < imageCorner[i].getX() + WIDTH){
                     if(prevPt.getY() > imageCorner[i].getY() && prevPt.getY() < imageCorner[i].getY() + HEIGHT) {
+
                         
+                        currentActivePlayer.setText("Player: " + gamePlayers[i].getId());
+                        activePlayerCash.setText("Cash: " + String.valueOf(gamePlayers[i].getMoney()));
+                        playerRank.setText("Rank: " + gamePlayers[i].getRank());
+                        if(gamePlayers[i].getHasRole()){
+                            playerRole.setText("Current Role: " + gamePlayers[i].getRole());
+                        } else {
+                            playerRole.setText("Current Role: none");
+                        }
+                        
+                        playerCredits.setText("Credits: " + gamePlayers[i].getCredits());
+                        playerRehearsalPoints.setText("Rehearsal Points: " + gamePlayers[i].getRehearsalPoints());
+                        playerLocation.setText("Location: " + gamePlayers[i].getPos());
+                        
+
                         dl.setIsInObject(true);
                         dl.setTileIdx(i);
                         return;

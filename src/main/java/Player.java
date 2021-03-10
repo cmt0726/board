@@ -1,9 +1,11 @@
+import javax.swing.ImageIcon;
 /* Written by Connor Teige and Connor Dole
     Assignment 4, CS345
     2/27/2021
 */
 
 public class Player {
+    private ImageIcon playerIcon;
     private int rank = 1;
     private int credit = 0;
     private int money = 0;
@@ -16,6 +18,18 @@ public class Player {
     private boolean hasMoved = false;
     private boolean hasRole = false;
     private boolean onCardRole = false;
+
+    public int getRehearsalPoints(){
+        return this.practiceChips;
+    }
+
+    public void setPlayerImage(String imagePath){
+        this.playerIcon = new ImageIcon(imagePath);
+    }
+
+    public ImageIcon getPlayerImage(){
+        return this.playerIcon;
+    }
     
     public boolean getHasMoved() {
     	return this.hasMoved;

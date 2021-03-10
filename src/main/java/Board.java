@@ -37,12 +37,12 @@ public class Board {
 		this.boardS = board;
 		this.cardS = card;
 
-		xml = new xmlParser(boardS, cardS);
+		//xml = new xmlParser(boardS, cardS);
 
-		this.cardData = xml.card.cardsData;
-		this.locationRoleData = xml.set.locationRoleData;
-		this.locationCardRoleData = xml.set.locationCardRoleData;
-		this.neighbors = xml.set.neighbors;
+		// this.cardData = xml.card.cardsData;
+		// this.locationRoleData = xml.set.locationRoleData;
+		// this.locationCardRoleData = xml.set.locationCardRoleData;
+		// this.neighbors = xml.set.neighbors;
 
     	Scanner sc = new Scanner(System.in);
 
