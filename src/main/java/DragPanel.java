@@ -16,7 +16,10 @@ public class DragPanel extends JPanel implements ActionListener{
     String[] setNames = {"Train Station", "Jail", "General Store", "Main Street", "Saloon", "Ranch", "Secret Hideout", "Bank", "Church", "Hotel"};
     
     int players = Deadwood.playerCount;
+    
     int cur;
+
+    double[] previousPlayerLoc = {0, 0};
     
     ImageIcon[] images = new ImageIcon[8];
     ImageIcon[] cardImages = new ImageIcon[10];
@@ -218,6 +221,7 @@ public class DragPanel extends JPanel implements ActionListener{
                 currentPlayerDie.paintIcon(this, g, (int)imageCorner[i].getX(), (int)imageCorner[i].getY());
             }
             ImageIcon currentPlayerDie = gamePlayers[idx].getPlayerImage();
+            System.out.println("In paintComp: x = " + imageCorner[idx].getX() + " y = " + imageCorner[idx].getY());
             currentPlayerDie.paintIcon(this, g, (int)imageCorner[idx].getX(), (int)imageCorner[idx].getY());
         }
 
@@ -255,43 +259,63 @@ public class DragPanel extends JPanel implements ActionListener{
             
             prevPt = e.getPoint();
             
+            
             System.out.println(prevPt.getX()+ " " + prevPt.getY());
                         		
             for(int i = 0; i < players; i++){
-                if(prevPt.getX() > imageCorner[i].getX() && prevPt.getX() < imageCorner[i].getX() + WIDTH){
-                    if(prevPt.getY() > imageCorner[i].getY() && prevPt.getY() < imageCorner[i].getY() + HEIGHT) {
-                        renderPlayerData(i);
+                if(i == board.getTurnNum()){
+                    if(prevPt.getX() > imageCorner[i].getX() && prevPt.getX() < imageCorner[i].getX() + WIDTH){
+                        if(prevPt.getY() > imageCorner[i].getY() && prevPt.getY() < imageCorner[i].getY() + HEIGHT) {
+                            renderPlayerData(i);
+                            double[] temp = {imageCorner[i].getX(),imageCorner[i].getY()};
+                            previousPlayerLoc = temp;
 
-                        dl.setIsInObject(true);
-                        dl.setTileIdx(i);
-                        return;
+                            dl.setIsInObject(true);
+                            dl.setTileIdx(i);
+                            return;
+                        } else {
+                            dl.setIsInObject(false);
+                        }
+                        
                     } else {
                         dl.setIsInObject(false);
                     }
-                    
-                } else {
-                    dl.setIsInObject(false);
                 }
             }
         }
 
         public void mouseReleased(MouseEvent e) {
+            
             if(!dl.isInObject){
                 return;
             }
             Point currentPt = e.getPoint();
-
+            
             for(int i = 0; i < tileNames.length; i++) {
                 Integer[][] currentSetCheck = approxSetLocs.get(tileNames[i]);
                 if(currentPt.getX() > currentSetCheck[0][0] && currentPt.getY() > currentSetCheck[0][1]){
                     if(currentPt.getX() < currentSetCheck[1][0] && currentPt.getY() < currentSetCheck[1][1]) {
-                        //System.out.println("Current set: " + tileNames[i]);
+                        
                         int idx = dragListener.currentTileIdx;
-                        gamePlayers[idx].setPos(tileNames[i]);
-                        renderPlayerData(idx);
+                        String oldSetLoc = gamePlayers[idx].getPos();
+                        boolean isValid = board.validatePlayerMove(oldSetLoc, tileNames[i]);
+                        if(isValid){
+                            gamePlayers[idx].setPos(tileNames[i]);
+                            renderPlayerData(idx);
+                            previousPlayerLoc[0] = currentPt.getX();
+                            previousPlayerLoc[1] = currentPt.getY();
+                        } else {
+                            
+                            System.out.println(previousPlayerLoc[0] + " " + previousPlayerLoc[1]);
+                            imageCorner[idx].move((int)previousPlayerLoc[0], (int)previousPlayerLoc[1]);
+                            repaint();
+                            return;
+                        }
                     }
                 }
-            }
+            }   
+
+
 
         }
 

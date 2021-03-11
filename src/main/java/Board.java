@@ -93,6 +93,61 @@ public class Board {
 		this.currentTurn++;
 	}
 
+	public boolean validatePlayerMove(String curPos, String destPos){
+		boolean adj = false;
+		Player player = players[currentTurn];
+		if (player.getHasMoved()) {
+			System.out.println("You cannot move twice in one turn.");
+			return adj;
+		} 
+	
+		if(player.getHasRole()) {
+			System.out.println("You can only act or rehearse while you have a role.");
+			return adj;
+		} 
+		
+		System.out.print("Move where?: ");
+		
+		String[] moves = neighbors.get(player.getPos());
+   
+	
+		if(moves != null) {
+			for(int i = 0; i < moves.length; i++) {
+				if(moves[i].equals(destPos)) {
+					adj = true;
+				}
+			}
+		}
+	
+		if(player.getPos().equalsIgnoreCase("Trailer") && traiNeiList.contains(destPos)) {
+			adj = true;
+		}
+	
+		if (player.getPos().equalsIgnoreCase("Office") && offNeiList.contains(destPos)) {
+			adj = true;
+		}
+	
+		if (!adj) {
+			System.out.println("You cannot move there from here.");
+			return false;
+		}
+	
+		if (player.getPos().equalsIgnoreCase("office") && !offNeiList.contains(destPos)) {
+			System.out.println("You cannot move there from here.");
+			return false;
+		}  
+	
+		else {
+			
+			System.out.println("You've moved from " + player.getPos() + " to " + destPos);
+			player.setPos(destPos);
+			
+			player.setHasMoved(true);
+			return true;
+		}
+		
+	}
+
 
     /*
         This function will loop through all players displaying what actions can be taken
