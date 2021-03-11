@@ -4,12 +4,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-<<<<<<< HEAD
-=======
 import java.util.HashMap;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
->>>>>>> branch 'master' of https://gitlab.cs.wwu.edu/cs345_21wi/team_constrictor_345-21wi.git
 
 
 public class DragPanel extends JPanel{
@@ -220,7 +217,6 @@ public class DragPanel extends JPanel{
             
             prevPt = e.getPoint();
             
-
             System.out.println(prevPt.getX()+ " " + prevPt.getY());
                         		
             for(int i = 0; i < players; i++){
@@ -229,7 +225,6 @@ public class DragPanel extends JPanel{
                     	
                     	cur = i;
                         
-<<<<<<< HEAD
                         currentActivePlayer.setText("Player: " + gamePlayers[i].getId());
                         activePlayerCash.setText("Cash: " + String.valueOf(gamePlayers[i].getMoney()));
                         playerRank.setText("Rank: " + gamePlayers[i].getRank());
@@ -245,9 +240,7 @@ public class DragPanel extends JPanel{
                         act.setVisible(true);
                         rehearse.setVisible(true);
                         end.setVisible(true);
-=======
                         renderPlayerData(i);
->>>>>>> branch 'master' of https://gitlab.cs.wwu.edu/cs345_21wi/team_constrictor_345-21wi.git
 
                         dl.setIsInObject(true);
                         dl.setTileIdx(i);
