@@ -1,21 +1,14 @@
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseMotionAdapter;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
 
 public class DragPanel extends JPanel{
     
     int players = Deadwood.playerCount;
+    int cur;
     
     ImageIcon[] images = new ImageIcon[8];
     //We can use this to algorithmically upgrade peoples dice
@@ -52,6 +45,10 @@ public class DragPanel extends JPanel{
     JLabel playerCredits = new JLabel();
     JLabel playerRehearsalPoints = new JLabel();
     JLabel playerLocation = new JLabel();
+    
+    JButton rehearse = new JButton("Rehearse");
+    JButton act = new JButton("Act");
+    JButton end = new JButton("End Turn");
 
     public DragPanel(Board board) throws IOException{
 
@@ -81,6 +78,30 @@ public class DragPanel extends JPanel{
         for(int i = 0; i < 4; i++){
             imageCorner[i+4] = new Point(1000 + (i * 40), 340);
         }
+        
+        add(act);
+        act.addActionListener(null);
+        act.setPreferredSize(new Dimension (200,100));
+        act.setVerticalTextPosition(AbstractButton.BOTTOM);
+        act.setHorizontalTextPosition(AbstractButton.CENTER);
+        act.setBounds(PLAYER_INFO_X, PLAYER_INFO_TOP + PLAYER_INFO_OFFSET*7, 150, 20);
+        act.setVisible(false);
+        
+        add(rehearse);
+        rehearse.addActionListener(null);
+        rehearse.setPreferredSize(new Dimension (200,100));
+        rehearse.setVerticalTextPosition(AbstractButton.BOTTOM);
+        rehearse.setHorizontalTextPosition(AbstractButton.CENTER);
+        rehearse.setBounds(PLAYER_INFO_X, PLAYER_INFO_TOP + PLAYER_INFO_OFFSET*8, 150, 20);
+        rehearse.setVisible(false);
+        
+        add(end);
+        end.addActionListener(null);
+        end.setPreferredSize(new Dimension (200,100));
+        end.setVerticalTextPosition(AbstractButton.BOTTOM);
+        end.setHorizontalTextPosition(AbstractButton.CENTER);
+        end.setBounds(PLAYER_INFO_X, PLAYER_INFO_TOP + PLAYER_INFO_OFFSET*9, 150, 20);
+        end.setVisible(false);
         
         //Adding the JLabels that include player data to the JPanel
         this.add(currentActivePlayer);
@@ -137,7 +158,8 @@ public class DragPanel extends JPanel{
             for(int i = 0; i < players; i++){
                 if(prevPt.getX() > imageCorner[i].getX() && prevPt.getX() < imageCorner[i].getX() + WIDTH){
                     if(prevPt.getY() > imageCorner[i].getY() && prevPt.getY() < imageCorner[i].getY() + HEIGHT) {
-
+                    	
+                    	cur = i;
                         
                         currentActivePlayer.setText("Player: " + gamePlayers[i].getId());
                         activePlayerCash.setText("Cash: " + String.valueOf(gamePlayers[i].getMoney()));
@@ -151,7 +173,9 @@ public class DragPanel extends JPanel{
                         playerCredits.setText("Credits: " + gamePlayers[i].getCredits());
                         playerRehearsalPoints.setText("Rehearsal Points: " + gamePlayers[i].getRehearsalPoints());
                         playerLocation.setText("Location: " + gamePlayers[i].getPos());
-                        
+                        act.setVisible(true);
+                        rehearse.setVisible(true);
+                        end.setVisible(true);
 
                         dl.setIsInObject(true);
                         dl.setTileIdx(i);
@@ -172,6 +196,13 @@ public class DragPanel extends JPanel{
 
 
         
+    }
+    
+    public void actionPerformed(ActionEvent e) {
+    	if(e.getSource() == rehearse) {
+    		gamePlayers[cur].rehearse();
+    		
+    	}
     }
 
     public class DragListener extends MouseMotionAdapter{
