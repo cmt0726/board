@@ -163,6 +163,26 @@ public class DragPanel extends JPanel implements ActionListener{
         int i = dragListener.currentTileIdx;
         board.handlePlayerTurn(i);
         renderPlayerData(board.getTurnNum());
+        showButtons(board.getTurnNum());
+    }
+
+    private void showButtons(int i) {
+        int[] actionSet = board.calcValidActionSet(i);
+        if(actionSet[0] == 1) {
+            act.setEnabled(true);
+        } else {
+            act.setEnabled(false);
+        }
+        if(actionSet[1] == 1) {
+            rehearse.setEnabled(true);
+        } else {
+            rehearse.setEnabled(false);
+        }
+        if(actionSet[2] == 1) {
+            rankUp.setEnabled(true);
+        } else {
+            rankUp.setEnabled(false);
+        }
     }
 
     public void renderCards(Graphics g){
@@ -306,6 +326,7 @@ public class DragPanel extends JPanel implements ActionListener{
         rehearse.setVisible(true);
         rankUp.setVisible(true);
         end.setVisible(true);
+        showButtons(i);
     }
 
     public class ClickListener extends MouseAdapter {

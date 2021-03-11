@@ -103,6 +103,21 @@ public class Board {
 
 	}
 
+	public int[] calcValidActionSet(int i) {
+		int[] actionSet = {0, 0, 0, 0};
+		if(!players[i].getHasRole()){
+			if(!(players[i].getPos().equalsIgnoreCase("Casting Office") || players[i].getPos().equalsIgnoreCase("Trailer"))) {
+				actionSet[0] = 1;
+			}
+		} else if (players[i].getHasRole()) {
+			actionSet[1] = 1;
+		} 
+		if (players[i].getPos().equalsIgnoreCase("Casting Office")) {
+			actionSet[2] = 1;
+		}
+		return actionSet;
+	}
+
 	public boolean validatePlayerMove(String curPos, String destPos){
 		boolean adj = false;
 		Player player = players[currentTurn];
