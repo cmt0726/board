@@ -9,7 +9,7 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 
 
-public class DragPanel extends JPanel{
+public class DragPanel extends JPanel implements ActionListener{
 
     HashMap<String, Integer[][]> approxSetLocs = new HashMap<String, Integer[][]>();
     String[] setNames = {"Train Station", "Jail", "General Store", "Main Street", "Saloon", "Trailer", "Casting Office", "Ranch", "Secret Hideout", "Bank", "Church", "Hotel"};
@@ -89,7 +89,7 @@ public class DragPanel extends JPanel{
         }
         
         add(act);
-        act.addActionListener(null);
+        act.addActionListener(this);
         act.setPreferredSize(new Dimension (200,100));
         act.setVerticalTextPosition(AbstractButton.BOTTOM);
         act.setHorizontalTextPosition(AbstractButton.CENTER);
@@ -97,7 +97,7 @@ public class DragPanel extends JPanel{
         act.setVisible(false);
         
         add(rehearse);
-        rehearse.addActionListener(null);
+        rehearse.addActionListener(this);
         rehearse.setPreferredSize(new Dimension (200,100));
         rehearse.setVerticalTextPosition(AbstractButton.BOTTOM);
         rehearse.setHorizontalTextPosition(AbstractButton.CENTER);
@@ -105,7 +105,7 @@ public class DragPanel extends JPanel{
         rehearse.setVisible(false);
         
         add(end);
-        end.addActionListener(null);
+        end.addActionListener(this);
         end.setPreferredSize(new Dimension (200,100));
         end.setVerticalTextPosition(AbstractButton.BOTTOM);
         end.setHorizontalTextPosition(AbstractButton.CENTER);
@@ -285,12 +285,13 @@ public class DragPanel extends JPanel{
     
     public void actionPerformed(ActionEvent e) {
     	if(e.getSource() == rehearse) {
-    		gamePlayers[cur].rehearse();
-    		
+    		if(!gamePlayers[cur].getHasRole()) {
+				System.out.println("You cannot rehearse without having a role");
+			} else {
+				gamePlayers[cur].rehearse();
+			}
     	}
     }
-
-    
 
     public class DragListener extends MouseMotionAdapter{
 
