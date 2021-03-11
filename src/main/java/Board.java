@@ -100,6 +100,7 @@ public class Board {
 	public boolean validatePlayerMove(String curPos, String destPos){
 		boolean adj = false;
 		Player player = players[currentTurn];
+		if(destPos == null){return false;}
 		if(curPos.equals(destPos)){return true;}
 		if (player.getHasMoved()) {
 			System.out.println("You cannot move twice in one turn.");

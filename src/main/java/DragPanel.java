@@ -333,14 +333,15 @@ public class DragPanel extends JPanel implements ActionListener{
             if(!dl.isInObject){
                 return;
             }
+            int idx = dragListener.currentTileIdx;
             Point currentPt = e.getPoint();
-            
+            boolean isInSomeSet = false;
             for(int i = 0; i < tileNames.length; i++) {
                 Integer[][] currentSetCheck = approxSetLocs.get(tileNames[i]);
                 if(currentPt.getX() > currentSetCheck[0][0] && currentPt.getY() > currentSetCheck[0][1]){
                     if(currentPt.getX() < currentSetCheck[1][0] && currentPt.getY() < currentSetCheck[1][1]) {
+                        isInSomeSet = true;
                         
-                        int idx = dragListener.currentTileIdx;
                         String oldSetLoc = gamePlayers[idx].getPos();
                         boolean isValid = board.validatePlayerMove(oldSetLoc, tileNames[i]);
                         if(isValid){
@@ -350,9 +351,10 @@ public class DragPanel extends JPanel implements ActionListener{
                             previousPlayerLoc[0] = currentPt.getX();
                             previousPlayerLoc[1] = currentPt.getY();
                             repaint();
+                            return;
                         } else {
                             
-                            System.out.println(previousPlayerLoc[0] + " " + previousPlayerLoc[1]);
+                            //System.out.println(previousPlayerLoc[0] + " " + previousPlayerLoc[1]);
                             imageCorner[idx].move((int)previousPlayerLoc[0], (int)previousPlayerLoc[1]);
                             repaint();
                             return;
@@ -360,7 +362,10 @@ public class DragPanel extends JPanel implements ActionListener{
                     }
                 }
             }   
-
+            if(!isInSomeSet) { //covers the edge case in which someone isn't in the approx bounds we set for the set locations, snaps them back to original location
+                imageCorner[idx].move((int)previousPlayerLoc[0], (int)previousPlayerLoc[1]);
+                repaint();
+            }
 
 
         }
