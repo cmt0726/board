@@ -57,11 +57,18 @@ public class DragPanel extends JPanel implements ActionListener{
     JButton rehearse = new JButton("Rehearse");
     JButton rankUp = new JButton("Rank Up");
     JButton end = new JButton("End Turn");
+    
+    JButton[] ranks = new JButton[6];
 
     public DragPanel(Board board) throws IOException{
 
         //fill aproxSetLocs hashmap
         fillSetHashMap();
+        
+        for(int i = 0; i < 6; i++) {
+        	ranks[i] = new JButton(Integer.toString((i + 1)));
+        	ranks[i].setBounds(400, 0 + (i*80), 150, 75);
+        }
         
         gamePlayers = board.getPlayers();
 
@@ -298,10 +305,18 @@ public class DragPanel extends JPanel implements ActionListener{
     		if(!(gamePlayers[cur].getPos().equalsIgnoreCase("Casting Office"))) {
 				System.out.println("You must go to the casting office to rank up.");
 			} else {
-				JFrame ranks = new JFrame("ranks");
-				ranks.setSize(500,500);
-				ranks.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-				ranks.setVisible(true);
+				JFrame rankMenu = new JFrame("ranks");
+				JPanel panel = new JPanel();
+				rankMenu.getContentPane();
+				panel.setLayout(null);
+				
+				rankMenu.setSize(1000,600);
+				rankMenu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				rankMenu.setVisible(true);
+				for (int i = gamePlayers[cur].getRank() - 1; i < ranks.length; i++) {
+					panel.add(ranks[i]);
+				}
+				rankMenu.add(panel);
 			}
     	}
     }
