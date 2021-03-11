@@ -25,7 +25,7 @@
                 
                 System.out.println("success!");
                 Board board = new Board(playerCount, boardXMLFile, cardXMLFile);
-                Frame f = new Frame(board);
+                
 
                 //play(board);
             } else {

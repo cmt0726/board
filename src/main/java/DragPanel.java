@@ -12,12 +12,15 @@ import java.awt.event.MouseEvent;
 public class DragPanel extends JPanel implements ActionListener{
 
     HashMap<String, Integer[][]> approxSetLocs = new HashMap<String, Integer[][]>();
-    String[] setNames = {"Train Station", "Jail", "General Store", "Main Street", "Saloon", "Trailer", "Casting Office", "Ranch", "Secret Hideout", "Bank", "Church", "Hotel"};
+    String[] tileNames = {"Train Station", "Jail", "General Store", "Main Street", "Saloon", "Trailer", "Casting Office", "Ranch", "Secret Hideout", "Bank", "Church", "Hotel"};
+    String[] setNames = {"Train Station", "Jail", "General Store", "Main Street", "Saloon", "Ranch", "Secret Hideout", "Bank", "Church", "Hotel"};
     
     int players = Deadwood.playerCount;
     int cur;
     
     ImageIcon[] images = new ImageIcon[8];
+    ImageIcon[] cardImages = new ImageIcon[10];
+    ImageIcon cardBack = new ImageIcon("./src/main/resources/img/cardback.png)");
     //We can use this to algorithmically upgrade peoples dice
     String[] imagePaths = {"./src/main/resources/img/dice_r1.png","./src/main/resources/img/dice_b1.png","./src/main/resources/img/dice_g1.png","./src/main/resources/img/dice_v1.png",
                             "./src/main/resources/img/dice_c1.png","./src/main/resources/img/dice_o1.png","./src/main/resources/img/dice_p1.png","./src/main/resources/img/dice_w1.png"};
@@ -60,8 +63,10 @@ public class DragPanel extends JPanel implements ActionListener{
     
     JButton[] ranks = new JButton[6];
 
-    public DragPanel(Board board) throws IOException{
+    Board board;
 
+    public DragPanel(Board boardImp) throws IOException{
+        this.board = boardImp;
         //fill aproxSetLocs hashmap
         fillSetHashMap();
         
@@ -141,53 +146,69 @@ public class DragPanel extends JPanel implements ActionListener{
         this.addMouseMotionListener(dragListener);
         this.setLayout(null); //we want absolute positioning
     }
+
+    public void renderCards(Graphics g){
+        for(int i = 0; i < setNames.length; i++){
+            String imagePath = board.locationCardRoleData.get(setNames[i])[0][4];
+            int x = board.boardPixelLoc.get(setNames[i])[0];
+            int y = board.boardPixelLoc.get(setNames[i])[1];
+            int height = board.boardPixelLoc.get(setNames[i])[2];
+            int width = board.boardPixelLoc.get(setNames[i])[3];
+
+            cardImages[i] = new ImageIcon("./src/main/resources/img/card_" + imagePath);
+            cardImages[i].paintIcon(this, g, x, y);
+        }
+        
+    }
     
     public void fillSetHashMap(){
         
         
         Integer[][] trainLoc = {{6,7},{237,442}};
-        approxSetLocs.put(setNames[0], trainLoc);
+        approxSetLocs.put(tileNames[0], trainLoc);
 
         Integer[][] jailLoc = {{266, 6},{591, 234}};
-        approxSetLocs.put(setNames[1], jailLoc);
+        approxSetLocs.put(tileNames[1], jailLoc);
 
         Integer[][] generalStoreLoc = {{203, 237},{593, 443}};
-        approxSetLocs.put(setNames[2], generalStoreLoc);
+        approxSetLocs.put(tileNames[2], generalStoreLoc);
 
         Integer[][] mainStreetLoc= {{604, 7},{1190,228}};
-        approxSetLocs.put(setNames[3], mainStreetLoc);
+        approxSetLocs.put(tileNames[3], mainStreetLoc);
 
         Integer[][] saloonLoc ={{607,202},{972, 438}};
-        approxSetLocs.put(setNames[4], saloonLoc);
+        approxSetLocs.put(tileNames[4], saloonLoc);
 
         Integer[][] trailerLoc = {{990, 244},{1189, 439}};
-        approxSetLocs.put(setNames[5], trailerLoc);
+        approxSetLocs.put(tileNames[5], trailerLoc);
 
         Integer[][] castingLoc = {{8, 458},{214, 665}};
-        approxSetLocs.put(setNames[6], castingLoc);
+        approxSetLocs.put(tileNames[6], castingLoc);
 
         Integer[][] ranchLoc = {{232, 458},{589, 687}};
-        approxSetLocs.put(setNames[7], ranchLoc);
+        approxSetLocs.put(tileNames[7], ranchLoc);
 
         Integer[][] hideoutLoc = {{7, 686},{587, 887}};
-        approxSetLocs.put(setNames[8], hideoutLoc);
+        approxSetLocs.put(tileNames[8], hideoutLoc);
 
         Integer[][] bankLoc = {{604, 461},{986, 637}};
-        approxSetLocs.put(setNames[9], bankLoc);
+        approxSetLocs.put(tileNames[9], bankLoc);
 
         Integer[][] churchLoc = {{608, 660},{926, 893}};
-        approxSetLocs.put(setNames[10], churchLoc);
+        approxSetLocs.put(tileNames[10], churchLoc);
 
         Integer[][] hotelLoc = {{938, 459},{1190, 893}};
-        approxSetLocs.put(setNames[11], hotelLoc);
+        approxSetLocs.put(tileNames[11], hotelLoc);
     }
 
     public void paintComponent(Graphics g) {
         
         super.paintComponent(g);
+        //Image newImage = imgBoard.getScaledInstance(1440, 1080, Image.SCALE_SMOOTH);
         g.drawImage(imgBoard, 0, 0, this);
 
         int idx = dragListener.currentTileIdx;
+        renderCards(g);
 
         if(idx == -1){
             
@@ -206,6 +227,8 @@ public class DragPanel extends JPanel implements ActionListener{
             ImageIcon currentPlayerDie = gamePlayers[idx].getPlayerImage();
             currentPlayerDie.paintIcon(this, g, (int)imageCorner[idx].getX(), (int)imageCorner[idx].getY());
         }
+
+        
 
     }
 
@@ -244,11 +267,6 @@ public class DragPanel extends JPanel implements ActionListener{
             for(int i = 0; i < players; i++){
                 if(prevPt.getX() > imageCorner[i].getX() && prevPt.getX() < imageCorner[i].getX() + WIDTH){
                     if(prevPt.getY() > imageCorner[i].getY() && prevPt.getY() < imageCorner[i].getY() + HEIGHT) {
-                    	
-                    	cur = i;
-                        
-                        
-                        
                         renderPlayerData(i);
 
                         dl.setIsInObject(true);
@@ -270,13 +288,13 @@ public class DragPanel extends JPanel implements ActionListener{
             }
             Point currentPt = e.getPoint();
 
-            for(int i = 0; i < setNames.length; i++) {
-                Integer[][] currentSetCheck = approxSetLocs.get(setNames[i]);
+            for(int i = 0; i < tileNames.length; i++) {
+                Integer[][] currentSetCheck = approxSetLocs.get(tileNames[i]);
                 if(currentPt.getX() > currentSetCheck[0][0] && currentPt.getY() > currentSetCheck[0][1]){
                     if(currentPt.getX() < currentSetCheck[1][0] && currentPt.getY() < currentSetCheck[1][1]) {
-                        //System.out.println("Current set: " + setNames[i]);
+                        //System.out.println("Current set: " + tileNames[i]);
                         int idx = dragListener.currentTileIdx;
-                        gamePlayers[idx].setPos(setNames[i]);
+                        gamePlayers[idx].setPos(tileNames[i]);
                         renderPlayerData(idx);
                     }
                 }

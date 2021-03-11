@@ -21,6 +21,7 @@ public class xmlParser {
     HashMap<String, Integer> locationShotCount = new HashMap<String, Integer>();
     //locationRoleData.get(setName) => {{"roleName", level},{"roleName", level},{"roleName", level}, etc}
     HashMap<String, String[][]> locationRoleData = new HashMap<String, String[][]>();
+    HashMap<String, Integer[]> boardPixelLoc = new HashMap<String, Integer[]>();
 
     //card hashMaps
     //This returns {{"RoleName", "level#"},{"RoleName", "level#"},{"RoleName", "level#"}, etc...}
@@ -75,6 +76,8 @@ public class xmlParser {
             String currentSetName = eEle.getAttribute("name");
             NodeList neighborNlist = eEle.getElementsByTagName("neighbor");
 
+            
+
             int neighborSize = neighborNlist.getLength();
 
             String[] neighbors = new String[neighborSize];
@@ -92,6 +95,16 @@ public class xmlParser {
             NodeList offCardRolesList = eEle.getElementsByTagName("part");
             int offCardRolesListSize = offCardRolesList.getLength();
             String[][] offCardRoleData = new String[offCardRolesListSize][3];
+
+            NodeList areaDim = eEle.getElementsByTagName("area");
+            Node areaNode = areaDim.item(0);
+            Element areaEle = (Element) areaNode;
+            Integer x = Integer.parseInt(areaEle.getAttribute("x"));
+            Integer y = Integer.parseInt(areaEle.getAttribute("y"));
+            Integer h = Integer.parseInt(areaEle.getAttribute("h"));
+            Integer w = Integer.parseInt(areaEle.getAttribute("w"));
+            Integer[] locAndDim = {x,y,h,w};
+            boardPixelLoc.put(currentSetName, locAndDim);
 
             //gets the level for each off card role
             for(int j = 0; j < offCardRolesListSize; j++){
@@ -126,9 +139,10 @@ public class xmlParser {
             
             String currentCardBudget = eEle.getAttribute("budget");
             String currentCardName = eEle.getAttribute("name");
+            String filePath = eEle.getAttribute("img");
             
             NodeList partCardList = eEle.getElementsByTagName("part");
-            String[][] cardDataInstance = new String[partCardList.getLength()][4];
+            String[][] cardDataInstance = new String[partCardList.getLength()][5];
 
             //gets the name and level for each card 
             for(int j = 0; j < partCardList.getLength(); j++) {     
@@ -136,14 +150,14 @@ public class xmlParser {
                 Element curPartEle = (Element) currentPart;
                 String curPartName = curPartEle.getAttribute("name");
                 String curPartLevel = curPartEle.getAttribute("level");
-                String[] cardArr = {curPartName, curPartLevel,currentCardBudget, "false"};
+                String[] cardArr = {curPartName, curPartLevel,currentCardBudget, "false", filePath};
                 cardDataInstance[j] = cardArr;
             }
             cardData.put(i, cardDataInstance);
         }
 
         card = new Cards(cardData);
-        set = new Sets(locationShotCount, locationNeighbors, locationRoleData, card);
+        set = new Sets(locationShotCount, locationNeighbors, locationRoleData, card, boardPixelLoc);
 
     }
 
