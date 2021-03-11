@@ -26,9 +26,11 @@ public class Board {
     public HashMap<String, String[][]> locationRoleData; 	 //data about different sets
     public HashMap<String, String[][]> locationCardRoleData; //data about a specific card on a specific set
     public HashMap<String, String[]> neighbors; 			 //data about neighbors from a specific set location
+	public HashMap<String, Integer[]> boardPixelLoc;
 
     private Player[] players;
     private int totalPlayerCount;
+	private int currentTurn = 0;
     public EndDay endday = new EndDay(this); //passing the Board object into EndDay
     
     public Board(int playerCount, String board, String card) throws Exception{
@@ -37,12 +39,13 @@ public class Board {
 		this.boardS = board;
 		this.cardS = card;
 
-		//xml = new xmlParser(boardS, cardS);
+		xml = new xmlParser(boardS, cardS);
 
-		// this.cardData = xml.card.cardsData;
-		// this.locationRoleData = xml.set.locationRoleData;
-		// this.locationCardRoleData = xml.set.locationCardRoleData;
-		// this.neighbors = xml.set.neighbors;
+		this.cardData = xml.card.cardsData;
+		this.locationRoleData = xml.set.locationRoleData;
+		this.locationCardRoleData = xml.set.locationCardRoleData;
+		this.neighbors = xml.set.neighbors;
+		this.boardPixelLoc = xml.set.boardPixelLoc;
 
     	Scanner sc = new Scanner(System.in);
 
@@ -72,12 +75,23 @@ public class Board {
             }
         }
         totalPlayerCount = playerCount;
-
-        
+		xml.set.generateSceneCards();
+        Frame f = new Frame(this);
 
     }
 
     public int getDay(){ return this.day;}
+
+	public int getTurnNum(){return this.currentTurn;}
+
+	public void resetTurn(){this.currentTurn = 0;}
+
+	public void handlePlayerTurn(){
+
+
+
+		this.currentTurn++;
+	}
 
 
     /*
@@ -107,7 +121,7 @@ public class Board {
         
         //HashMap<String, Integer> sceneShotCounter = xml.set.sceneShotCounter;
 
-        xml.set.generateSceneCards();
+        
 
         while(!res.equals("exit")) {
         	for(int curTurnIdx = 0; curTurnIdx < totalPlayerCount; curTurnIdx++){
