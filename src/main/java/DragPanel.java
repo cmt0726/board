@@ -41,7 +41,7 @@ public class DragPanel extends JPanel implements ActionListener{
     
     int WIDTH = img1.getIconWidth();
     int HEIGHT = img1.getIconHeight();
-    int PLAYER_INFO_X = 1272;
+    int PLAYER_INFO_X = 1242;
     int PLAYER_INFO_TOP = 50;
     int PLAYER_INFO_OFFSET = 30;
 
@@ -131,7 +131,14 @@ public class DragPanel extends JPanel implements ActionListener{
         rankUp.setVisible(false);
         
         add(end);
-        end.addActionListener(this);
+        end.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleEndTurn(e);
+            }
+        });
+
         end.setPreferredSize(new Dimension (200,100));
         end.setVerticalTextPosition(AbstractButton.BOTTOM);
         end.setHorizontalTextPosition(AbstractButton.CENTER);
@@ -150,6 +157,12 @@ public class DragPanel extends JPanel implements ActionListener{
         this.addMouseListener(clickListener);
         this.addMouseMotionListener(dragListener);
         this.setLayout(null); //we want absolute positioning
+    }
+
+    public void handleEndTurn(ActionEvent e) {
+        int i = dragListener.currentTileIdx;
+        board.handlePlayerTurn(i);
+        renderPlayerData(board.getTurnNum());
     }
 
     public void renderCards(Graphics g){
@@ -265,7 +278,7 @@ public class DragPanel extends JPanel implements ActionListener{
                 currentPlayerDie.paintIcon(this, g, (int)imageCorner[i].getX(), (int)imageCorner[i].getY());
             }
             ImageIcon currentPlayerDie = gamePlayers[idx].getPlayerImage();
-            System.out.println("In paintComp: x = " + imageCorner[idx].getX() + " y = " + imageCorner[idx].getY());
+            //System.out.println("In paintComp: x = " + imageCorner[idx].getX() + " y = " + imageCorner[idx].getY());
             currentPlayerDie.paintIcon(this, g, (int)imageCorner[idx].getX(), (int)imageCorner[idx].getY());
         }
 
@@ -328,6 +341,15 @@ public class DragPanel extends JPanel implements ActionListener{
             }
         }
 
+        private int calcSetBoolIdx(String[] setNames, String destPos) {
+            for(int i = 0; i < setNames.length; i++) {
+                if(setNames[i].equals(destPos)){
+                    return i;
+                }
+            }
+            return -1;
+        }
+
         public void mouseReleased(MouseEvent e) {
             
             if(!dl.isInObject){
@@ -344,13 +366,24 @@ public class DragPanel extends JPanel implements ActionListener{
                         
                         String oldSetLoc = gamePlayers[idx].getPos();
                         boolean isValid = board.validatePlayerMove(oldSetLoc, tileNames[i]);
+                        
                         if(isValid){
                             gamePlayers[idx].setPos(tileNames[i]);
-                            isCardShown[i] = 1;
+                            // tileNames[i].
+                            int setIdx = calcSetBoolIdx(setNames, tileNames[i]);
+                            if(setIdx != -1){
+                                isCardShown[setIdx] = 1;
+                            }
+                            
                             renderPlayerData(idx);
                             previousPlayerLoc[0] = currentPt.getX();
                             previousPlayerLoc[1] = currentPt.getY();
                             repaint();
+
+
+
+
+
                             return;
                         } else {
                             

@@ -90,11 +90,17 @@ public class Board {
 
 	public void resetTurn(){this.currentTurn = 0;}
 
-	public void handlePlayerTurn(){
+	//Handles the end of a players turn
+	public void handlePlayerTurn(int idx){
 
 
 
 		this.currentTurn++;
+		players[idx].setHasMoved(false);
+		if(this.currentTurn == totalPlayerCount) {
+			this.currentTurn = 0;
+		}
+
 	}
 
 	public boolean validatePlayerMove(String curPos, String destPos){
@@ -124,12 +130,27 @@ public class Board {
 				}
 			}
 		}
+
+		if(destPos.equalsIgnoreCase("Trailer")){
+			for(int i = 0; i < trailerNeighbors.length; i++) {
+				if(trailerNeighbors[i].equalsIgnoreCase(player.getPos())) {
+					adj = true;
+				}
+			}
+		} else if(destPos.equalsIgnoreCase("Casting Office")) {
+			//System.out.println("YOU BE TRYING TO GO TO OFFICE");
+			for(int i = 0; i < officeNeighbors.length; i++) {
+				if(officeNeighbors[i].equalsIgnoreCase(player.getPos())) {
+					adj = true;
+				}
+			}
+		}
 	
 		if(player.getPos().equalsIgnoreCase("Trailer") && traiNeiList.contains(destPos)) {
 			adj = true;
 		}
 	
-		if (player.getPos().equalsIgnoreCase("Office") && offNeiList.contains(destPos)) {
+		if (player.getPos().equalsIgnoreCase("Casting Office") && offNeiList.contains(destPos)) {
 			adj = true;
 		}
 	
@@ -138,7 +159,7 @@ public class Board {
 			return false;
 		}
 	
-		if (player.getPos().equalsIgnoreCase("office") && !offNeiList.contains(destPos)) {
+		if (player.getPos().equalsIgnoreCase("Casting Office") && !offNeiList.contains(destPos)) {
 			System.out.println("You cannot move there from here.");
 			return false;
 		}  
@@ -503,74 +524,6 @@ public class Board {
                         
         					hasMoreAction = false;
         					break;
-
-                        
-        				case "move": 
-                    	
-        					if (players[curTurnIdx].getHasMoved()) {
-        						System.out.println("You cannot move twice in one turn.");
-        						break;
-        					} 
-                    	
-        					if(players[curTurnIdx].getHasRole()) {
-        						System.out.println("You can only act or rehearse while you have a role.");
-        						break;
-        					} 
-        					
-        					System.out.print("Move where?: ");
-        					
-        					String[] moves = neighbors.get(currentPlayer.getPos());
-
-                            if(currentPlayer.getPos().equals("trailer")){
-                                for(int i = 0; i < trailerNeighbors.length; i++)
-                                    System.out.print(trailerNeighbors[i] + ", ");
-                            } else if(currentPlayer.getPos().equals("office")){
-                                for(int i = 0; i < trailerNeighbors.length; i++)
-                                    System.out.print(officeNeighbors[i] + ", ");
-                            } else {
-                                for(int i = 0; i < moves.length; i++)
-                                    System.out.print(moves[i] + ", ");
-                            }
-                            System.out.println("\n");
-                            String destPos = sc.nextLine();
-        					boolean adj = false;	   
-                        
-        					if(moves != null) {
-        						for(int i = 0; i < moves.length; i++) {
-        							if(moves[i].equals(destPos)) {
-        								adj = true;
-        							}
-        						}
-        					}
-                    	
-        					if(players[curTurnIdx].getPos().equalsIgnoreCase("trailer") && traiNeiList.contains(destPos)) {
-        						adj = true;
-        					}
-                    	
-        					if (players[curTurnIdx].getPos().equalsIgnoreCase("office") && offNeiList.contains(destPos)) {
-        						adj = true;
-        					}
-                        
-        					if (!adj) {
-        						System.out.println("You cannot move there from here.");
-        						break;
-        					}
-                        
-        					if (players[curTurnIdx].getPos().equalsIgnoreCase("office") && !offNeiList.contains(destPos)) {
-        						System.out.println("You cannot move there from here.");
-        						break;
-        					}  
-                        
-        					else {
-        						//System.out.println(traiNeiList.contains(destPos));
-                        	 
-        						//TODO calculate if that move is actually valid
-        						System.out.println("You've moved from " + players[curTurnIdx].getPos() + " to " + destPos);
-        						players[curTurnIdx].setPos(destPos);
-        						//System.out.println(players[curTurnIdx].getPos());
-        						players[curTurnIdx].setHasMoved(true);
-        						break;
-        					}
                         
         				case "rankup":         	
                     	
