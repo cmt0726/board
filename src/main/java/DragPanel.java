@@ -4,8 +4,18 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+<<<<<<< HEAD
+=======
+import java.util.HashMap;
+import java.awt.Point;
+import java.awt.event.MouseEvent;
+>>>>>>> branch 'master' of https://gitlab.cs.wwu.edu/cs345_21wi/team_constrictor_345-21wi.git
+
 
 public class DragPanel extends JPanel{
+
+    HashMap<String, Integer[][]> approxSetLocs = new HashMap<String, Integer[][]>();
+    String[] setNames = {"Train Station", "Jail", "General Store", "Main Street", "Saloon", "Trailer", "Casting Office", "Ranch", "Secret Hideout", "Bank", "Church", "Hotel"};
     
     int players = Deadwood.playerCount;
     int cur;
@@ -52,6 +62,8 @@ public class DragPanel extends JPanel{
 
     public DragPanel(Board board) throws IOException{
 
+        //fill aproxSetLocs hashmap
+        fillSetHashMap();
         
         gamePlayers = board.getPlayers();
 
@@ -116,6 +128,46 @@ public class DragPanel extends JPanel{
         this.addMouseMotionListener(dragListener);
         this.setLayout(null); //we want absolute positioning
     }
+    
+    public void fillSetHashMap(){
+        
+        
+        Integer[][] trainLoc = {{6,7},{237,442}};
+        approxSetLocs.put(setNames[0], trainLoc);
+
+        Integer[][] jailLoc = {{266, 6},{591, 234}};
+        approxSetLocs.put(setNames[1], jailLoc);
+
+        Integer[][] generalStoreLoc = {{203, 237},{593, 443}};
+        approxSetLocs.put(setNames[2], generalStoreLoc);
+
+        Integer[][] mainStreetLoc= {{604, 7},{1190,228}};
+        approxSetLocs.put(setNames[3], mainStreetLoc);
+
+        Integer[][] saloonLoc ={{607,202},{972, 438}};
+        approxSetLocs.put(setNames[4], saloonLoc);
+
+        Integer[][] trailerLoc = {{990, 244},{1189, 439}};
+        approxSetLocs.put(setNames[5], trailerLoc);
+
+        Integer[][] castingLoc = {{8, 458},{214, 665}};
+        approxSetLocs.put(setNames[6], castingLoc);
+
+        Integer[][] ranchLoc = {{232, 458},{589, 687}};
+        approxSetLocs.put(setNames[7], ranchLoc);
+
+        Integer[][] hideoutLoc = {{7, 686},{587, 887}};
+        approxSetLocs.put(setNames[8], hideoutLoc);
+
+        Integer[][] bankLoc = {{604, 461},{986, 637}};
+        approxSetLocs.put(setNames[9], bankLoc);
+
+        Integer[][] churchLoc = {{608, 660},{926, 893}};
+        approxSetLocs.put(setNames[10], churchLoc);
+
+        Integer[][] hotelLoc = {{938, 459},{1190, 893}};
+        approxSetLocs.put(setNames[11], hotelLoc);
+    }
 
     public void paintComponent(Graphics g) {
         
@@ -144,6 +196,22 @@ public class DragPanel extends JPanel{
 
     }
 
+    public void renderPlayerData(int i){
+        //setting text for the Jlabels to render
+        currentActivePlayer.setText("Player: " + gamePlayers[i].getId());
+        activePlayerCash.setText("Cash: " + String.valueOf(gamePlayers[i].getMoney()));
+        playerRank.setText("Rank: " + gamePlayers[i].getRank());
+        if(gamePlayers[i].getHasRole()){
+            playerRole.setText("Current Role: " + gamePlayers[i].getRole());
+        } else {
+            playerRole.setText("Current Role: none");
+        }
+        
+        playerCredits.setText("Credits: " + gamePlayers[i].getCredits());
+        playerRehearsalPoints.setText("Rehearsal Points: " + gamePlayers[i].getRehearsalPoints());
+        playerLocation.setText("Location: " + gamePlayers[i].getPos());
+    }
+
     public class ClickListener extends MouseAdapter {
         
         DragListener dl;
@@ -153,7 +221,7 @@ public class DragPanel extends JPanel{
             prevPt = e.getPoint();
             
 
-            //System.out.println(currentPt.getX()+ " " + currentPt.getY());
+            System.out.println(prevPt.getX()+ " " + prevPt.getY());
                         		
             for(int i = 0; i < players; i++){
                 if(prevPt.getX() > imageCorner[i].getX() && prevPt.getX() < imageCorner[i].getX() + WIDTH){
@@ -161,6 +229,7 @@ public class DragPanel extends JPanel{
                     	
                     	cur = i;
                         
+<<<<<<< HEAD
                         currentActivePlayer.setText("Player: " + gamePlayers[i].getId());
                         activePlayerCash.setText("Cash: " + String.valueOf(gamePlayers[i].getMoney()));
                         playerRank.setText("Rank: " + gamePlayers[i].getRank());
@@ -176,6 +245,9 @@ public class DragPanel extends JPanel{
                         act.setVisible(true);
                         rehearse.setVisible(true);
                         end.setVisible(true);
+=======
+                        renderPlayerData(i);
+>>>>>>> branch 'master' of https://gitlab.cs.wwu.edu/cs345_21wi/team_constrictor_345-21wi.git
 
                         dl.setIsInObject(true);
                         dl.setTileIdx(i);
@@ -188,6 +260,26 @@ public class DragPanel extends JPanel{
                     dl.setIsInObject(false);
                 }
             }
+        }
+
+        public void mouseReleased(MouseEvent e) {
+            if(!dl.isInObject){
+                return;
+            }
+            Point currentPt = e.getPoint();
+
+            for(int i = 0; i < setNames.length; i++) {
+                Integer[][] currentSetCheck = approxSetLocs.get(setNames[i]);
+                if(currentPt.getX() > currentSetCheck[0][0] && currentPt.getY() > currentSetCheck[0][1]){
+                    if(currentPt.getX() < currentSetCheck[1][0] && currentPt.getY() < currentSetCheck[1][1]) {
+                        System.out.println("Current set: " + setNames[i]);
+                        int idx = dragListener.currentTileIdx;
+                        gamePlayers[idx].setPos(setNames[i]);
+                        renderPlayerData(idx);
+                    }
+                }
+            }
+
         }
 
         public ClickListener(DragListener dlnative) {
@@ -205,19 +297,22 @@ public class DragPanel extends JPanel{
     	}
     }
 
+    
+
     public class DragListener extends MouseMotionAdapter{
 
         public boolean isInObject = true;
         int currentTileIdx = -1;
         
         public void mouseDragged(MouseEvent e) {
+            Point currentPt = e.getPoint();
+
+            
 
             if(!isInObject){
                 return;
             }
             
-            Point currentPt = e.getPoint();
-                        
             imageCorner[this.currentTileIdx].translate(
                 (int)(currentPt.getX() - prevPt.getX()),
                 (int)(currentPt.getY() - prevPt.getY())
@@ -233,6 +328,10 @@ public class DragPanel extends JPanel{
 
         public void setTileIdx(int i){
             this.currentTileIdx = i;
+        }
+
+        public void detectPlayerLocation(){
+
         }
 
     }
