@@ -198,6 +198,7 @@ public class DragPanel extends JPanel implements ActionListener{
         currentActivePlayer.setText("Player: " + gamePlayers[i].getId());
         activePlayerCash.setText("Cash: " + String.valueOf(gamePlayers[i].getMoney()));
         playerRank.setText("Rank: " + gamePlayers[i].getRank());
+
         if(gamePlayers[i].getHasRole()){
             playerRole.setText("Current Role: " + gamePlayers[i].getRole());
         } else {
@@ -207,6 +208,10 @@ public class DragPanel extends JPanel implements ActionListener{
         playerCredits.setText("Credits: " + gamePlayers[i].getCredits());
         playerRehearsalPoints.setText("Rehearsal Points: " + gamePlayers[i].getRehearsalPoints());
         playerLocation.setText("Location: " + gamePlayers[i].getPos());
+
+        act.setVisible(true);
+        rehearse.setVisible(true);
+        end.setVisible(true);
     }
 
     public class ClickListener extends MouseAdapter {
@@ -225,21 +230,8 @@ public class DragPanel extends JPanel implements ActionListener{
                     	
                     	cur = i;
                         
-                        currentActivePlayer.setText("Player: " + gamePlayers[i].getId());
-                        activePlayerCash.setText("Cash: " + String.valueOf(gamePlayers[i].getMoney()));
-                        playerRank.setText("Rank: " + gamePlayers[i].getRank());
-                        if(gamePlayers[i].getHasRole()){
-                            playerRole.setText("Current Role: " + gamePlayers[i].getRole());
-                        } else {
-                            playerRole.setText("Current Role: none");
-                        }
                         
-                        playerCredits.setText("Credits: " + gamePlayers[i].getCredits());
-                        playerRehearsalPoints.setText("Rehearsal Points: " + gamePlayers[i].getRehearsalPoints());
-                        playerLocation.setText("Location: " + gamePlayers[i].getPos());
-                        act.setVisible(true);
-                        rehearse.setVisible(true);
-                        end.setVisible(true);
+                        
                         renderPlayerData(i);
 
                         dl.setIsInObject(true);
@@ -265,7 +257,7 @@ public class DragPanel extends JPanel implements ActionListener{
                 Integer[][] currentSetCheck = approxSetLocs.get(setNames[i]);
                 if(currentPt.getX() > currentSetCheck[0][0] && currentPt.getY() > currentSetCheck[0][1]){
                     if(currentPt.getX() < currentSetCheck[1][0] && currentPt.getY() < currentSetCheck[1][1]) {
-                        System.out.println("Current set: " + setNames[i]);
+                        //System.out.println("Current set: " + setNames[i]);
                         int idx = dragListener.currentTileIdx;
                         gamePlayers[idx].setPos(setNames[i]);
                         renderPlayerData(idx);
