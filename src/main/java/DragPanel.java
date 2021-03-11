@@ -175,6 +175,7 @@ public class DragPanel extends JPanel{
         currentActivePlayer.setText("Player: " + gamePlayers[i].getId());
         activePlayerCash.setText("Cash: " + String.valueOf(gamePlayers[i].getMoney()));
         playerRank.setText("Rank: " + gamePlayers[i].getRank());
+
         if(gamePlayers[i].getHasRole()){
             playerRole.setText("Current Role: " + gamePlayers[i].getRole());
         } else {
@@ -201,7 +202,6 @@ public class DragPanel extends JPanel{
                 if(prevPt.getX() > imageCorner[i].getX() && prevPt.getX() < imageCorner[i].getX() + WIDTH){
                     if(prevPt.getY() > imageCorner[i].getY() && prevPt.getY() < imageCorner[i].getY() + HEIGHT) {
 
-                        
                         renderPlayerData(i);
 
                         dl.setIsInObject(true);
@@ -227,7 +227,7 @@ public class DragPanel extends JPanel{
                 Integer[][] currentSetCheck = approxSetLocs.get(setNames[i]);
                 if(currentPt.getX() > currentSetCheck[0][0] && currentPt.getY() > currentSetCheck[0][1]){
                     if(currentPt.getX() < currentSetCheck[1][0] && currentPt.getY() < currentSetCheck[1][1]) {
-                        System.out.println("Current set: " + setNames[i]);
+                        //System.out.println("Current set: " + setNames[i]);
                         int idx = dragListener.currentTileIdx;
                         gamePlayers[idx].setPos(setNames[i]);
                         renderPlayerData(idx);
