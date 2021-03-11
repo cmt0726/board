@@ -53,8 +53,9 @@ public class DragPanel extends JPanel implements ActionListener{
     JLabel playerRehearsalPoints = new JLabel();
     JLabel playerLocation = new JLabel();
     
-    JButton rehearse = new JButton("Rehearse");
     JButton act = new JButton("Act");
+    JButton rehearse = new JButton("Rehearse");
+    JButton rankUp = new JButton("Rank Up");
     JButton end = new JButton("End Turn");
 
     public DragPanel(Board board) throws IOException{
@@ -104,12 +105,20 @@ public class DragPanel extends JPanel implements ActionListener{
         rehearse.setBounds(PLAYER_INFO_X, PLAYER_INFO_TOP + PLAYER_INFO_OFFSET*8, 150, 20);
         rehearse.setVisible(false);
         
+        add(rankUp);
+        rankUp.addActionListener(this);
+        rankUp.setPreferredSize(new Dimension (200,100));
+        rankUp.setVerticalTextPosition(AbstractButton.BOTTOM);
+        rankUp.setHorizontalTextPosition(AbstractButton.CENTER);
+        rankUp.setBounds(PLAYER_INFO_X, PLAYER_INFO_TOP + PLAYER_INFO_OFFSET*9, 150, 20);
+        rankUp.setVisible(false);
+        
         add(end);
         end.addActionListener(this);
         end.setPreferredSize(new Dimension (200,100));
         end.setVerticalTextPosition(AbstractButton.BOTTOM);
         end.setHorizontalTextPosition(AbstractButton.CENTER);
-        end.setBounds(PLAYER_INFO_X, PLAYER_INFO_TOP + PLAYER_INFO_OFFSET*9, 150, 20);
+        end.setBounds(PLAYER_INFO_X, PLAYER_INFO_TOP + PLAYER_INFO_OFFSET*10, 150, 20);
         end.setVisible(false);
         
         //Adding the JLabels that include player data to the JPanel
@@ -211,6 +220,7 @@ public class DragPanel extends JPanel implements ActionListener{
 
         act.setVisible(true);
         rehearse.setVisible(true);
+        rankUp.setVisible(true);
         end.setVisible(true);
     }
 
@@ -281,6 +291,17 @@ public class DragPanel extends JPanel implements ActionListener{
 				System.out.println("You cannot rehearse without having a role");
 			} else {
 				gamePlayers[cur].rehearse();
+			}
+    	}
+    	
+    	if(e.getSource() == rankUp) {
+    		if(!(gamePlayers[cur].getPos().equalsIgnoreCase("Casting Office"))) {
+				System.out.println("You must go to the casting office to rank up.");
+			} else {
+				JFrame ranks = new JFrame("ranks");
+				ranks.setSize(500,500);
+				ranks.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				ranks.setVisible(true);
 			}
     	}
     }
