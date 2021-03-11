@@ -18,6 +18,7 @@ public class Sets {
     HashMap<String, String[][]> locationRoleData;
     HashMap<String, String[][]> locationCardRoleData = new HashMap<String, String[][]>();
     HashMap<String, Integer[]> boardPixelLoc;
+    HashMap<String, Integer[][]> boardShotLoc;
     Cards card;
     int cardIdx = 0;
 
@@ -26,7 +27,9 @@ public class Sets {
                HashMap<String, String[]> neighborsInc,
                HashMap<String, String[][]> roleData,
                Cards cData,
-               HashMap<String, Integer[]> boardPixelLoc){
+               HashMap<String, Integer[]> boardPixelLoc,
+               HashMap<String, Integer[][]> boardShotLocIn){
+        this.boardShotLoc = boardShotLocIn;
         sceneShotCounter = new HashMap<String, Integer>(scene);
         neighbors = neighborsInc;
         locationRoleData = roleData;

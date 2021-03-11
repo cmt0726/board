@@ -14,6 +14,7 @@ public class DragPanel extends JPanel implements ActionListener{
     HashMap<String, Integer[][]> approxSetLocs = new HashMap<String, Integer[][]>();
     String[] tileNames = {"Train Station", "Jail", "General Store", "Main Street", "Saloon", "Trailer", "Casting Office", "Ranch", "Secret Hideout", "Bank", "Church", "Hotel"};
     String[] setNames = {"Train Station", "Jail", "General Store", "Main Street", "Saloon", "Ranch", "Secret Hideout", "Bank", "Church", "Hotel"};
+    int[] isCardShown = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; //used to know whether or not we should show the front or back of a card
     
     int players = Deadwood.playerCount;
     
@@ -23,6 +24,7 @@ public class DragPanel extends JPanel implements ActionListener{
     
     ImageIcon[] images = new ImageIcon[8];
     ImageIcon[] cardImages = new ImageIcon[10];
+    ImageIcon[] shotImages = new ImageIcon[22];
     ImageIcon cardBack = new ImageIcon("./src/main/resources/img/cardback.png)");
     //We can use this to algorithmically upgrade peoples dice
     String[] imagePaths = {"./src/main/resources/img/dice_r1.png","./src/main/resources/img/dice_b1.png","./src/main/resources/img/dice_g1.png","./src/main/resources/img/dice_v1.png",
@@ -152,14 +154,48 @@ public class DragPanel extends JPanel implements ActionListener{
 
     public void renderCards(Graphics g){
         for(int i = 0; i < setNames.length; i++){
-            String imagePath = board.locationCardRoleData.get(setNames[i])[0][4];
             int x = board.boardPixelLoc.get(setNames[i])[0];
             int y = board.boardPixelLoc.get(setNames[i])[1];
             int height = board.boardPixelLoc.get(setNames[i])[2];
             int width = board.boardPixelLoc.get(setNames[i])[3];
+            if(isCardShown[i] == 0){
+                String imagePath = "./src/main/resources/img/cardback.png";
+                cardImages[i] = new ImageIcon(imagePath);
+                cardImages[i].paintIcon(this, g, x, y);
+            } else {
+                String imagePath = board.locationCardRoleData.get(setNames[i])[0][4];
+                cardImages[i] = new ImageIcon("./src/main/resources/img/card_" + imagePath);
+                cardImages[i].paintIcon(this, g, x, y);
+            }
+            
+        }
+        
+    }
 
-            cardImages[i] = new ImageIcon("./src/main/resources/img/card_" + imagePath);
-            cardImages[i].paintIcon(this, g, x, y);
+    public void renderShots(Graphics g){
+        String imagePath = "./src/main/resources/img/shot.png";
+        for(int i = 0; i < setNames.length; i++) {
+            Integer[][] shotDimensions = board.boardShotLoc.get(setNames[i]);
+            Integer shotCounts = board.sceneShotCount.get(setNames[i]);
+
+            int validShots = 0; //calculates how many shots a set actually has so we can use an offset to render 1 - 3 possible shot scene tiles
+            for(int k = 0; k < shotDimensions.length; k++){
+                if(shotDimensions[k][0] == 0) { //if the shot dimensions has the default value 0 then we move on
+                    continue;
+                } else {
+                    validShots++;
+                }
+            }
+            for(int j = 0; j < validShots - shotCounts; j++) {
+                
+                int xDim = shotDimensions[j][0];
+                int yDim = shotDimensions[j][1];
+                int height = shotDimensions[j][2];
+                int width = shotDimensions[j][3];
+                if(xDim == 0){continue;} //this set has fewer than 3 shots;
+                shotImages[i + j] = new ImageIcon(imagePath);
+                shotImages[i + j].paintIcon(this, g, xDim, yDim);
+            }
         }
         
     }
@@ -211,7 +247,8 @@ public class DragPanel extends JPanel implements ActionListener{
         g.drawImage(imgBoard, 0, 0, this);
 
         int idx = dragListener.currentTileIdx;
-        renderCards(g);
+        renderCards(g); //Should be showing the backside TODO
+        renderShots(g); //This will at first not show any shot counters as they're supposed to show up after a succesful shot roll
 
         if(idx == -1){
             
@@ -308,9 +345,11 @@ public class DragPanel extends JPanel implements ActionListener{
                         boolean isValid = board.validatePlayerMove(oldSetLoc, tileNames[i]);
                         if(isValid){
                             gamePlayers[idx].setPos(tileNames[i]);
+                            isCardShown[i] = 1;
                             renderPlayerData(idx);
                             previousPlayerLoc[0] = currentPt.getX();
                             previousPlayerLoc[1] = currentPt.getY();
+                            repaint();
                         } else {
                             
                             System.out.println(previousPlayerLoc[0] + " " + previousPlayerLoc[1]);

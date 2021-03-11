@@ -27,6 +27,8 @@ public class Board {
     public HashMap<String, String[][]> locationCardRoleData; //data about a specific card on a specific set
     public HashMap<String, String[]> neighbors; 			 //data about neighbors from a specific set location
 	public HashMap<String, Integer[]> boardPixelLoc;
+	public HashMap<String, Integer[][]> boardShotLoc;
+	public HashMap<String, Integer> sceneShotCount;
 
     private Player[] players;
     private int totalPlayerCount;
@@ -46,6 +48,8 @@ public class Board {
 		this.locationCardRoleData = xml.set.locationCardRoleData;
 		this.neighbors = xml.set.neighbors;
 		this.boardPixelLoc = xml.set.boardPixelLoc;
+		this.boardShotLoc = xml.set.boardShotLoc;
+		this.sceneShotCount = xml.set.sceneShotCounter;
 
     	Scanner sc = new Scanner(System.in);
 
@@ -96,6 +100,7 @@ public class Board {
 	public boolean validatePlayerMove(String curPos, String destPos){
 		boolean adj = false;
 		Player player = players[currentTurn];
+		if(curPos.equals(destPos)){return true;}
 		if (player.getHasMoved()) {
 			System.out.println("You cannot move twice in one turn.");
 			return adj;

@@ -22,6 +22,7 @@ public class xmlParser {
     //locationRoleData.get(setName) => {{"roleName", level},{"roleName", level},{"roleName", level}, etc}
     HashMap<String, String[][]> locationRoleData = new HashMap<String, String[][]>();
     HashMap<String, Integer[]> boardPixelLoc = new HashMap<String, Integer[]>();
+    HashMap<String, Integer[][]> boardShotLoc = new HashMap<String, Integer[][]>();
 
     //card hashMaps
     //This returns {{"RoleName", "level#"},{"RoleName", "level#"},{"RoleName", "level#"}, etc...}
@@ -121,10 +122,29 @@ public class xmlParser {
             locationRoleData.put(currentSetName, offCardRoleData);
 
             NodeList setTakeList = eEle.getElementsByTagName("take");
+            
             Node setTakeNode = setTakeList.item(0);
             Element setTakeEle = (Element) setTakeNode;
             Integer setTakesCount = Integer.parseInt(setTakeEle.getAttribute("number"));
 
+            //This next bit calculates the locations for all shot tiles and then saves them based on the name of that set
+            Integer[][] boardShotLocations = new Integer[3][4];
+            Integer[] temp = {0, 0, 0, 0};
+
+            for(int l = 0; l < 3; l++){boardShotLocations[l] = temp;} //filling boardShotlocation data with temp values to protect against null collisions
+
+            for(int k = 0; k < setTakeList.getLength(); k++){
+                Node setTakeNodeShots = setTakeList.item(k);
+                NodeList shotLocations = setTakeNodeShots.getChildNodes();
+                Element shotDimensions = (Element) shotLocations.item(0);
+                int xDim = Integer.parseInt(shotDimensions.getAttribute("x"));
+                int yDim = Integer.parseInt(shotDimensions.getAttribute("y"));
+                int height = 47;
+                int width = 47;
+                Integer[] shotLoc = {xDim, yDim, height, width};
+                boardShotLocations[k] = shotLoc;
+            }
+            boardShotLoc.put(currentSetName, boardShotLocations);
             locationNeighbors.put(currentSetName, neighbors);
             locationShotCount.put(currentSetName, setTakesCount);
 
@@ -157,7 +177,7 @@ public class xmlParser {
         }
 
         card = new Cards(cardData);
-        set = new Sets(locationShotCount, locationNeighbors, locationRoleData, card, boardPixelLoc);
+        set = new Sets(locationShotCount, locationNeighbors, locationRoleData, card, boardPixelLoc, boardShotLoc);
 
     }
 
