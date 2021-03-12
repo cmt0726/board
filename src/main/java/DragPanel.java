@@ -16,6 +16,7 @@ public class DragPanel extends JPanel implements ActionListener{
     String[] tileNames = {"Train Station", "Jail", "General Store", "Main Street", "Saloon", "Trailer", "Casting Office", "Ranch", "Secret Hideout", "Bank", "Church", "Hotel"};
     String[] setNames = {"Train Station", "Jail", "General Store", "Main Street", "Saloon", "Ranch", "Secret Hideout", "Bank", "Church", "Hotel"};
     int[] isCardShown = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; //used to know whether or not we should show the front or back of a card
+    int[] pixelLocToSnap = {0,0,0,0};
     
     int players = Deadwood.playerCount;
     
@@ -175,33 +176,44 @@ public class DragPanel extends JPanel implements ActionListener{
 
     public void handleAct(ActionEvent e) {
         int i = dragListener.currentTileIdx;
+
         
-        ArrayList<String> offCardRoles = board.showAvailableOffCardRoles(i);
-        ArrayList<String> onCardRoles = board.showAvailableCardRoles(i);
+        if(!board.getPlayers()[i].getHasRole()){ 
+        
+            ArrayList<String> offCardRoles = board.showAvailableOffCardRoles(i);
+            ArrayList<String> onCardRoles = board.showAvailableCardRoles(i);
 
-        int[] pixelLocToSnap = {0,0,0,0};
+            
 
-        for(int index = 0; index < offCardRoles.size(); index++) {
-            onCardRoles.add(offCardRoles.get(index));
-        };
-        Object[] onCard = onCardRoles.toArray();
-        if(onCard.length != 0){
-            Object[] title = {"Which Role would you like to choose?"};
-            Component myComp = this.getComponent(0);
-            int optionIndex = JOptionPane.showOptionDialog(myComp, title[0], "Choose Role", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, onCard, onCard[0]);
-            pixelLocToSnap = board.handlePlayerAct(i, onCard[optionIndex].toString());
+            for(int index = 0; index < offCardRoles.size(); index++) {
+                onCardRoles.add(offCardRoles.get(index));
+            };
+            Object[] onCard = onCardRoles.toArray();
+            if(onCard.length != 0){
+                Object[] title = {"Which Role would you like to choose?"};
+                Component myComp = this.getComponent(0);
+                int optionIndex = JOptionPane.showOptionDialog(myComp, title[0], "Choose Role", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, onCard, onCard[0]);
+                pixelLocToSnap = board.handlePlayerAct(i, onCard[optionIndex].toString());
+            } else {
+                int[] actions = board.calcValidActionSet(i);
+                actions[0] = 0;
+                showButtons(i, actions);
+                //pixelLocToSnap = board.handlePlayerAct(i, null);
+                return;
+            }
+
+            if(!board.isPlayerOnCard(i)) {
+                pixelLocToSnap[0] = board.curSetPixelLoc(i)[0] + 3;
+                pixelLocToSnap[1] = board.curSetPixelLoc(i)[1] + 3;
+            }
+            imageCorner[i].x = pixelLocToSnap[0];
+            imageCorner[i].y = pixelLocToSnap[1];
         } else {
-            pixelLocToSnap = board.handlePlayerAct(i, null);
-        }
-
-        if(!board.isPlayerOnCard(i)) {
-            pixelLocToSnap[0] = board.curSetPixelLoc(i)[0] + 3;
-            pixelLocToSnap[1] = board.curSetPixelLoc(i)[1] + 3;
+            board.handlePlayerAct(i, board.getPlayers()[i].getRole());
         }
         
         System.out.println("X: " + pixelLocToSnap[0] + " Y: "+ pixelLocToSnap[1]);
-        imageCorner[i].x = pixelLocToSnap[0];
-        imageCorner[i].y = pixelLocToSnap[1];
+        
         renderPlayerData(i);
         repaint();
     }
@@ -210,6 +222,24 @@ public class DragPanel extends JPanel implements ActionListener{
 
     private void showButtons(int i) {
         int[] actionSet = board.calcValidActionSet(i);
+        if(actionSet[0] == 1) {
+            act.setEnabled(true);
+        } else {
+            act.setEnabled(false);
+        }
+        if(actionSet[1] == 1) {
+            rehearse.setEnabled(true);
+        } else {
+            rehearse.setEnabled(false);
+        }
+        if(actionSet[2] == 1) {
+            rankUp.setEnabled(true);
+        } else {
+            rankUp.setEnabled(false);
+        }
+    }
+    private void showButtons(int i, int[] actionSet) {
+        
         if(actionSet[0] == 1) {
             act.setEnabled(true);
         } else {
@@ -489,25 +519,14 @@ public class DragPanel extends JPanel implements ActionListener{
 			} else {
                 Object[] ranks = {2, 3, 4, 5, 6};
                 Object[] type = {"money", "credits"};
-                Object[] title = {"Which Rank would you like to choose?"};
+                Object[] title = {"Which Rank would you like to choose?", "How would you like to pay?"};
                 Component myComp = this.getComponent(0);
                 int optionIndex = JOptionPane.showOptionDialog(myComp, title[0], "Choose Role", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, ranks, ranks[0]);
                 
-                int typeIndex = JOptionPane.showOptionDialog(myComp, title[0], "Choose Type", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, type, type[0]);
+                int typeIndex = JOptionPane.showOptionDialog(myComp, title[1], "Choose Type", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, type, type[0]);
 
                 board.rankUp(idx, Integer.parseInt(ranks[optionIndex].toString()), type[typeIndex].toString());
-				// JFrame rankMenu = new JFrame("ranks");
-				// JPanel panel = new JPanel();
-				// rankMenu.getContentPane();
-				// panel.setLayout(null);
 				
-				// rankMenu.setSize(1000,600);
-				// rankMenu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-				// rankMenu.setVisible(true);
-				// for (int i = gamePlayers[idx].getRank() - 1; i < ranks.length; i++) {
-				// 	panel.add(ranks[i]);
-				// }
-				// rankMenu.add(panel);
                 renderPlayerData(idx);
 			}
     	}

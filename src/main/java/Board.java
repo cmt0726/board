@@ -443,10 +443,13 @@ public class Board {
 			if(!(players[i].getPos().equalsIgnoreCase("Casting Office") || players[i].getPos().equalsIgnoreCase("Trailer"))) {
 				actionSet[0] = 1;
 			}
-		} else if (players[i].getHasRole()) {
+		} else if (players[i].getHasRole() && players[i].getHasMoved()) {
+			//actionSet[0] = 1;
+			//actionSet[1] = 1;
+		} else if (players[i].getHasRole()){
 			actionSet[0] = 1;
 			actionSet[1] = 1;
-		} 
+		}
 		if (players[i].getPos().equalsIgnoreCase("Casting Office")) {
 			actionSet[2] = 1;
 		}
