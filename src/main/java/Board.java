@@ -222,7 +222,9 @@ public class Board {
 							if(xml.set.sceneShotCounter.get(playerLocation) == 0) {
 								currentRoleDataOffCard[0][2] = "true";
 								locationRoleData.put(playerLocation, currentRoleDataOffCard);
+
 								payout(players,playerLocation ,currentPlayer.bonus(partBudgetS));
+								
 								for(int j = 0; j < players.length;j++) {
 									if(!players[j].getHasRole()) {
 										players[j].setChips(0);

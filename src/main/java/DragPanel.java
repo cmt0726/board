@@ -15,6 +15,8 @@ public class DragPanel extends JPanel implements ActionListener{
     HashMap<String, Integer[][]> approxSetLocs = new HashMap<String, Integer[][]>();
     String[] tileNames = {"Train Station", "Jail", "General Store", "Main Street", "Saloon", "Trailer", "Casting Office", "Ranch", "Secret Hideout", "Bank", "Church", "Hotel"};
     String[] setNames = {"Train Station", "Jail", "General Store", "Main Street", "Saloon", "Ranch", "Secret Hideout", "Bank", "Church", "Hotel"};
+    ImageIcon playerBackgroundHalo = new ImageIcon("./src/main/resources/img/halomark2.png");
+    Image scaleImage;
     int[] isCardShown = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; //used to know whether or not we should show the front or back of a card
     int[] pixelLocToSnap = {0,0,0,0};
     
@@ -73,6 +75,9 @@ public class DragPanel extends JPanel implements ActionListener{
     Board board;
 
     public DragPanel(Board boardImp) throws IOException{
+        
+        scaleImage = playerBackgroundHalo.getImage().getScaledInstance(50, 50,Image.SCALE_DEFAULT);
+        this.setOpaque(false);
         this.board = boardImp;
         //fill aproxSetLocs hashmap
         fillSetHashMap();
@@ -172,6 +177,7 @@ public class DragPanel extends JPanel implements ActionListener{
         board.handlePlayerTurn(i);
         renderPlayerData(board.getTurnNum());
         showButtons(board.getTurnNum());
+        repaint();
     }
 
     public void handleAct(ActionEvent e) {
@@ -356,10 +362,11 @@ public class DragPanel extends JPanel implements ActionListener{
         //Image newImage = imgBoard.getScaledInstance(1440, 1080, Image.SCALE_SMOOTH);
         g.drawImage(imgBoard, 0, 0, this);
 
-        int idx = dragListener.currentTileIdx;
+        int idx = board.getTurnNum();
+        
         renderCards(g); //Should be showing the backside TODO
         renderShots(g); //This will at first not show any shot counters as they're supposed to show up after a succesful shot roll
-
+        g.drawImage(scaleImage, (int)imageCorner[idx].getX() - 5, (int)imageCorner[idx].getY() - 5, this);
         if(idx == -1){
             
             for(int i = 0; i < players; i++){
@@ -376,6 +383,7 @@ public class DragPanel extends JPanel implements ActionListener{
             }
             ImageIcon currentPlayerDie = gamePlayers[idx].getPlayerImage();
             //System.out.println("In paintComp: x = " + imageCorner[idx].getX() + " y = " + imageCorner[idx].getY());
+            //playerBackgroundHalo.paintIcon(this, g, (int)imageCorner[idx].getX(), (int)imageCorner[idx].getY());
             currentPlayerDie.paintIcon(this, g, (int)imageCorner[idx].getX(), (int)imageCorner[idx].getY());
         }
 
@@ -416,9 +424,9 @@ public class DragPanel extends JPanel implements ActionListener{
             
             
             System.out.println(prevPt.getX()+ " " + prevPt.getY());
-                        		
-            for(int i = 0; i < players; i++){
-                if(i == board.getTurnNum()){
+            int i = board.getTurnNum();     		
+            //for(int i = 0; i < players; i++){
+                //if(i == board.getTurnNum()){
                     if(prevPt.getX() > imageCorner[i].getX() && prevPt.getX() < imageCorner[i].getX() + WIDTH){
                         if(prevPt.getY() > imageCorner[i].getY() && prevPt.getY() < imageCorner[i].getY() + HEIGHT) {
 
@@ -436,8 +444,8 @@ public class DragPanel extends JPanel implements ActionListener{
                     } else {
                         dl.setIsInObject(false);
                     }
-                }
-            }
+                //}
+            //}
         }
 
         private int calcSetBoolIdx(String[] setNames, String destPos) {
