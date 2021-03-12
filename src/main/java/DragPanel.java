@@ -474,30 +474,41 @@ public class DragPanel extends JPanel implements ActionListener{
     }
     
     public void actionPerformed(ActionEvent e) {
+        int idx = dragListener.currentTileIdx;
     	if(e.getSource() == rehearse) {
-    		if(!gamePlayers[cur].getHasRole()) {
+    		if(!gamePlayers[idx].getHasRole()) {
 				System.out.println("You cannot rehearse without having a role");
 			} else {
-				gamePlayers[cur].rehearse();
+				gamePlayers[idx].rehearse();
 			}
     	}
     	
     	if(e.getSource() == rankUp) {
-    		if(!(gamePlayers[cur].getPos().equalsIgnoreCase("Casting Office"))) {
+    		if(!(gamePlayers[idx].getPos().equalsIgnoreCase("Casting Office"))) {
 				System.out.println("You must go to the casting office to rank up.");
 			} else {
-				JFrame rankMenu = new JFrame("ranks");
-				JPanel panel = new JPanel();
-				rankMenu.getContentPane();
-				panel.setLayout(null);
+                Object[] ranks = {2, 3, 4, 5, 6};
+                Object[] type = {"money", "credits"};
+                Object[] title = {"Which Rank would you like to choose?"};
+                Component myComp = this.getComponent(0);
+                int optionIndex = JOptionPane.showOptionDialog(myComp, title[0], "Choose Role", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, ranks, ranks[0]);
+                
+                int typeIndex = JOptionPane.showOptionDialog(myComp, title[0], "Choose Type", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, type, type[0]);
+
+                board.rankUp(idx, Integer.parseInt(ranks[optionIndex].toString()), type[typeIndex].toString());
+				// JFrame rankMenu = new JFrame("ranks");
+				// JPanel panel = new JPanel();
+				// rankMenu.getContentPane();
+				// panel.setLayout(null);
 				
-				rankMenu.setSize(1000,600);
-				rankMenu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-				rankMenu.setVisible(true);
-				for (int i = gamePlayers[cur].getRank() - 1; i < ranks.length; i++) {
-					panel.add(ranks[i]);
-				}
-				rankMenu.add(panel);
+				// rankMenu.setSize(1000,600);
+				// rankMenu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				// rankMenu.setVisible(true);
+				// for (int i = gamePlayers[idx].getRank() - 1; i < ranks.length; i++) {
+				// 	panel.add(ranks[i]);
+				// }
+				// rankMenu.add(panel);
+                renderPlayerData(idx);
 			}
     	}
     }

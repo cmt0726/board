@@ -525,6 +525,29 @@ public class Board {
 		
 	}
 
+	public boolean rankUp(int i, int rankToBe, String method) {
+		if(!(players[i].getPos().equalsIgnoreCase("casting office"))) {
+			System.out.println("You must go to the casting office to rank up.");
+			return false;
+		}
+	
+		
+		
+
+		if(rankToBe <= players[i].getRank()) {
+			System.out.println("You are already that rank or higher.");
+			return false;
+		}
+	
+		players[i].rankUp(rankToBe, method);
+
+		if(players[i].getRank() != rankToBe) {
+			return false;
+		}
+
+		return true;
+		
+	}
 
     /*
         This function will loop through all players displaying what actions can be taken
@@ -599,37 +622,7 @@ public class Board {
                         
         				case "rankup":         	
                     	
-        					if(!(players[curTurnIdx].getPos().equalsIgnoreCase("office"))) {
-        						System.out.println("You must go to the casting office to rank up.");
-        						break;
-        					}
-                    	
-        					System.out.println("Which rank would you like to be?: ");
-        					int rankToBe = Integer.parseInt(sc.nextLine());
-        					System.out.println("How would you like to pay?: ");
-        					String method = sc.nextLine();
-
-        					if(rankToBe <= players[curTurnIdx].getRank()) {
-        						System.out.println("You are already that rank or higher.");
-        						break;
-        					}
-                        	
-        					if(rankToBe > 6) {
-        						System.out.println("You can only rank up to 6.");
-        						break;
-        					}
-                        
-        					players[curTurnIdx].rankUp(rankToBe, method);
-                        
-        					if(!(method.equalsIgnoreCase("money")) && !(method.equalsIgnoreCase("credit"))) {
-        						System.out.println("Payement must be money or credit");
-        						break;
-        					} 
-                        
-        					else if(players[curTurnIdx].getRank() != rankToBe) {
-        						System.out.println("You did not have enough to rank up.");
-        					}
-        					System.out.println("Current Rank: " + players[curTurnIdx].getRank());
+        					
         					break;
                         
         				case "endturn":
