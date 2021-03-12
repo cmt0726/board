@@ -23,7 +23,7 @@ public class xmlParser {
     HashMap<String, String[][]> locationRoleData = new HashMap<String, String[][]>();
     HashMap<String, Integer[]> boardPixelLoc = new HashMap<String, Integer[]>();
     HashMap<String, Integer[][]> boardShotLoc = new HashMap<String, Integer[][]>();
-    HashMap<String, Integer[][]> setRoleLoc = new HashMap<String, Integer[][]>();
+    HashMap<String, Integer[]> setRoleLoc = new HashMap<String, Integer[]>();
 
     //card hashMaps
     //This returns {{"RoleName", "level#"},{"RoleName", "level#"},{"RoleName", "level#"}, etc...}
@@ -96,6 +96,8 @@ public class xmlParser {
             
             NodeList offCardRolesList = eEle.getElementsByTagName("part");
             int offCardRolesListSize = offCardRolesList.getLength();
+
+            //System.out.println(offCardRolesListSize + " OFFCARDROLELIST SIZE");
             String[][] offCardRoleData = new String[offCardRolesListSize][3];
 
             NodeList areaDim = eEle.getElementsByTagName("area");
@@ -118,21 +120,24 @@ public class xmlParser {
                 Element oCREle = (Element) offCardRoleNode;
                 String currentTileRoleLevel = oCREle.getAttribute("level"); 
                 String currentTileRoleName = oCREle.getAttribute("name");
+
+                //System.out.println(currentTileRoleName + " ROLE NAME");
                 
                 NodeList dims = oCREle.getElementsByTagName("area");
-                for(int k = 0; k < dims.getLength(); k++){
-                    Element dimsNode = (Element) dims.item(k);
-                    // NodeList part = dimsNode.getElementsByTagName("part");
-                    // Element curPart = (Element) part.item(0);
-                    Integer xDim = Integer.parseInt(dimsNode.getAttribute("x"));
-                    Integer yDim = Integer.parseInt(dimsNode.getAttribute("y"));
-                    Integer height = Integer.parseInt(dimsNode.getAttribute("h"));
-                    Integer width = Integer.parseInt(dimsNode.getAttribute("w"));
-                    Integer[] dimSet = {xDim, yDim, height, width};
-                    curSetRolePixelLoc[j] = dimSet;
+                
+                Element dimsNode = (Element) dims.item(0);
+                
+                Integer xDim = Integer.parseInt(dimsNode.getAttribute("x"));
+                Integer yDim = Integer.parseInt(dimsNode.getAttribute("y"));
+                Integer height = Integer.parseInt(dimsNode.getAttribute("h"));
+                Integer width = Integer.parseInt(dimsNode.getAttribute("w"));
+                Integer[] dimSet = {xDim, yDim, height, width};
+                //System.out.println(currentTileRoleName + ": " + xDim + " " + yDim + " ");
+                curSetRolePixelLoc[j] = dimSet;
 
-                    setRoleName(currentTileRoleName, curSetRolePixelLoc);
-                }
+                //setRoleName(currentTileRoleName, curSetRolePixelLoc);
+                setRoleName(currentTileRoleName, dimSet);
+               
                 
                 String[] temp = {currentTileRoleName, currentTileRoleLevel, "false"};
                 offCardRoleData[j] = temp;
@@ -214,7 +219,7 @@ public class xmlParser {
     public Sets getSet(){return this.set;}
     public Cards getCard(){return this.card;}
 
-    private void setRoleName(String roleName, Integer[][]curSetRolePixelLoc){
+    private void setRoleName(String roleName, Integer[]curSetRolePixelLoc){
         setRoleLoc.put(roleName, curSetRolePixelLoc);
     }
 

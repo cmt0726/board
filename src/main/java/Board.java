@@ -30,7 +30,7 @@ public class Board {
 	public HashMap<String, Integer[]> boardPixelLoc;
 	public HashMap<String, Integer[][]> boardShotLoc;
 	public HashMap<String, Integer> sceneShotCount;
-	public HashMap<String, Integer[][]> setRoleLoc;
+	public HashMap<String, Integer[]> setRoleLoc;
 
     private Player[] players;
     private int totalPlayerCount;
@@ -100,7 +100,7 @@ public class Board {
 
 		this.currentTurn++;
 		players[idx].setHasMoved(false);
-		if(this.currentTurn == totalPlayerCount) {
+		if(this.currentTurn >= totalPlayerCount) {
 			this.currentTurn = 0;
 		}
 
@@ -152,7 +152,7 @@ public class Board {
 			Integer[] ret = {x, y};
 			return ret;
 		}
-		return setRoleLoc.get(players[i].getRole())[0];
+		return setRoleLoc.get(players[i].getRole());
 	}
 
 	public boolean isPlayerOnCard(int i) {
@@ -184,12 +184,12 @@ public class Board {
 				String partBudgetS = currentRoleDataOnCard[0][2];
 				if(nameOfPotentialRole.equals(roleSelection)) {
 
-					Integer[][] setRolelocations = setRoleLoc.get(roleSelection);
+					Integer[] setRolelocations = setRoleLoc.get(roleSelection);
 					
-					loc[0] = setRolelocations[0][0];
-					loc[1] = setRolelocations[0][1];
-					loc[2] = setRolelocations[0][2];
-					loc[3] = setRolelocations[0][3];
+					loc[0] = setRolelocations[0];
+					loc[1] = setRolelocations[1];
+					loc[2] = setRolelocations[2];
+					loc[3] = setRolelocations[3];
 					
 					
 
