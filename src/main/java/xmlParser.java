@@ -23,6 +23,7 @@ public class xmlParser {
     HashMap<String, String[][]> locationRoleData = new HashMap<String, String[][]>();
     HashMap<String, Integer[]> boardPixelLoc = new HashMap<String, Integer[]>();
     HashMap<String, Integer[][]> boardShotLoc = new HashMap<String, Integer[][]>();
+    HashMap<String, Integer[][]> setRoleLoc = new HashMap<String, Integer[][]>();
 
     //card hashMaps
     //This returns {{"RoleName", "level#"},{"RoleName", "level#"},{"RoleName", "level#"}, etc...}
@@ -106,17 +107,37 @@ public class xmlParser {
             Integer w = Integer.parseInt(areaEle.getAttribute("w"));
             Integer[] locAndDim = {x,y,h,w};
             boardPixelLoc.put(currentSetName, locAndDim);
-
+            Integer[][] curSetRolePixelLoc = new Integer[4][4];
+            Integer[] tempPixel = {0,0,0,0};
+            for(int l = 0; l < curSetRolePixelLoc.length; l++){curSetRolePixelLoc[l] = tempPixel;}
             //gets the level for each off card role
+            
             for(int j = 0; j < offCardRolesListSize; j++){
 
                 Node offCardRoleNode = offCardRolesList.item(j);
                 Element oCREle = (Element) offCardRoleNode;
                 String currentTileRoleLevel = oCREle.getAttribute("level"); 
                 String currentTileRoleName = oCREle.getAttribute("name");
+                
+                NodeList dims = oCREle.getElementsByTagName("area");
+                for(int k = 0; k < dims.getLength(); k++){
+                    Element dimsNode = (Element) dims.item(k);
+                    // NodeList part = dimsNode.getElementsByTagName("part");
+                    // Element curPart = (Element) part.item(0);
+                    Integer xDim = Integer.parseInt(dimsNode.getAttribute("x"));
+                    Integer yDim = Integer.parseInt(dimsNode.getAttribute("y"));
+                    Integer height = Integer.parseInt(dimsNode.getAttribute("h"));
+                    Integer width = Integer.parseInt(dimsNode.getAttribute("w"));
+                    Integer[] dimSet = {xDim, yDim, height, width};
+                    curSetRolePixelLoc[j] = dimSet;
+
+                    setRoleName(currentTileRoleName, curSetRolePixelLoc);
+                }
+                
                 String[] temp = {currentTileRoleName, currentTileRoleLevel, "false"};
                 offCardRoleData[j] = temp;
 
+                
             }
             
             locationRoleData.put(currentSetName, offCardRoleData);
@@ -162,7 +183,7 @@ public class xmlParser {
             String filePath = eEle.getAttribute("img");
             
             NodeList partCardList = eEle.getElementsByTagName("part");
-            String[][] cardDataInstance = new String[partCardList.getLength()][5];
+            String[][] cardDataInstance = new String[partCardList.getLength()][7];
 
             //gets the name and level for each card 
             for(int j = 0; j < partCardList.getLength(); j++) {     
@@ -170,14 +191,18 @@ public class xmlParser {
                 Element curPartEle = (Element) currentPart;
                 String curPartName = curPartEle.getAttribute("name");
                 String curPartLevel = curPartEle.getAttribute("level");
-                String[] cardArr = {curPartName, curPartLevel,currentCardBudget, "false", filePath};
+                NodeList cardArea = curPartEle.getElementsByTagName("area");
+                Element cardAreaEle = (Element) cardArea.item(0);
+                String xOff = cardAreaEle.getAttribute("x");
+                String yOff = cardAreaEle.getAttribute("y");
+                String[] cardArr = {curPartName, curPartLevel,currentCardBudget, "false", filePath,xOff,yOff};
                 cardDataInstance[j] = cardArr;
             }
             cardData.put(i, cardDataInstance);
         }
 
         card = new Cards(cardData);
-        set = new Sets(locationShotCount, locationNeighbors, locationRoleData, card, boardPixelLoc, boardShotLoc);
+        set = new Sets(locationShotCount, locationNeighbors, locationRoleData, card, boardPixelLoc, boardShotLoc, setRoleLoc);
 
     }
 
@@ -188,5 +213,9 @@ public class xmlParser {
 
     public Sets getSet(){return this.set;}
     public Cards getCard(){return this.card;}
+
+    private void setRoleName(String roleName, Integer[][]curSetRolePixelLoc){
+        setRoleLoc.put(roleName, curSetRolePixelLoc);
+    }
 
 }

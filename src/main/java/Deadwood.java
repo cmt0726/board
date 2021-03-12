@@ -20,7 +20,7 @@
                 playerCount = Integer.parseInt(args[2]);
                 if (playerCount < 2 || playerCount > 8){
                     System.out.println("Invalid player count. Must be from 2 to 8");
-                    System.exit(0);
+                    //System.exit(0);
                 }
                 
                 System.out.println("success!");
@@ -32,7 +32,7 @@
                 boardXMLFile = "src/main/resources/board.xml";
                 cardXMLFile = "src/main/resources/cards.xml";
                 System.out.println("Invalid usage!");
-                System.exit(0);
+                //System.exit(0);
             }
 
             

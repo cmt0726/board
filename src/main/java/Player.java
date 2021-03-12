@@ -23,6 +23,10 @@ public class Player {
         return this.practiceChips;
     }
 
+    public void setRole(String role){
+        this.role = role;
+    }
+
     public void setPlayerImage(String imagePath){
         this.playerIcon = new ImageIcon(imagePath);
     }

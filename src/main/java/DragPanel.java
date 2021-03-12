@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -107,7 +108,13 @@ public class DragPanel extends JPanel implements ActionListener{
         }
         
         add(act);
-        act.addActionListener(this);
+        act.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleAct(e);
+            }
+        });
         act.setPreferredSize(new Dimension (200,100));
         act.setVerticalTextPosition(AbstractButton.BOTTOM);
         act.setHorizontalTextPosition(AbstractButton.CENTER);
@@ -165,6 +172,41 @@ public class DragPanel extends JPanel implements ActionListener{
         renderPlayerData(board.getTurnNum());
         showButtons(board.getTurnNum());
     }
+
+    public void handleAct(ActionEvent e) {
+        int i = dragListener.currentTileIdx;
+        
+        ArrayList<String> offCardRoles = board.showAvailableOffCardRoles(i);
+        ArrayList<String> onCardRoles = board.showAvailableCardRoles(i);
+
+        int[] pixelLocToSnap = {0,0,0,0};
+
+        for(int index = 0; index < offCardRoles.size(); index++) {
+            onCardRoles.add(offCardRoles.get(index));
+        };
+        Object[] onCard = onCardRoles.toArray();
+        if(onCard.length != 0){
+            Object[] title = {"Which Role would you like to choose?"};
+            Component myComp = this.getComponent(0);
+            int optionIndex = JOptionPane.showOptionDialog(myComp, title[0], "Choose Role", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, onCard, onCard[0]);
+            pixelLocToSnap = board.handlePlayerAct(i, onCard[optionIndex].toString());
+        } else {
+            pixelLocToSnap = board.handlePlayerAct(i, null);
+        }
+
+        if(!board.isPlayerOnCard(i)) {
+            pixelLocToSnap[0] = board.curSetPixelLoc(i)[0] + 3;
+            pixelLocToSnap[1] = board.curSetPixelLoc(i)[1] + 3;
+        }
+        
+        System.out.println("X: " + pixelLocToSnap[0] + " Y: "+ pixelLocToSnap[1]);
+        imageCorner[i].x = pixelLocToSnap[0];
+        imageCorner[i].y = pixelLocToSnap[1];
+        renderPlayerData(i);
+        repaint();
+    }
+
+    
 
     private void showButtons(int i) {
         int[] actionSet = board.calcValidActionSet(i);
@@ -344,6 +386,7 @@ public class DragPanel extends JPanel implements ActionListener{
                 if(i == board.getTurnNum()){
                     if(prevPt.getX() > imageCorner[i].getX() && prevPt.getX() < imageCorner[i].getX() + WIDTH){
                         if(prevPt.getY() > imageCorner[i].getY() && prevPt.getY() < imageCorner[i].getY() + HEIGHT) {
+
                             renderPlayerData(i);
                             double[] temp = {imageCorner[i].getX(),imageCorner[i].getY()};
                             previousPlayerLoc = temp;
@@ -381,6 +424,7 @@ public class DragPanel extends JPanel implements ActionListener{
             boolean isInSomeSet = false;
             for(int i = 0; i < tileNames.length; i++) {
                 Integer[][] currentSetCheck = approxSetLocs.get(tileNames[i]);
+
                 if(currentPt.getX() > currentSetCheck[0][0] && currentPt.getY() > currentSetCheck[0][1]){
                     if(currentPt.getX() < currentSetCheck[1][0] && currentPt.getY() < currentSetCheck[1][1]) {
                         isInSomeSet = true;
@@ -397,13 +441,10 @@ public class DragPanel extends JPanel implements ActionListener{
                             }
                             
                             renderPlayerData(idx);
+                            showButtons(idx);
                             previousPlayerLoc[0] = currentPt.getX();
                             previousPlayerLoc[1] = currentPt.getY();
                             repaint();
-
-
-
-
 
                             return;
                         } else {
