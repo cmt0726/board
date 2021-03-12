@@ -175,7 +175,7 @@ public class DragPanel extends JPanel implements ActionListener{
     }
 
     public void handleAct(ActionEvent e) {
-        int i = dragListener.currentTileIdx;
+        int i = board.getTurnNum();
 
         
         if(!board.getPlayers()[i].getHasRole()){ 
@@ -214,12 +214,12 @@ public class DragPanel extends JPanel implements ActionListener{
         
         //System.out.println("X: " + pixelLocToSnap[0] + " Y: "+ pixelLocToSnap[1]);
         //maybe we need a popup to show what you just earned?
-        renderPlayerData(i);
+        
 
         board.handlePlayerTurn(i);
         renderPlayerData(board.getTurnNum());
         showButtons(board.getTurnNum());
-        
+        renderPlayerData(board.getTurnNum());
         repaint();
     }
 

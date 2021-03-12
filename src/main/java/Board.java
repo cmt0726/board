@@ -101,7 +101,7 @@ public class Board {
 		this.currentTurn++;
 		players[idx].setHasMoved(false);
 		if(this.currentTurn >= totalPlayerCount) {
-			this.currentTurn = 0;
+			resetTurn();
 		}
 
 	}
@@ -289,6 +289,7 @@ public class Board {
 					//System.out.println("Current Role Budget:" + cardRoleBudget);
 					currentPlayer.setHasRole(true);
 					currentPlayer.setOnCardRole(true);
+					currentPlayer.setRole(roleSelection);
 					
 					if(!currentPlayer.getHasMoved()) {
 
