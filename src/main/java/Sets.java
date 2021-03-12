@@ -47,8 +47,18 @@ public class Sets {
         
     }
 
-    public void resetShotCount(HashMap<String, Integer> scene){
-        sceneShotCounter = new HashMap<String, Integer>(scene);
+    public void resetShotCount(){
+    
+        sceneShotCounter.put("Train Station", 3);
+        sceneShotCounter.put("Secret Hideout", 3);
+        sceneShotCounter.put("Church", 2);
+        sceneShotCounter.put("Hotel", 3);
+        sceneShotCounter.put("Main Street", 3);
+        sceneShotCounter.put("Jail", 1);
+        sceneShotCounter.put("General Store", 2);
+        sceneShotCounter.put("Ranch", 2);
+        sceneShotCounter.put("Bank", 1);
+        sceneShotCounter.put("Saloon", 2);
     }
 
     public void generateSceneCards(){

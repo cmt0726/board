@@ -213,7 +213,7 @@ public class xmlParser {
 
     public void resetSceneCounts(){
         //Sets scene = new Sets(locationShotCount, locationNeighbors, locationRoleData, card);
-        set.resetShotCount(locationShotCount);
+        set.resetShotCount();
     }
 
     public Sets getSet(){return this.set;}

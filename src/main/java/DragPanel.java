@@ -53,6 +53,7 @@ public class DragPanel extends JPanel implements ActionListener{
     //int WIDTH_HEIGHT = img.getIconHeight();
 
     Point[] imageCorner = new Point[8];
+    Point[] imageCornerForReset = new Point[8];
     Point prevPt;
     DragListener dragListener = new DragListener();
     ClickListener clickListener = new ClickListener(dragListener);
@@ -108,10 +109,14 @@ public class DragPanel extends JPanel implements ActionListener{
         
         for(int i = 0; i < 4; i++){
             imageCorner[i] = new Point(1000 + (i * 40), 300);
+            imageCornerForReset[i] = new Point(1000 + (i * 40), 300);
         }
         for(int i = 0; i < 4; i++){
             imageCorner[i+4] = new Point(1000 + (i * 40), 340);
+            imageCornerForReset[i+4] = new Point(1000 + (i * 40), 340);
         }
+
+
         
         add(act);
         act.addActionListener(new ActionListener() {
@@ -226,6 +231,31 @@ public class DragPanel extends JPanel implements ActionListener{
         renderPlayerData(board.getTurnNum());
         showButtons(board.getTurnNum());
         renderPlayerData(board.getTurnNum());
+
+        if(board.getHasResetDay()){
+            resetPlayerPos();
+            resetCards();
+            Graphics g = getGraphics();
+            board.xml.resetSceneCounts();
+            renderShots(g);
+            board.setHasResetDay(false);
+        }
+        
+        repaint();
+    }
+
+    private void resetPlayerPos() {
+        for(int i = 0; i < board.getPlayerCount(); i++) {
+            imageCorner[i].x = imageCornerForReset[i].x;
+            imageCorner[i].y = imageCornerForReset[i].y;
+        }
+        repaint();
+    }
+
+    private void resetCards() {
+        for(int i = 0; i < 10; i++) {
+            isCardShown[i] = 0;
+        }
         repaint();
     }
 

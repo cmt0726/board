@@ -51,7 +51,9 @@ public class EndDay {
         for(int i = 0; i < playerCount; i++) {
             players[i].setPos("Trailer");
         }
+
         board.incrementDay();
+        board.resetTurn();
         if(board.getDay() > this.dayLimit){
             endGame(players);
         }

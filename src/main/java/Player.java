@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 public class Player {
     private ImageIcon playerIcon;
     private String imagePath;
-    private int rank = 1;
+    private int rank = 6;
     private int credit = 0;
     private int money = 0;
     private String role;

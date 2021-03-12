@@ -35,6 +35,7 @@ public class Board {
     private Player[] players;
     private int totalPlayerCount;
 	private int currentTurn = 0;
+	private boolean hasResetBoard = false;
     public EndDay endday = new EndDay(this); //passing the Board object into EndDay
     
     public Board(int playerCount, String board, String card) throws Exception{
@@ -88,6 +89,10 @@ public class Board {
     }
 
     public int getDay(){ return this.day;}
+
+	public boolean getHasResetDay(){return this.hasResetBoard;}
+
+	public void setHasResetDay(boolean bool){ this.hasResetBoard = bool;}
 
 	public int getTurnNum(){return this.currentTurn;}
 
@@ -251,7 +256,8 @@ public class Board {
 								}
 								if(totalActiveScenes < 2) {
 									endday.resetForNextDay();
-									//res = "exit";
+									hasResetBoard = true;
+									
 								}
 							
 							}
@@ -333,7 +339,7 @@ public class Board {
 								}
 								if(totalActiveScenes < 2) {
 									endday.resetForNextDay();
-									//res = "exit";
+									hasResetBoard = true;
 								} 
 							
 							}
@@ -383,7 +389,7 @@ public class Board {
 							}
 							if(totalActiveScenes < 2) {
 								endday.resetForNextDay();
-								//res = "exit";
+								hasResetBoard = true;
 							}
 						}
 						
@@ -428,7 +434,7 @@ public class Board {
 							}
 							if(totalActiveScenes < 2) {
 								endday.resetForNextDay();
-								//res = "exit";
+								hasResetBoard = true;
 							}
 						}
 					
