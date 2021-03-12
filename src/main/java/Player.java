@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 
 public class Player {
     private ImageIcon playerIcon;
+    private String imagePath;
     private int rank = 1;
     private int credit = 0;
     private int money = 0;
@@ -29,10 +30,15 @@ public class Player {
 
     public void setPlayerImage(String imagePath){
         this.playerIcon = new ImageIcon(imagePath);
+        this.imagePath = imagePath;
     }
 
     public ImageIcon getPlayerImage(){
         return this.playerIcon;
+    }
+
+    public String getPlayerImagePath() {
+        return this.imagePath;
     }
     
     public boolean getHasMoved() {

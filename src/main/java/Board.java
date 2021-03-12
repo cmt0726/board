@@ -93,6 +93,13 @@ public class Board {
 
 	public void resetTurn(){this.currentTurn = 0;}
 
+	public void increasePlayerRankVisual(int idx){
+		//"./src/main/resources/img/dice_r1.png"
+		String regex = "[0-9]";
+		String playerImgFilePath = players[idx].getPlayerImagePath().replaceAll(regex, String.valueOf(players[idx].getRank()));
+		players[idx].setPlayerImage(playerImgFilePath);
+	}
+
 	//Handles the end of a players turn
 	public void handlePlayerTurn(int idx){
 
@@ -224,7 +231,7 @@ public class Board {
 								locationRoleData.put(playerLocation, currentRoleDataOffCard);
 
 								payout(players,playerLocation ,currentPlayer.bonus(partBudgetS));
-								
+
 								for(int j = 0; j < players.length;j++) {
 									if(!players[j].getHasRole()) {
 										players[j].setChips(0);

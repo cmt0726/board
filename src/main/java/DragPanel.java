@@ -538,9 +538,13 @@ public class DragPanel extends JPanel implements ActionListener{
                 
                 int typeIndex = JOptionPane.showOptionDialog(myComp, title[1], "Choose Type", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, type, type[0]);
 
-                board.rankUp(idx, Integer.parseInt(ranks[optionIndex].toString()), type[typeIndex].toString());
-				
+                boolean res = board.rankUp(idx, Integer.parseInt(ranks[optionIndex].toString()), type[typeIndex].toString());
+				if(res){
+                    board.increasePlayerRankVisual(idx);
+                    repaint();
+                }
                 renderPlayerData(idx);
+                
 			}
     	}
     }
