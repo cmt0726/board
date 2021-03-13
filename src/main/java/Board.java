@@ -214,6 +214,15 @@ public class Board {
 		}
 	}
 
+	public boolean isSetDone(String setName){
+		
+		if(sceneShotCount.get(setName) == 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public int[] handlePlayerAct(int idx, String role) {
 		int[] loc = {0, 0, 0, 0};
 		String playerLocation = players[idx].getPos();

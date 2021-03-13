@@ -18,6 +18,7 @@ public class DragPanel extends JPanel implements ActionListener{
     ImageIcon playerBackgroundHalo = new ImageIcon("./src/main/resources/img/halomark2.png");
     Image scaleImage;
     int[] isCardShown = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; //used to know whether or not we should show the front or back of a card
+    int[] isXShown = {0,0,0,0,0,0,0,0,0,0};
     int[] pixelLocToSnap = {0,0,0,0};
     
     int players = Deadwood.playerCount;
@@ -36,6 +37,8 @@ public class DragPanel extends JPanel implements ActionListener{
     //This guy is kept to calculate die width and height
     ImageIcon img1 = new ImageIcon("./src/main/resources/img/dice_r1.png");
     
+    ImageIcon xImage = new ImageIcon("./src/main/resources/img/x.png");
+    Image scaledXImage = xImage.getImage().getScaledInstance(200, 125,Image.SCALE_DEFAULT);
 
     Image imgBoard;
 
@@ -77,6 +80,7 @@ public class DragPanel extends JPanel implements ActionListener{
     public DragPanel(Board boardImp) throws IOException{
         
         scaleImage = playerBackgroundHalo.getImage().getScaledInstance(50, 50,Image.SCALE_DEFAULT);
+
         this.setOpaque(false);
         this.board = boardImp;
         //fill aproxSetLocs hashmap
@@ -282,9 +286,24 @@ public class DragPanel extends JPanel implements ActionListener{
             int[] actions = board.calcValidActionSet(board.getTurnNum());
             actions[0] = 0;
             showButtons(board.getTurnNum(), actions);
+            
         }
   
         repaint();
+    }
+
+    public void renderX(Graphics g){
+        for(int i = 0; i < setNames.length; i++){
+            if(board.isSetDone(setNames[i])) {
+                int x = board.boardPixelLoc.get(setNames[i])[0];
+                int y = board.boardPixelLoc.get(setNames[i])[1];
+                g.drawImage(scaledXImage, x, y, this);
+                repaint();
+            } else {
+                continue;
+            }
+        }
+        
     }
 
     private void finishGame(){
@@ -451,6 +470,7 @@ public class DragPanel extends JPanel implements ActionListener{
         
         renderCards(g); //Should be showing the backside TODO
         renderShots(g); //This will at first not show any shot counters as they're supposed to show up after a succesful shot roll
+        renderX(g);
         g.drawImage(scaleImage, (int)imageCorner[idx].getX() - 5, (int)imageCorner[idx].getY() - 5, this);
         if(idx == -1){
             
