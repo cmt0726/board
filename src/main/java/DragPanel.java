@@ -31,8 +31,7 @@ public class DragPanel extends JPanel implements ActionListener{
     ImageIcon[] shotImages = new ImageIcon[22];
     ImageIcon cardBack = new ImageIcon("./src/main/resources/img/cardback.png)");
     //We can use this to algorithmically upgrade peoples dice
-    String[] imagePaths = {"./src/main/resources/img/dice_r1.png","./src/main/resources/img/dice_b1.png","./src/main/resources/img/dice_g1.png","./src/main/resources/img/dice_v1.png",
-                            "./src/main/resources/img/dice_c1.png","./src/main/resources/img/dice_o1.png","./src/main/resources/img/dice_p1.png","./src/main/resources/img/dice_w1.png"};
+    
     
     //This guy is kept to calculate die width and height
     ImageIcon img1 = new ImageIcon("./src/main/resources/img/dice_r1.png");
@@ -102,7 +101,7 @@ public class DragPanel extends JPanel implements ActionListener{
         playerLocation.setBounds(PLAYER_INFO_X, PLAYER_INFO_TOP + PLAYER_INFO_OFFSET*6, 150, 20);
 
         for(int i = 0; i < players; i++){
-            gamePlayers[i].setPlayerImage(imagePaths[i]);
+            //gamePlayers[i].setPlayerImage(imagePaths[i]);
         }
 
         imgBoard = ImageIO.read(new File("./src/main/resources/img/board.png"));

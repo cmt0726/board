@@ -19,6 +19,9 @@ public class Board {
     private String[] trailerNeighbors = {"Main Street", "Saloon", "Hotel"};
     private String[] officeNeighbors = {"Train Station", "Ranch", "Secret Hideout"};
     private String[] setNames = {"Train Station", "Secret Hideout", "Church", "Hotel", "Main Street", "Jail", "General Store", "Ranch", "Bank", "Saloon"};
+	String[] imagePaths = {"./src/main/resources/img/dice_r1.png","./src/main/resources/img/dice_b1.png","./src/main/resources/img/dice_g1.png","./src/main/resources/img/dice_v1.png",
+                            "./src/main/resources/img/dice_c1.png","./src/main/resources/img/dice_o1.png","./src/main/resources/img/dice_p1.png","./src/main/resources/img/dice_w1.png"};
+							
     private List<String> traiNeiList = Arrays.asList(trailerNeighbors);
     private List<String> offNeiList = Arrays.asList(officeNeighbors);
 
@@ -63,6 +66,7 @@ public class Board {
             players[i] = new Player();
             System.out.println("Player name :");
             players[i].setId(sc.next());
+			players[i].setPlayerImage(imagePaths[i]);
         }
         if(playerCount <= 3) {
             endday.setDayLimit(3);
@@ -81,6 +85,9 @@ public class Board {
                 p.setCredits(4);
                 p.setRank(2);
             }
+			for(int i = 0; i < playerCount; i++){
+				increasePlayerRankVisual(i);
+			}
         }
         totalPlayerCount = playerCount;
 		xml.set.generateSceneCards();
