@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class Board {
     
 
-    private int day;
+    private int day = 1;
 	private String boardS;
 	private String cardS;
     public xmlParser xml;
@@ -39,6 +39,8 @@ public class Board {
     private int totalPlayerCount;
 	private int currentTurn = 0;
 	private boolean hasResetBoard = false;
+	private boolean isGameEnd = false;
+	private int winningIdx;
     public EndDay endday = new EndDay(this); //passing the Board object into EndDay
     
     public Board(int playerCount, String board, String card) throws Exception{
@@ -96,6 +98,16 @@ public class Board {
     }
 
     public int getDay(){ return this.day;}
+
+	public void setWinningIdx(int i){this.winningIdx = i;}
+
+	public int getWinningIdx(){return this.winningIdx;}
+
+	public void setIsGameEnd(boolean bool){
+		this.isGameEnd = bool;
+	}
+
+	public boolean getIsGameEnd(){return this.isGameEnd;}
 
 	public boolean getHasResetDay(){return this.hasResetBoard;}
 

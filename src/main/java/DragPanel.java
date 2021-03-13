@@ -239,6 +239,10 @@ public class DragPanel extends JPanel implements ActionListener{
         } else {
             board.handlePlayerAct(i, board.getPlayers()[i].getRole());
         }
+
+        if(board.getIsGameEnd()) {
+            finishGame();
+        }
         
         //System.out.println("X: " + pixelLocToSnap[0] + " Y: "+ pixelLocToSnap[1]);
         //maybe we need a popup to show what you just earned?
@@ -262,8 +266,19 @@ public class DragPanel extends JPanel implements ActionListener{
             actions[0] = 0;
             showButtons(board.getTurnNum(), actions);
         }
-        
+  
         repaint();
+    }
+
+    private void finishGame(){
+        int winnerIdx = board.getWinningIdx();
+        Player player = board.getPlayers()[winnerIdx];
+        Object[] ranks = {player.getId()};
+        Object[] type = {"money", "credits"};
+        Object[] title = {"The Winner is... !!!"};
+        Component myComp = this.getComponent(0);
+        int optionIndex = JOptionPane.showOptionDialog(myComp, title[0], "Winner: ", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, ranks, ranks[0]);
+        System.exit(1);
     }
 
     private void resetPlayerPos() {

@@ -10,6 +10,7 @@ public class EndDay {
 
     public EndDay(Board bObject){
         this.board = bObject;
+        this.playerCount = this.board.getPlayerCount();
     }
 
     public void setDayLimit(int dLimit) {
@@ -18,8 +19,10 @@ public class EndDay {
 
     public void endGame(Player[] players) {
         
+        
         int[] ret = calculateScore(players);
         int playerWinnerIdx = 0;
+        
         int maxScore = 0;
         for(int i = 0; i < ret.length; i++){
             if(ret[i] > maxScore){
@@ -27,14 +30,17 @@ public class EndDay {
                 maxScore = ret[i];
             }
         }
+        board.setWinningIdx(playerWinnerIdx);
+        board.setIsGameEnd(true);
         System.out.println("The winner is: " + playerWinnerIdx);
-        System.exit(1);
+        //System.exit(1);
         
     }
 
     //Calculates and returns an array of the final scores of each player
     public int[] calculateScore(Player[] players){
-        int[] scores = new int[playerCount];
+        players = board.getPlayers();
+        int[] scores = new int[board.getPlayerCount()];
         for(int i = 0; i < players.length; i++){
             scores[i] = players[i].getMoney() + players[i].getCredits() + (players[i].getRank() * 5);
         }
