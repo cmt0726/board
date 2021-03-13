@@ -120,6 +120,7 @@ public class xmlParser {
                 Element oCREle = (Element) offCardRoleNode;
                 String currentTileRoleLevel = oCREle.getAttribute("level"); 
                 String currentTileRoleName = oCREle.getAttribute("name");
+                //System.out.println(currentTileRoleName);
 
                 //System.out.println(currentTileRoleName + " ROLE NAME");
                 

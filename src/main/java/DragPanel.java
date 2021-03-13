@@ -178,18 +178,25 @@ public class DragPanel extends JPanel implements ActionListener{
     }
 
     public void handleEndTurn(ActionEvent e) {
-        int i = dragListener.currentTileIdx;
+        int i = board.getTurnNum();
         board.handlePlayerTurn(i);
         renderPlayerData(board.getTurnNum());
         showButtons(board.getTurnNum());
+        
+        if(board.isSetDone(board.getTurnNum())){
+            int[] actions = board.calcValidActionSet(board.getTurnNum());
+            actions[0] = 0;
+            showButtons(board.getTurnNum(), actions);
+        }
         repaint();
     }
 
     public void handleAct(ActionEvent e) {
         int i = board.getTurnNum();
-
-        
-        if(!board.getPlayers()[i].getHasRole()){ 
+ 
+        if(!board.getPlayers()[i].getHasRole()){
+            
+            
         
             ArrayList<String> offCardRoles = board.showAvailableOffCardRoles(i);
             ArrayList<String> onCardRoles = board.showAvailableCardRoles(i);
@@ -205,6 +212,9 @@ public class DragPanel extends JPanel implements ActionListener{
                 Component myComp = this.getComponent(0);
                 int optionIndex = JOptionPane.showOptionDialog(myComp, title[0], "Choose Role", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, onCard, onCard[0]);
                 pixelLocToSnap = board.handlePlayerAct(i, onCard[optionIndex].toString());
+                int[] actions = board.calcValidActionSet(i);
+                
+                showButtons(i, actions);
             } else {
                 int[] actions = board.calcValidActionSet(i);
                 actions[0] = 0;
@@ -213,12 +223,20 @@ public class DragPanel extends JPanel implements ActionListener{
                 return;
             }
 
-            if(!board.isPlayerOnCard(i)) {
+            if(!board.isPlayerOnCard(i) && pixelLocToSnap[0] != 0) {
                 pixelLocToSnap[0] = board.curSetPixelLoc(i)[0] + 3;
                 pixelLocToSnap[1] = board.curSetPixelLoc(i)[1] + 3;
             }
-            imageCorner[i].x = pixelLocToSnap[0];
-            imageCorner[i].y = pixelLocToSnap[1];
+            if(pixelLocToSnap[0] != 0){
+                imageCorner[i].x = pixelLocToSnap[0];
+                imageCorner[i].y = pixelLocToSnap[1];
+            } else {
+                int[] actions = board.calcValidActionSet(i);
+                
+                showButtons(i, actions);
+                return;
+            }
+            
         } else {
             board.handlePlayerAct(i, board.getPlayers()[i].getRole());
         }
@@ -226,9 +244,8 @@ public class DragPanel extends JPanel implements ActionListener{
         //System.out.println("X: " + pixelLocToSnap[0] + " Y: "+ pixelLocToSnap[1]);
         //maybe we need a popup to show what you just earned?
         
-
         board.handlePlayerTurn(i);
-        renderPlayerData(board.getTurnNum());
+        //renderPlayerData(board.getTurnNum());
         showButtons(board.getTurnNum());
         renderPlayerData(board.getTurnNum());
 
@@ -239,6 +256,12 @@ public class DragPanel extends JPanel implements ActionListener{
             board.xml.resetSceneCounts();
             renderShots(g);
             board.setHasResetDay(false);
+        }
+
+        if(board.isSetDone(board.getTurnNum())){
+            int[] actions = board.calcValidActionSet(board.getTurnNum());
+            actions[0] = 0;
+            showButtons(board.getTurnNum(), actions);
         }
         
         repaint();

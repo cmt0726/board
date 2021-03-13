@@ -127,6 +127,7 @@ public class Board {
 		
 		for(String[] role : currentRoleDataOnCard){
 			if(role[3].equals("false") && (Integer.parseInt(role[1]) <= currentPlayer.getRank())){
+				//roles.add("On Card, Rank: " + role[1] + ", Role: " + role[0]);
 				roles.add(role[0]);
 			}
 		}
@@ -141,11 +142,13 @@ public class Board {
 		Player currentPlayer = players[idx];
 		String[][] currentRoleDataOffCard = locationRoleData.get(playerLocation);
 
-		for(String[] role : currentRoleDataOffCard){
+		for(int i = 0; i < currentRoleDataOffCard.length; i++){
+			String[] role = currentRoleDataOffCard[i];
 			if(role[2].equals("false") && (Integer.parseInt(role[1]) <= currentPlayer.getRank())){
-				roles.add(role[0]);
+				roles.add(role[0]);	
 			}
 		}
+		
 
 		return roles;
 	}
@@ -171,6 +174,17 @@ public class Board {
 		return players[i].getOnCardRole();
 	}
 
+	public boolean isSetDone(int i){
+		if(players[i].getPos().equalsIgnoreCase("trailer") || players[i].getPos().equalsIgnoreCase("casting office")){
+			return false;
+		}
+		if(sceneShotCount.get(players[i].getPos()) == 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public int[] handlePlayerAct(int idx, String role) {
 		int[] loc = {0, 0, 0, 0};
 		String playerLocation = players[idx].getPos();
@@ -179,7 +193,8 @@ public class Board {
 		String[][] currentRoleDataOnCard = locationCardRoleData.get(playerLocation);
 		Boolean playerHasAvailableRole = false;
 
-		if(currentRoleDataOffCard[0][2].equals("true")){
+		//if(currentRoleDataOffCard[0][2].equals("true")){
+		if(sceneShotCount.get(currentPlayer.getPos()) == 0){
 			System.out.println("This set is has wrapped up, you must move to another location");
 			currentPlayer.setHasRole(false);
 			currentPlayer.setOnCardRole(false);
@@ -206,6 +221,7 @@ public class Board {
 					
 
 					Integer selectedRoleRank = Integer.parseInt(currentRoleDataOffCard[i][1]);
+					currentRoleDataOffCard[i][2] = "true";
 					currentPlayer.setCurrentRoleRank(selectedRoleRank);
 
 					//Means the player chose a role that is OffCard and we're associating a player position with that fact
@@ -462,9 +478,12 @@ public class Board {
 		} else if (players[i].getHasRole() && players[i].getHasMoved()) {
 			//actionSet[0] = 1;
 			//actionSet[1] = 1;
-		} else if (players[i].getHasRole()){
+		} else if (players[i].getHasRole() && sceneShotCount.get(players[i].getPos()) != 0){
 			actionSet[0] = 1;
 			actionSet[1] = 1;
+		} else if(sceneShotCount.get(players[i].getPos()) == 0){
+			actionSet[0] = 0;
+			actionSet[1] = 0;
 		}
 		if (players[i].getPos().equalsIgnoreCase("Casting Office")) {
 			actionSet[2] = 1;
