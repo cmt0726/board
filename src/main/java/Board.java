@@ -153,6 +153,16 @@ public class Board {
 		return roles;
 	}
 
+	public boolean increasePracticeChips(int i){
+		
+		players[i].increasePracticeChip();
+		if(players[i].getChips() == 5) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 	public ArrayList<String> showAvailableOffCardRoles(int idx) {
 
 		
@@ -267,6 +277,7 @@ public class Board {
 						//off card guys get no bonus money
 						//This means that specific scene has no more shots to take and that we should commence payout
 							if(xml.set.sceneShotCounter.get(playerLocation) == 0) {
+								currentPlayer.setChips(0);
 								currentRoleDataOffCard[0][2] = "true";
 								locationRoleData.put(playerLocation, currentRoleDataOffCard);
 
@@ -352,6 +363,7 @@ public class Board {
 
 							//No more shots left on this card
 							if(xml.set.sceneShotCounter.get(playerLocation) == 0) {
+								currentPlayer.setChips(0);
 								currentRoleDataOffCard[0][2] = "true";
 								locationRoleData.put(playerLocation, currentRoleDataOffCard);
 							
@@ -404,7 +416,7 @@ public class Board {
 						//System.out.println("You have succeeded! You gain 2 credits");
 
 						if(xml.set.sceneShotCounter.get(playerLocation) == 0) {
-
+							currentPlayer.setChips(0);
 							currentRoleDataOffCard[0][2] = "true"; //this scene is done, no more shots left.
 							locationRoleData.put(playerLocation, currentRoleDataOffCard); //set the data for that location with the fact there are no more shots left
 						
@@ -447,7 +459,7 @@ public class Board {
 
 					//off card guys get no bonus money
 						if(xml.set.sceneShotCounter.get(playerLocation) == 0) {
-
+							currentPlayer.setChips(0);
 							currentRoleDataOffCard[0][2] = "true";
 							locationRoleData.put(playerLocation, currentRoleDataOffCard);
 
@@ -499,7 +511,10 @@ public class Board {
 			//actionSet[1] = 1;
 		} else if (players[i].getHasRole() && sceneShotCount.get(players[i].getPos()) != 0){
 			actionSet[0] = 1;
-			actionSet[1] = 1;
+			if(players[i].getChips() != 5){
+				actionSet[1] = 1;
+			}
+			
 		} else if(sceneShotCount.get(players[i].getPos()) == 0){
 			actionSet[0] = 0;
 			actionSet[1] = 0;

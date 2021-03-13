@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 public class Player {
     private ImageIcon playerIcon;
     private String imagePath;
-    private int rank = 6;
+    private int rank = 1;
     private int credit = 0;
     private int money = 0;
     private String role;
@@ -115,6 +115,10 @@ public class Player {
     public int setChips(int chips) {
     	this.practiceChips = chips;
     	return this.practiceChips;
+    }
+
+    public void increasePracticeChip(){
+        this.practiceChips += 1;
     }
     
     public int getChips() {

@@ -132,7 +132,13 @@ public class DragPanel extends JPanel implements ActionListener{
         act.setVisible(false);
         
         add(rehearse);
-        rehearse.addActionListener(this);
+        rehearse.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleRehearse(e);
+            }
+        });
         rehearse.setPreferredSize(new Dimension (200,100));
         rehearse.setVerticalTextPosition(AbstractButton.BOTTOM);
         rehearse.setHorizontalTextPosition(AbstractButton.CENTER);
@@ -188,6 +194,17 @@ public class DragPanel extends JPanel implements ActionListener{
             showButtons(board.getTurnNum(), actions);
         }
         repaint();
+    }
+
+    public void handleRehearse(ActionEvent e) {
+        int i = board.getTurnNum();
+        boolean canRehearse = board.increasePracticeChips(i);
+        renderPlayerData(i);
+        repaint();
+        if(!canRehearse) {
+            showButtons(i);
+        }
+        board.handlePlayerTurn(i);
     }
 
     public void handleAct(ActionEvent e) {
@@ -315,6 +332,7 @@ public class DragPanel extends JPanel implements ActionListener{
         } else {
             rankUp.setEnabled(false);
         }
+        repaint();
     }
     private void showButtons(int i, int[] actionSet) {
         
