@@ -19,20 +19,20 @@ public class PlayerAction {
     public PlayerAction(Player playerOb){
         player = playerOb;
     }
-
-    
-	//TODO
-	public Boolean act(int playerRank, int difficulty) {
+	/**
+	 * Randomly picks a number and uses that to see if the acting was succesfful
+	 * @param playerRank
+	 * @param difficulty the difficulty of the scene
+	 * @return
+	 */
+    public Boolean act(int playerRank, int difficulty) {
 		Boolean success = false;
 		Random randRoll = new Random();
-		// if(difficulty > playerRank)
-		// 	return false;
 		
 		int roll = randRoll.nextInt(6) + 1;
 		System.out.println("PLAYER ROLL FOR ACTING: " + roll);
 		int chips = player.getChips();
-		if(roll + chips >= difficulty/*difficulty*/) {
-			//scene.progress++;
+		if(roll + chips >= difficulty) {
 			success = true;
 		}
         return success;
@@ -41,7 +41,11 @@ public class PlayerAction {
 	public void rehearse() {
 		player.setChips(player.getChips() + 1);
 	}
-
+	/**
+	 * 
+	 * @param budget
+	 * @return an integer array with numbers between 1 and 6 inclusive
+	 */
 	public Integer[] bonus(String budget) {
 		Integer[] rolls = new Integer[Integer.parseInt(budget)];
 
@@ -54,7 +58,6 @@ public class PlayerAction {
 
     public void rankUp(int rankRequest, String payment) {
         String temp = "casting office";
-        //TODO : Link up playerPosition from board class
 		if(payment.equalsIgnoreCase("money") && player.getPos().equalsIgnoreCase(temp)){
 			if (rankRequest == 2 && (player.getMoney() >= 4)) {
 				player.setMoney(player.getMoney() - 4);

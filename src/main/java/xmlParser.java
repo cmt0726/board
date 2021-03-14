@@ -52,17 +52,6 @@ public class xmlParser {
  
     }
 
-    public void printEle(String ele){
-        nList = doc.getElementsByTagName(ele);
-        
-        for(int i = 0; i < nList.getLength(); i++){
-            Node nNode = nList.item(i);
-            System.out.print(nNode.getNodeName() + ": ");
-            Element eEle = (Element) nNode;
-            System.out.println(eEle.getAttribute("name"));
-        }
-    }
-
     //This function will populate the hashmaps associated with Sets.java and Cards.java
     private void populateHash(){
         nList = doc.getElementsByTagName("set");
@@ -103,6 +92,7 @@ public class xmlParser {
             NodeList areaDim = eEle.getElementsByTagName("area");
             Node areaNode = areaDim.item(0);
             Element areaEle = (Element) areaNode;
+            //retreiving pixel locations for where to put cards
             Integer x = Integer.parseInt(areaEle.getAttribute("x"));
             Integer y = Integer.parseInt(areaEle.getAttribute("y"));
             Integer h = Integer.parseInt(areaEle.getAttribute("h"));
@@ -128,22 +118,18 @@ public class xmlParser {
                 
                 Element dimsNode = (Element) dims.item(0);
                 
+                //retrieving x, y coords for where off card roles are
                 Integer xDim = Integer.parseInt(dimsNode.getAttribute("x"));
                 Integer yDim = Integer.parseInt(dimsNode.getAttribute("y"));
                 Integer height = Integer.parseInt(dimsNode.getAttribute("h"));
                 Integer width = Integer.parseInt(dimsNode.getAttribute("w"));
                 Integer[] dimSet = {xDim, yDim, height, width};
-                //System.out.println(currentTileRoleName + ": " + xDim + " " + yDim + " ");
                 curSetRolePixelLoc[j] = dimSet;
 
-                //setRoleName(currentTileRoleName, curSetRolePixelLoc);
                 setRoleName(currentTileRoleName, dimSet);
-               
-                
+                     
                 String[] temp = {currentTileRoleName, currentTileRoleLevel, "false"};
                 offCardRoleData[j] = temp;
-
-                
             }
             
             locationRoleData.put(currentSetName, offCardRoleData);
@@ -191,7 +177,7 @@ public class xmlParser {
             NodeList partCardList = eEle.getElementsByTagName("part");
             String[][] cardDataInstance = new String[partCardList.getLength()][7];
 
-            //gets the name and level for each card 
+            //gets the name and level for each card as well as x, y coords for each on card role location
             for(int j = 0; j < partCardList.getLength(); j++) {     
                 Node currentPart = partCardList.item(j);
                 Element curPartEle = (Element) currentPart;

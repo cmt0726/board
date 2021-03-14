@@ -18,8 +18,8 @@ public class DragPanel extends JPanel implements ActionListener{
     ImageIcon playerBackgroundHalo = new ImageIcon("./src/main/resources/img/halomark2.png");
     Image scaleImage;
     int[] isCardShown = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; //used to know whether or not we should show the front or back of a card
-    int[] isXShown = {0,0,0,0,0,0,0,0,0,0};
-    int[] pixelLocToSnap = {0,0,0,0};
+    
+    int[] pixelLocToSnap = {0,0,0,0}; //used to snap players back to onClickLocation
     
     int players = Deadwood.playerCount;
     
@@ -27,9 +27,9 @@ public class DragPanel extends JPanel implements ActionListener{
 
     double[] previousPlayerLoc = {0, 0};
     
-    ImageIcon[] images = new ImageIcon[8];
-    ImageIcon[] cardImages = new ImageIcon[10];
-    ImageIcon[] shotImages = new ImageIcon[22];
+    ImageIcon[] images = new ImageIcon[8]; //player icons
+    ImageIcon[] cardImages = new ImageIcon[10]; //card images
+    ImageIcon[] shotImages = new ImageIcon[22]; //shot images
     ImageIcon cardBack = new ImageIcon("./src/main/resources/img/cardback.png)");
     //We can use this to algorithmically upgrade peoples dice
     
@@ -37,6 +37,7 @@ public class DragPanel extends JPanel implements ActionListener{
     //This guy is kept to calculate die width and height
     ImageIcon img1 = new ImageIcon("./src/main/resources/img/dice_r1.png");
     
+    //scaled image to denote if a set is done
     ImageIcon xImage = new ImageIcon("./src/main/resources/img/x.png");
     Image scaledXImage = xImage.getImage().getScaledInstance(200, 125,Image.SCALE_DEFAULT);
 
@@ -51,14 +52,13 @@ public class DragPanel extends JPanel implements ActionListener{
     int PLAYER_INFO_TOP = 50;
     int PLAYER_INFO_OFFSET = 30;
 
-    //int WIDTH_BOARD = imgBoard.getIconWidth();
-    //int WIDTH_HEIGHT = img.getIconHeight();
 
     Point[] imageCorner = new Point[8];
     Point[] imageCornerForReset = new Point[8];
     Point prevPt;
     DragListener dragListener = new DragListener();
     ClickListener clickListener = new ClickListener(dragListener);
+
     //player info text boxes
     JLabel currentActivePlayer = new JLabel();
     JLabel activePlayerCash = new JLabel();
@@ -72,8 +72,6 @@ public class DragPanel extends JPanel implements ActionListener{
     JButton rehearse = new JButton("Rehearse");
     JButton rankUp = new JButton("Rank Up");
     JButton end = new JButton("End Turn");
-    
-    JButton[] ranks = new JButton[6];
 
     Board board;
 
@@ -81,19 +79,12 @@ public class DragPanel extends JPanel implements ActionListener{
         
         scaleImage = playerBackgroundHalo.getImage().getScaledInstance(50, 50,Image.SCALE_DEFAULT);
 
-        this.setOpaque(false);
         this.board = boardImp;
+
         //fill aproxSetLocs hashmap
         fillSetHashMap();
-        
-        for(int i = 0; i < 6; i++) {
-        	ranks[i] = new JButton(Integer.toString((i + 1)));
-        	ranks[i].setBounds(400, 0 + (i*80), 150, 75);
-        }
-        
+       
         gamePlayers = board.getPlayers();
-
-        //Dimension size = currentActivePlayer.getPreferredSize();
 
         //setting offsets from board to place active playerInfo
         currentActivePlayer.setBounds(PLAYER_INFO_X, PLAYER_INFO_TOP, 150, 20);
@@ -103,10 +94,6 @@ public class DragPanel extends JPanel implements ActionListener{
         playerRank.setBounds(PLAYER_INFO_X, PLAYER_INFO_TOP + PLAYER_INFO_OFFSET*4, 150, 20);  
         playerRehearsalPoints.setBounds(PLAYER_INFO_X, PLAYER_INFO_TOP + PLAYER_INFO_OFFSET*5, 150, 20);
         playerLocation.setBounds(PLAYER_INFO_X, PLAYER_INFO_TOP + PLAYER_INFO_OFFSET*6, 150, 20);
-
-        for(int i = 0; i < players; i++){
-            //gamePlayers[i].setPlayerImage(imagePaths[i]);
-        }
 
         imgBoard = ImageIO.read(new File("./src/main/resources/img/board.png"));
         
@@ -118,9 +105,7 @@ public class DragPanel extends JPanel implements ActionListener{
             imageCorner[i+4] = new Point(1000 + (i * 40), 340);
             imageCornerForReset[i+4] = new Point(1000 + (i * 40), 340);
         }
-
-
-        
+       
         add(act);
         act.addActionListener(new ActionListener() {
 
@@ -165,7 +150,6 @@ public class DragPanel extends JPanel implements ActionListener{
                 handleEndTurn(e);
             }
         });
-
         end.setPreferredSize(new Dimension (200,100));
         end.setVerticalTextPosition(AbstractButton.BOTTOM);
         end.setHorizontalTextPosition(AbstractButton.CENTER);
@@ -186,6 +170,12 @@ public class DragPanel extends JPanel implements ActionListener{
         this.setLayout(null); //we want absolute positioning
     }
 
+    /**
+     * When a player clicks to end their turn
+     * this tells board.java to increment the turn counter
+     * as well as remove that players available actions
+     * @param e
+     */
     public void handleEndTurn(ActionEvent e) {
         int i = board.getTurnNum();
         board.handlePlayerTurn(i);
@@ -200,6 +190,11 @@ public class DragPanel extends JPanel implements ActionListener{
         repaint();
     }
 
+    /**
+     * Increases a players practice chips and figures out
+     * whether or not to allow them to rehearse again
+     * @param e
+     */
     public void handleRehearse(ActionEvent e) {
         int i = board.getTurnNum();
         boolean canRehearse = board.increasePracticeChips(i);
@@ -210,39 +205,41 @@ public class DragPanel extends JPanel implements ActionListener{
         }
         board.handlePlayerTurn(i);
     }
-
+    /**
+     * This handles displaying relevant user information
+     * based on if the player succesfully acted
+     * as well as handling actually moving the player die to
+     * the correct location
+     * @param e
+     */
     public void handleAct(ActionEvent e) {
         int i = board.getTurnNum();
  
-        if(!board.getPlayers()[i].getHasRole()){
-            
-            
-        
+        if(!board.getPlayers()[i].getHasRole()){   
             ArrayList<String> offCardRoles = board.showAvailableOffCardRoles(i);
             ArrayList<String> onCardRoles = board.showAvailableCardRoles(i);
-
-            
 
             for(int index = 0; index < offCardRoles.size(); index++) {
                 onCardRoles.add(offCardRoles.get(index));
             };
+
             Object[] onCard = onCardRoles.toArray();
-            if(onCard.length != 0){
+
+            if(onCard.length != 0){ //if there's available roles
                 Object[] title = {"Which Role would you like to choose?"};
                 Component myComp = this.getComponent(0);
+                //rendering the popup
                 int optionIndex = JOptionPane.showOptionDialog(myComp, title[0], "Choose Role", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, onCard, onCard[0]);
                 pixelLocToSnap = board.handlePlayerAct(i, onCard[optionIndex].toString());
                 int[] actions = board.calcValidActionSet(i);
-                
                 showButtons(i, actions);
-            } else {
+            } else { //if not, don't let them try to act again
                 int[] actions = board.calcValidActionSet(i);
                 actions[0] = 0;
                 showButtons(i, actions);
-                //pixelLocToSnap = board.handlePlayerAct(i, null);
                 return;
             }
-
+            //absolute positioning for off card roles
             if(!board.isPlayerOnCard(i) && pixelLocToSnap[0] != 0) {
                 pixelLocToSnap[0] = board.curSetPixelLoc(i)[0] + 3;
                 pixelLocToSnap[1] = board.curSetPixelLoc(i)[1] + 3;
@@ -252,7 +249,6 @@ public class DragPanel extends JPanel implements ActionListener{
                 imageCorner[i].y = pixelLocToSnap[1];
             } else {
                 int[] actions = board.calcValidActionSet(i);
-                
                 showButtons(i, actions);
                 return;
             }
@@ -265,11 +261,7 @@ public class DragPanel extends JPanel implements ActionListener{
             finishGame();
         }
         
-        //System.out.println("X: " + pixelLocToSnap[0] + " Y: "+ pixelLocToSnap[1]);
-        //maybe we need a popup to show what you just earned?
-        
         board.handlePlayerTurn(i);
-        //renderPlayerData(board.getTurnNum());
         showButtons(board.getTurnNum());
         renderPlayerData(board.getTurnNum());
 
@@ -285,13 +277,15 @@ public class DragPanel extends JPanel implements ActionListener{
         if(board.isSetDone(board.getTurnNum())){
             int[] actions = board.calcValidActionSet(board.getTurnNum());
             actions[0] = 0;
-            showButtons(board.getTurnNum(), actions);
-            
+            showButtons(board.getTurnNum(), actions);      
         }
   
         repaint();
     }
-
+    /**
+     * renders the X's over sets to show they're done
+     * @param g
+     */
     public void renderX(Graphics g){
         for(int i = 0; i < setNames.length; i++){
             if(board.isSetDone(setNames[i])) {
@@ -305,7 +299,10 @@ public class DragPanel extends JPanel implements ActionListener{
         }
         
     }
-
+    /**
+     * displays the end game winner popup
+     * and closes the game
+     */
     private void finishGame(){
         int winnerIdx = board.getWinningIdx();
         Player player = board.getPlayers()[winnerIdx];
@@ -316,7 +313,9 @@ public class DragPanel extends JPanel implements ActionListener{
         int optionIndex = JOptionPane.showOptionDialog(myComp, title[0], "Winner: ", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, ranks, ranks[0]);
         System.exit(1);
     }
-
+    /**
+     * Brings all player dice to the trailer
+     */
     private void resetPlayerPos() {
         for(int i = 0; i < board.getPlayerCount(); i++) {
             imageCorner[i].x = imageCornerForReset[i].x;
@@ -324,7 +323,9 @@ public class DragPanel extends JPanel implements ActionListener{
         }
         repaint();
     }
-
+    /**
+     * Makes it so scene cards are face down
+     */
     private void resetCards() {
         for(int i = 0; i < 10; i++) {
             isCardShown[i] = 0;
@@ -333,7 +334,11 @@ public class DragPanel extends JPanel implements ActionListener{
     }
 
     
-
+    /**
+     * For a given player index, decides whether or not
+     * to allow the player to click on certain action buttons
+     * @param i
+     */
     private void showButtons(int i) {
         int[] actionSet = board.calcValidActionSet(i);
         if(actionSet[0] == 1) {
@@ -371,13 +376,14 @@ public class DragPanel extends JPanel implements ActionListener{
             rankUp.setEnabled(false);
         }
     }
-
+    /**
+     * Displays the scene cards
+     * @param g
+     */
     public void renderCards(Graphics g){
         for(int i = 0; i < setNames.length; i++){
             int x = board.boardPixelLoc.get(setNames[i])[0];
             int y = board.boardPixelLoc.get(setNames[i])[1];
-            int height = board.boardPixelLoc.get(setNames[i])[2];
-            int width = board.boardPixelLoc.get(setNames[i])[3];
             if(isCardShown[i] == 0){
                 String imagePath = "./src/main/resources/img/cardback.png";
                 cardImages[i] = new ImageIcon(imagePath);
@@ -387,11 +393,13 @@ public class DragPanel extends JPanel implements ActionListener{
                 cardImages[i] = new ImageIcon("./src/main/resources/img/card_" + imagePath);
                 cardImages[i].paintIcon(this, g, x, y);
             }
-            
         }
-        
     }
-
+    /**
+     * Displays the shot counters based on if there's
+     * been 'n' succesful shots
+     * @param g
+     */
     public void renderShots(Graphics g){
         String imagePath = "./src/main/resources/img/shot.png";
         for(int i = 0; i < setNames.length; i++) {
@@ -419,9 +427,12 @@ public class DragPanel extends JPanel implements ActionListener{
         }
         
     }
-    
+    /**
+     * This is a manual implementation of the approximate
+     * pixel boundaries for different sets so that players
+     * can click and drag their piece around
+     */
     public void fillSetHashMap(){
-        
         
         Integer[][] trainLoc = {{6,7},{237,442}};
         approxSetLocs.put(tileNames[0], trainLoc);
@@ -460,42 +471,39 @@ public class DragPanel extends JPanel implements ActionListener{
         approxSetLocs.put(tileNames[11], hotelLoc);
     }
 
+    /**
+     * The super implementation of everything that gets redrawn to the screen
+     */
     public void paintComponent(Graphics g) {
         
         super.paintComponent(g);
-        //Image newImage = imgBoard.getScaledInstance(1440, 1080, Image.SCALE_SMOOTH);
         g.drawImage(imgBoard, 0, 0, this);
 
         int idx = board.getTurnNum();
         
-        renderCards(g); //Should be showing the backside TODO
+        renderCards(g); 
         renderShots(g); //This will at first not show any shot counters as they're supposed to show up after a succesful shot roll
         renderX(g);
         g.drawImage(scaleImage, (int)imageCorner[idx].getX() - 5, (int)imageCorner[idx].getY() - 5, this);
-        if(idx == -1){
-            
+        if(idx == -1){      
             for(int i = 0; i < players; i++){
                 ImageIcon currentPlayerDie = gamePlayers[i].getPlayerImage();
                 currentPlayerDie.paintIcon(this, g, (int)imageCorner[i].getX(), (int)imageCorner[i].getY());
             }
-
         } else {
-
             for(int i = 0; i < players; i++){
                 if(idx == i){continue;}
                 ImageIcon currentPlayerDie = gamePlayers[i].getPlayerImage();
                 currentPlayerDie.paintIcon(this, g, (int)imageCorner[i].getX(), (int)imageCorner[i].getY());
             }
             ImageIcon currentPlayerDie = gamePlayers[idx].getPlayerImage();
-            //System.out.println("In paintComp: x = " + imageCorner[idx].getX() + " y = " + imageCorner[idx].getY());
-            //playerBackgroundHalo.paintIcon(this, g, (int)imageCorner[idx].getX(), (int)imageCorner[idx].getY());
             currentPlayerDie.paintIcon(this, g, (int)imageCorner[idx].getX(), (int)imageCorner[idx].getY());
         }
-
-        
-
     }
-
+    /**
+     * This shows player data for the current active player
+     * @param i
+     */
     public void renderPlayerData(int i){
         //setting text for the Jlabels to render
         currentActivePlayer.setText("Player: " + gamePlayers[i].getId());
@@ -523,36 +531,37 @@ public class DragPanel extends JPanel implements ActionListener{
         
         DragListener dl;
 
+        
         public void mousePressed(MouseEvent e) {
             
-            prevPt = e.getPoint();
-            
+            prevPt = e.getPoint();  
             
             System.out.println(prevPt.getX()+ " " + prevPt.getY());
             int i = board.getTurnNum();     		
-            //for(int i = 0; i < players; i++){
-                //if(i == board.getTurnNum()){
-                    if(prevPt.getX() > imageCorner[i].getX() && prevPt.getX() < imageCorner[i].getX() + WIDTH){
-                        if(prevPt.getY() > imageCorner[i].getY() && prevPt.getY() < imageCorner[i].getY() + HEIGHT) {
+            //Figures out if where you clicked is actually on your die
+            if(prevPt.getX() > imageCorner[i].getX() && prevPt.getX() < imageCorner[i].getX() + WIDTH){
+                if(prevPt.getY() > imageCorner[i].getY() && prevPt.getY() < imageCorner[i].getY() + HEIGHT) {
+                    renderPlayerData(i);
+                    double[] temp = {imageCorner[i].getX(),imageCorner[i].getY()};
+                    previousPlayerLoc = temp;
 
-                            renderPlayerData(i);
-                            double[] temp = {imageCorner[i].getX(),imageCorner[i].getY()};
-                            previousPlayerLoc = temp;
-
-                            dl.setIsInObject(true);
-                            dl.setTileIdx(i);
-                            return;
-                        } else {
-                            dl.setIsInObject(false);
-                        }
-                        
-                    } else {
-                        dl.setIsInObject(false);
-                    }
-                //}
-            //}
+                    dl.setIsInObject(true);
+                    dl.setTileIdx(i);
+                    return;
+                } else {
+                    dl.setIsInObject(false);
+                }  
+            } else {
+                dl.setIsInObject(false);
+            }
         }
-
+        /**
+         * Helper function that returns an index of where the player location is
+         * in the Set array
+         * @param setNames
+         * @param destPos
+         * @return
+         */
         private int calcSetBoolIdx(String[] setNames, String destPos) {
             for(int i = 0; i < setNames.length; i++) {
                 if(setNames[i].equals(destPos)){
@@ -570,9 +579,12 @@ public class DragPanel extends JPanel implements ActionListener{
             int idx = dragListener.currentTileIdx;
             Point currentPt = e.getPoint();
             boolean isInSomeSet = false;
+
+            //Goes through every set
             for(int i = 0; i < tileNames.length; i++) {
                 Integer[][] currentSetCheck = approxSetLocs.get(tileNames[i]);
 
+                //Checks if where you released is actually in a set
                 if(currentPt.getX() > currentSetCheck[0][0] && currentPt.getY() > currentSetCheck[0][1]){
                     if(currentPt.getX() < currentSetCheck[1][0] && currentPt.getY() < currentSetCheck[1][1]) {
                         isInSomeSet = true;
@@ -580,24 +592,20 @@ public class DragPanel extends JPanel implements ActionListener{
                         String oldSetLoc = gamePlayers[idx].getPos();
                         boolean isValid = board.validatePlayerMove(oldSetLoc, tileNames[i]);
                         
+                        //then checks if you can actually move into the set
                         if(isValid){
                             gamePlayers[idx].setPos(tileNames[i]);
-                            // tileNames[i].
                             int setIdx = calcSetBoolIdx(setNames, tileNames[i]);
                             if(setIdx != -1){
                                 isCardShown[setIdx] = 1;
                             }
-                            
                             renderPlayerData(idx);
                             showButtons(idx);
                             previousPlayerLoc[0] = currentPt.getX();
                             previousPlayerLoc[1] = currentPt.getY();
                             repaint();
-
                             return;
-                        } else {
-                            
-                            //System.out.println(previousPlayerLoc[0] + " " + previousPlayerLoc[1]);
+                        } else { //snaps player back to onClick location
                             imageCorner[idx].move((int)previousPlayerLoc[0], (int)previousPlayerLoc[1]);
                             repaint();
                             return;
@@ -609,18 +617,15 @@ public class DragPanel extends JPanel implements ActionListener{
                 imageCorner[idx].move((int)previousPlayerLoc[0], (int)previousPlayerLoc[1]);
                 repaint();
             }
-
-
         }
 
         public ClickListener(DragListener dlnative) {
             dl = dlnative;
-        }
-
-
-        
+        }   
     }
-    
+    /**
+     * This handles the rendering of player RankUp information
+     */
     public void actionPerformed(ActionEvent e) {
         int idx = dragListener.currentTileIdx;
     	if(e.getSource() == rehearse) {
@@ -662,8 +667,6 @@ public class DragPanel extends JPanel implements ActionListener{
         public void mouseDragged(MouseEvent e) {
             Point currentPt = e.getPoint();
 
-            
-
             if(!isInObject){
                 return;
             }
@@ -683,10 +686,6 @@ public class DragPanel extends JPanel implements ActionListener{
 
         public void setTileIdx(int i){
             this.currentTileIdx = i;
-        }
-
-        public void detectPlayerLocation(){
-
         }
 
     }

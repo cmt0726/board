@@ -30,10 +30,10 @@ public class Board {
     public HashMap<String, String[][]> locationRoleData; 	 //data about different sets
     public HashMap<String, String[][]> locationCardRoleData; //data about a specific card on a specific set
     public HashMap<String, String[]> neighbors; 			 //data about neighbors from a specific set location
-	public HashMap<String, Integer[]> boardPixelLoc;
-	public HashMap<String, Integer[][]> boardShotLoc;
-	public HashMap<String, Integer> sceneShotCount;
-	public HashMap<String, Integer[]> setRoleLoc;
+	public HashMap<String, Integer[]> boardPixelLoc;		 //data about x, y coords for card locations
+	public HashMap<String, Integer[][]> boardShotLoc;		 //data about x, y coords for shot locations
+	public HashMap<String, Integer> sceneShotCount;			 //how many shots a scene has left
+	public HashMap<String, Integer[]> setRoleLoc;            //data about x, y coords for off card role locations
 
     private Player[] players;
     private int totalPlayerCount;
@@ -45,12 +45,13 @@ public class Board {
     
     public Board(int playerCount, String board, String card) throws Exception{
 		
-		//Gui g = new Gui();
+		
 		this.boardS = board;
 		this.cardS = card;
 
 		xml = new xmlParser(boardS, cardS);
 
+		//initializing data from xml parsing
 		this.cardData = xml.card.cardsData;
 		this.locationRoleData = xml.set.locationRoleData;
 		this.locationCardRoleData = xml.set.locationCardRoleData;
@@ -62,6 +63,8 @@ public class Board {
 
     	Scanner sc = new Scanner(System.in);
 
+
+		//setting up the board based on player count and names
         totalPlayerCount = playerCount;
         players = new Player[playerCount];
         for(int i = 0; i < playerCount; i++){
@@ -117,8 +120,13 @@ public class Board {
 
 	public void resetTurn(){this.currentTurn = 0;}
 
+	/**
+	 * Takes in an index into the player array,
+	 * fetches their image Icon path and changes
+	 * the value to the path for the next rank up
+	 * @param idx
+	 */
 	public void increasePlayerRankVisual(int idx){
-		//"./src/main/resources/img/dice_r1.png"
 		String regex = "[0-9]";
 		String playerImgFilePath = players[idx].getPlayerImagePath().replaceAll(regex, String.valueOf(players[idx].getRank()));
 		players[idx].setPlayerImage(playerImgFilePath);
@@ -126,17 +134,17 @@ public class Board {
 
 	//Handles the end of a players turn
 	public void handlePlayerTurn(int idx){
-
-
-
 		this.currentTurn++;
 		players[idx].setHasMoved(false);
 		if(this.currentTurn >= totalPlayerCount) {
 			resetTurn();
 		}
-
 	}
-
+	/**
+	 * 
+	 * @param idx index into the player array
+	 * @return an ArrayList of available Roles for that player that are on Card
+	 */
 	public ArrayList<String> showAvailableCardRoles(int idx) {
 
 		ArrayList<String> roles = new ArrayList<String>();
@@ -146,13 +154,17 @@ public class Board {
 		
 		for(String[] role : currentRoleDataOnCard){
 			if(role[3].equals("false") && (Integer.parseInt(role[1]) <= currentPlayer.getRank())){
-				//roles.add("On Card, Rank: " + role[1] + ", Role: " + role[0]);
+				
 				roles.add(role[0]);
 			}
 		}
 		return roles;
 	}
-
+	/**
+	 * 
+	 * @param i index into player array
+	 * @return whether or not the player is allowed to still rehearse
+	 */
 	public boolean increasePracticeChips(int i){
 		
 		players[i].increasePracticeChip();
@@ -162,7 +174,11 @@ public class Board {
 			return true;
 		}
 	}
-
+	/**
+	 * 
+	 * @param idx index into player array
+	 * @return an Array List of available roles for that player that are off Card
+	 */
 	public ArrayList<String> showAvailableOffCardRoles(int idx) {
 
 		
@@ -182,6 +198,12 @@ public class Board {
 		return roles;
 	}
 
+	/**
+	 * 
+	 * @param i index into player array
+	 * @return An Integer array describing the x, y coords
+	 * 	  	   for an on Card Role
+	 */
 	public Integer[] curSetPixelLoc(int i){
 		int x = 0;
 		int y = 0;
@@ -198,11 +220,19 @@ public class Board {
 		}
 		return setRoleLoc.get(players[i].getRole());
 	}
-
+	/**
+	 * 
+	 * @param i index into player array
+	 * @return whether or not a player is on a card
+	 */
 	public boolean isPlayerOnCard(int i) {
 		return players[i].getOnCardRole();
 	}
-
+	/**
+	 * 
+	 * @param i index into player array
+	 * @return whether or not a set is done for a given player
+	 */
 	public boolean isSetDone(int i){
 		if(players[i].getPos().equalsIgnoreCase("trailer") || players[i].getPos().equalsIgnoreCase("casting office")){
 			return false;
@@ -213,7 +243,11 @@ public class Board {
 			return false;
 		}
 	}
-
+	/**
+	 * 
+	 * @param setName
+	 * @return whether or not a set is done based on set name
+	 */
 	public boolean isSetDone(String setName){
 		
 		if(sceneShotCount.get(setName) == 0) {
@@ -222,7 +256,15 @@ public class Board {
 			return false;
 		}
 	}
-
+	/**
+	 * This function uses the index and role to figure out whether or not a given player
+	 * can act on a certain location. It also handles the random roll that decides if a player
+	 * succesfully worked that shot. It also handles the payouts for if a set is done as well as
+	 * if the day is done.
+	 * @param idx index into player array
+	 * @param role the chosen player role
+	 * @return x, y coords describing the location for that role on the board
+	 */
 	public int[] handlePlayerAct(int idx, String role) {
 		int[] loc = {0, 0, 0, 0};
 		String playerLocation = players[idx].getPos();
@@ -231,7 +273,7 @@ public class Board {
 		String[][] currentRoleDataOnCard = locationCardRoleData.get(playerLocation);
 		Boolean playerHasAvailableRole = false;
 
-		//if(currentRoleDataOffCard[0][2].equals("true")){
+		
 		if(sceneShotCount.get(currentPlayer.getPos()) == 0){
 			System.out.println("This set is has wrapped up, you must move to another location");
 			currentPlayer.setHasRole(false);
@@ -280,7 +322,7 @@ public class Board {
 							currentPlayer.setMoney(currentPlayer.getMoney() + 1);
 					
 							xml.set.decreaseShotCount(playerLocation);
-							//System.out.println("You have succeeded! You gain 1 credit and 1 dollar");
+							
 							currentRoleDataOffCard[i][2] = "True";
 
 						//off card guys get no bonus money
@@ -323,10 +365,10 @@ public class Board {
 							currentPlayer.setMoney(currentPlayer.getMoney() + 1);
 							
 							if(selectedRoleRank > currentPlayer.getRank()){
-								System.out.println("You're not high enough rank for this role");
+								
 								return loc;
 							}
-							System.out.println("You have failed! You gain 1 dollar");
+
 							currentRoleDataOffCard[i][2] = "True";
 
 						}
@@ -415,14 +457,14 @@ public class Board {
 			String roleBudget = currentRoleDataOnCard[0][2];
 
 			if(currentPlayer.getOnCardRole()){
-				//System.out.println("Current Role budget:" + roleBudget);
+				
 				
 				if(!currentPlayer.getHasMoved()) {
 					Boolean success = currentPlayer.act(Integer.parseInt(roleBudget), currentPlayer.getRank());
 					if(success){
 						currentPlayer.setCredits(currentPlayer.getCredits() + 2);
 						xml.set.decreaseShotCount(playerLocation);
-						//System.out.println("You have succeeded! You gain 2 credits");
+						
 
 						if(xml.set.sceneShotCounter.get(playerLocation) == 0) {
 							currentPlayer.setChips(0);
@@ -449,12 +491,10 @@ public class Board {
 							}
 						}
 						
-					} else {
-						System.out.println("You have failed your role and earned NOTHING!");
-					}
+					} 
 				}
 			} else {
-				//System.out.println("CURRENT ROLE BUDGET:" + roleBudget);
+				
 				if(!currentPlayer.getHasMoved()) {
 					Boolean success = currentPlayer.act(Integer.parseInt(roleBudget), currentPlayer.getRank());
 					if(success){
@@ -463,7 +503,7 @@ public class Board {
 						currentPlayer.setMoney(currentPlayer.getMoney() + 1);
 				
 						xml.set.decreaseShotCount(playerLocation);
-						//System.out.println("You have succeeded! You gain 1 credit and 1 dollar");
+						
 						currentRoleDataOffCard[0][2] = "True";
 
 					//off card guys get no bonus money
@@ -497,10 +537,10 @@ public class Board {
 					} else {
 						currentPlayer.setMoney(currentPlayer.getMoney() + 1);
 						if(Integer.parseInt(currentRoleDataOffCard[0][1]) > currentPlayer.getRank()){
-							//System.out.println("You're not high enough rank for this role");
+							
 							return loc;
 						}
-						//System.out.println("You have failed! You gain 1 dollar");
+						
 						currentRoleDataOffCard[0][2] = "True";
 					}
 				}
@@ -509,6 +549,12 @@ public class Board {
 		return loc;
 	}
 
+	/**
+	 * 
+	 * @param i index into player array
+	 * @return 1's and 0's describing whether or not
+	 * 		   a given player can {act, rehearse, rankup, endTurn}
+	 */
 	public int[] calcValidActionSet(int i) {
 		int[] actionSet = {0, 0, 0, 0};
 		if(!players[i].getHasRole()){
@@ -534,6 +580,12 @@ public class Board {
 		return actionSet;
 	}
 
+	/**
+	 * 
+	 * @param curPos
+	 * @param destPos
+	 * @return whether or not a player can move that location
+	 */
 	public boolean validatePlayerMove(String curPos, String destPos){
 		boolean adj = false;
 		Player player = players[currentTurn];
@@ -605,16 +657,20 @@ public class Board {
 		}
 		
 	}
-
+	/**
+	 * If the player has enough money and isn't already that rank
+	 * increases the players rank as well as changing their icon
+	 * @param i
+	 * @param rankToBe
+	 * @param method Money or Credits
+	 * @return if the rankup was succesful
+	 */
 	public boolean rankUp(int i, int rankToBe, String method) {
 		if(!(players[i].getPos().equalsIgnoreCase("casting office"))) {
 			System.out.println("You must go to the casting office to rank up.");
 			return false;
 		}
 	
-		
-		
-
 		if(rankToBe <= players[i].getRank()) {
 			System.out.println("You are already that rank or higher.");
 			return false;
@@ -629,122 +685,18 @@ public class Board {
 		return true;
 		
 	}
-
-    /*
-        This function will loop through all players displaying what actions can be taken
-        It will then execute those actions
-        If an action is one that is turn ending it sets the hasMoreAction flag to false
-        and the result variable to "exit"
-
-        if you can do more actions, then it will continue to do so for that player
-
-        I've decided that Act, Move, Endturn, and Exit are turn ending but that is arbitrary
-
-        if you add an action that is turn ending, remember to set the flag to false
-        and that case is lowercase
-
-        Currently with 3 players, for 3 days, if every player acts and ends the turn
-        this function will end up looping through the userInput 9 times, which is correct
-    */
-    public String executeDay(){
-    	
-    	for(int i = 0; i < players.length; i++) {
-    		players[i].setPos("trailer");
-    	}
-        
-        Scanner sc = new Scanner(System.in);
-        String res = "";
-        
-        //HashMap<String, Integer> sceneShotCounter = xml.set.sceneShotCounter;
-
-        
-
-        while(!res.equals("exit")) {
-        	for(int curTurnIdx = 0; curTurnIdx < totalPlayerCount; curTurnIdx++){
-        		Player currentPlayer = players[curTurnIdx];
-        		Boolean hasMoreAction = true;
-        		currentPlayer.setHasMoved(false);
-            
-        		while(hasMoreAction){
-        			System.out.println(currentPlayer.getId());
-        			Boolean playerHasAvailableRole = false;
-        			System.out.println("Current Available Actions: Act, Rehearse, Move, RankUp, EndTurn, Active Player, exit, Show Players");
-        			res = sc.nextLine();
-                
-
-        			System.out.println("--> " + res);
-        			String[] commands = res.split(" ");
-        			switch(commands[0].toLowerCase()) {
-        				case "act":
-                            if(currentPlayer.getPos().equals("office") || currentPlayer.getPos().equals("trailer")){
-                                System.out.println("There are no roles for you here!");
-                                break;
-                            }
-                            
-                        
-        					hasMoreAction = false;
-        					break;
-                        
-        				case "rehearse":
-        					if(currentPlayer.getChips() > 4) {
-        						System.out.println("You already have guaranteed success, you must act.");
-        						break;
-        					}
-        					
-        					if(!currentPlayer.getHasRole()) {
-        						System.out.println("You cannot rehearse without having a role");
-        						break;
-        					}
-        					
-        					currentPlayer.rehearse();
-                        
-        					hasMoreAction = false;
-        					break;
-                        
-        				case "rankup":         	
-                    	
-        					
-        					break;
-                        
-        				case "endturn":
-        					hasMoreAction = false;
-        					break;
-                        
-        				case "exit":
-        					res = "exit";
-        					hasMoreAction = false;
-        					break;
-                        
-        				case "active":
-        					System.out.println("Current player is " + players[curTurnIdx].getId());
-        					System.out.println("Current player is at " + players[curTurnIdx].getPos());
-        					System.out.println("Rank : " + players[curTurnIdx].getRank());
-        					System.out.println("Money : " + players[curTurnIdx].getMoney());
-        					System.out.println("Credits : " + players[curTurnIdx].getCredits());
-        					System.out.println("Practice Chips : " + players[curTurnIdx].getChips());
-        					break;
-                        
-        				case "show":
-        					for(int i = 0; i < players.length; i++) {
-        						System.out.println(players[i].getId() + " is at " + players[i].getPos());
-        					}
-        					break;
-        					//add any actions you feel would be helpful
-        			}
-        		}
-        		if(res.equals("exit")) {
-        			break;
-        		}
-        	}
-        }
-        //res = "exit";
-        return res;
-    }
-
+    
     public int getPlayerCount(){return this.totalPlayerCount;}
     public Player[] getPlayers(){return this.players;}
     public void incrementDay(){this.day += 1;}
-
+	/**
+	 * This Sorts a copy of the player array based on role rank
+	 * To determine in what order they should be payed and then
+	 * subsequently pays them accordingly
+	 * @param players
+	 * @param finishedRoleLoc used to retrieve all players at that set location
+	 * @param payout an array of integer values between 1-6 for each payout bonus
+	 */
     public void payout(Player[] players, String finishedRoleLoc, Integer[] payout){
 
         int validPlayers = 0;

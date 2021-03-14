@@ -60,7 +60,9 @@ public class Sets {
         sceneShotCounter.put("Bank", 1);
         sceneShotCounter.put("Saloon", 2);
     }
-
+    /**
+     * Randomly picks cards to display
+     */
     public void generateSceneCards(){
 
         //code copied from https://www.journaldev.com/32661/shuffle-array-java
@@ -83,14 +85,12 @@ public class Sets {
         int i = cardIdx;
         while(temp1.hasNext()){
             try{
-                locationCardRoleData.put(temp1.next(), card.cardsData.get(i));
+                locationCardRoleData.put(temp1.next(), card.cardsData.get(dataIdxs[i]));
                 i++;
                 cardIdx++;
             }catch(Exception e){
-                System.out.println("no more scenes");
+                
             }
         }
-        
-
     }
 }

@@ -17,9 +17,11 @@ public class EndDay {
         this.dayLimit = dLimit;
     }
 
-    public void endGame(Player[] players) {
-        
-        
+    /**
+     * Ends the Game and returns info to display in DragPanel.java
+     * @param players
+     */
+    public void endGame(Player[] players) {   
         int[] ret = calculateScore(players);
         int playerWinnerIdx = 0;
         
@@ -32,9 +34,6 @@ public class EndDay {
         }
         board.setWinningIdx(playerWinnerIdx);
         board.setIsGameEnd(true);
-        System.out.println("The winner is: " + playerWinnerIdx);
-        //System.exit(1);
-        
     }
 
     //Calculates and returns an array of the final scores of each player
