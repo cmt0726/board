@@ -1,0 +1,1 @@
+Code looks good but it needs some consistent spacing. Highlighting the current player is a great touch! Game plays great! Diagram reflects code and looks good! Report was honest and gave me a good insight into your design but it did not specifically mention design patterns or types of cohesion.
