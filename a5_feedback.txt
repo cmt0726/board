@@ -1,1 +1,20 @@
 Code looks good but it needs some consistent spacing. Highlighting the current player is a great touch! Game plays great! Diagram reflects code and looks good! Report was honest and gave me a good insight into your design but it did not specifically mention design patterns or types of cohesion.
+
++------------------------+----------+---------------+
+| Test                   |   Points |   constrictor |
+|------------------------+----------+---------------|
+| Active player          |        2 |          2    |
+| Location-active player |        2 |          2    |
+| Location-all           |        2 |          2    |
+| Move                   |        2 |          2    |
+| Take role              |        2 |          2    |
+| Upgrade                |        2 |          2    |
+| Rehearse               |        2 |          2    |
+| Act                    |        2 |          2    |
+| End day                |        2 |          2    |
+| End turn               |        2 |          2    |
+| Quality of code        |        5 |          4.75 |
+| Design patterns        |       10 |          8.5  |
+| Presentation           |        5 |          5    |
+| Total                  |       40 |         38.25 |
++------------------------+----------+---------------+
